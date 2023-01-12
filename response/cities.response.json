@@ -1,0 +1,805 @@
+[
+  {
+    "value": 34,
+    "text": "İSTANBUL",
+    "children": [
+      {
+        "value": 342,
+        "text": "İSTANBUL(ANADOLU)",
+        "children": [],
+        "value2": 1,
+        "value3": 34,
+        "text2": "",
+        "favori": false
+      },
+      {
+        "value": 341,
+        "text": "İSTANBUL(AVRUPA)",
+        "children": [],
+        "value2": 1,
+        "value3": 34,
+        "text2": "",
+        "favori": false
+      }
+    ],
+    "value2": 1,
+    "value3": 1,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 6,
+    "text": "ANKARA",
+    "children": [],
+    "value2": 1,
+    "value3": 2,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 16,
+    "text": "BURSA",
+    "children": [],
+    "value2": 1,
+    "value3": 3,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 35,
+    "text": "İZMİR",
+    "children": [],
+    "value2": 1,
+    "value3": 4,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 1,
+    "text": "ADANA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 2,
+    "text": "ADIYAMAN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 3,
+    "text": "AFYONKARAHİSAR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 4,
+    "text": "AĞRI",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 68,
+    "text": "AKSARAY",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 5,
+    "text": "AMASYA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 6,
+    "text": "ANKARA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 7,
+    "text": "ANTALYA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 75,
+    "text": "ARDAHAN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 8,
+    "text": "ARTVİN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 9,
+    "text": "AYDIN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 10,
+    "text": "BALIKESİR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 74,
+    "text": "BARTIN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 72,
+    "text": "BATMAN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 69,
+    "text": "BAYBURT",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 11,
+    "text": "BİLECİK",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 12,
+    "text": "BİNGÖL",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 13,
+    "text": "BİTLİS",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 14,
+    "text": "BOLU",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 15,
+    "text": "BURDUR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 16,
+    "text": "BURSA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 17,
+    "text": "ÇANAKKALE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 18,
+    "text": "ÇANKIRI",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 19,
+    "text": "ÇORUM",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 20,
+    "text": "DENİZLİ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 21,
+    "text": "DİYARBAKIR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 81,
+    "text": "DÜZCE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 22,
+    "text": "EDİRNE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 23,
+    "text": "ELAZIĞ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 24,
+    "text": "ERZİNCAN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 25,
+    "text": "ERZURUM",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 26,
+    "text": "ESKİŞEHİR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 27,
+    "text": "GAZİANTEP",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 28,
+    "text": "GİRESUN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 29,
+    "text": "GÜMÜŞHANE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 30,
+    "text": "HAKKARİ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 31,
+    "text": "HATAY",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 76,
+    "text": "IĞDIR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 32,
+    "text": "ISPARTA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 34,
+    "text": "İSTANBUL",
+    "children": [
+      {
+        "value": 342,
+        "text": "İSTANBUL(ANADOLU)",
+        "children": [],
+        "value2": 0,
+        "value3": 34,
+        "text2": "",
+        "favori": false
+      },
+      {
+        "value": 341,
+        "text": "İSTANBUL(AVRUPA)",
+        "children": [],
+        "value2": 0,
+        "value3": 34,
+        "text2": "",
+        "favori": false
+      }
+    ],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 35,
+    "text": "İZMİR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 46,
+    "text": "KAHRAMANMARAŞ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 78,
+    "text": "KARABÜK",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 70,
+    "text": "KARAMAN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 36,
+    "text": "KARS",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 37,
+    "text": "KASTAMONU",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 38,
+    "text": "KAYSERİ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 71,
+    "text": "KIRIKKALE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 39,
+    "text": "KIRKLARELİ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 40,
+    "text": "KIRŞEHİR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 79,
+    "text": "KİLİS",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 41,
+    "text": "KOCAELİ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 42,
+    "text": "KONYA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 43,
+    "text": "KÜTAHYA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 44,
+    "text": "MALATYA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 45,
+    "text": "MANİSA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 47,
+    "text": "MARDİN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 33,
+    "text": "MERSİN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 48,
+    "text": "MUĞLA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 49,
+    "text": "MUŞ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 50,
+    "text": "NEVŞEHİR",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 51,
+    "text": "NİĞDE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 52,
+    "text": "ORDU",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 80,
+    "text": "OSMANİYE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 53,
+    "text": "RİZE",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 54,
+    "text": "SAKARYA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 55,
+    "text": "SAMSUN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 56,
+    "text": "SİİRT",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 57,
+    "text": "SİNOP",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 58,
+    "text": "SİVAS",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 63,
+    "text": "ŞANLIURFA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 73,
+    "text": "ŞIRNAK",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 59,
+    "text": "TEKİRDAĞ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 60,
+    "text": "TOKAT",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 61,
+    "text": "TRABZON",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 62,
+    "text": "TUNCELİ",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 64,
+    "text": "UŞAK",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 65,
+    "text": "VAN",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 77,
+    "text": "YALOVA",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 66,
+    "text": "YOZGAT",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  },
+  {
+    "value": 67,
+    "text": "ZONGULDAK",
+    "children": [],
+    "value2": 0,
+    "value3": 0,
+    "text2": "",
+    "favori": false
+  }
+]

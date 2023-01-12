@@ -1,0 +1,16 @@
+export const District = {
+  ADALAR: {value: '1103', title: 'ADALAR'},
+  ATAŞEHİR: {value: '2049', title: 'ATAŞEHİR'},
+  BEYKOZ: {value: '1185', title: 'BEYKOZ'},
+  ÇEKMEKÖY: {value: '2052', title: 'ÇEKMEKÖY'},
+  KADIKÖY: {value: '1421', title: 'KADIKÖY'},
+  KARTAL: {value: '1449', title: 'KARTAL'},
+  MALTEPE: {value: '2012', title: 'MALTEPE'},
+  PENDİK: {value: '1835', title: 'PENDİK'},
+  SANCAKTEPE: {value: '2054', title: 'SANCAKTEPE'},
+  SULTANBEYLİ: {value: '2014', title: 'SULTANBEYLİ'},
+  ŞİLE: {value: '1659', title: 'ŞİLE'},
+  TUZLA: {value: '2015', title: 'TUZLA'},
+  ÜMRANİYE: {value: '1852', title: 'ÜMRANİYE'},
+  ÜSKÜDAR: {value: '1708', title: 'ÜSKÜDAR'},
+}

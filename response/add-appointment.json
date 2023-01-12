@@ -1,0 +1,282 @@
+{
+  "lang": "tr-TR",
+  "success": true,
+  "infos": [
+    {"kodu": "RND5000", "mesaj": "Randevu kaydı başarıyla yapılmıştır."}
+  ],
+  "warnings": [
+    {
+      "kodu": "RND5023",
+      "mesaj": "mucahidyazar@gmail.com e-Posta adresinize randevu bilgileriniz gönderilmiştir. (RND5023)"
+    },
+    {
+      "kodu": "RIS1000",
+      "mesaj": "Aldığınız randevu ön muayene randevusudur. (RIS1000)"
+    }
+  ],
+  "errors": [],
+  "data": {
+    "randevuBaslangicZamani": "2022-06-14 08:30:00",
+    "randevuBitisZamani": "2022-06-14 08:45:00",
+    "randevuTuru": "Muayene",
+    "randevuTuruId": 200,
+    "kurum": {
+      "mhrsKurumId": 177339,
+      "halkDilindekiAdi": "TUZLA DEVLET HASTANESİ",
+      "telefonNumarasi": 2164940952,
+      "eposta": "istanbuldhs19@saglik.gov.tr",
+      "adres": "TUZLA DEVLET HASTANESİ (İÇMELER MERKEZ):\nPİRİREİS CAD. İÇMELER MAH. NO:74 TUZLA TEL:216 494 09 52-53-54-55-56\n\n\n\nKARTAL YAVUZ SELİM TAŞOCAĞI EK HİZMET BİNASI: ESENTEPE MH. TAŞOCAKLARI MEVKİİ. MUALLİM SEDAT BEY SOK. NO: 5 KARTAL\n\nKARTAL YAVUZ SELİM İBNİ SİNA SEMT POLİKLİNİĞİ:UĞURMUMCU MAH.ŞEYHŞAMİL CAD. NO:17 UĞURMUMCU PTT ŞUBESİ YANI KARTAL\n\nMİMAR SİNAN ŞİFA SEMT POLİKLİNİĞİ\nSİFA MAHALLESİ EMİROGLU CADDESİ HAKAN SOK NO:2   34950-TUZLA TEL:216 475 17 70",
+      "enlem": 40.84482032566562,
+      "boylam": 29.30203914642334,
+      "mhrsIlId": 342,
+      "mhrsIlceId": 2015,
+      "ilAdi": "İSTANBUL(ANADOLU)",
+      "ilceAdi": "TUZLA",
+      "kurumAdi": "İSTANBUL- (ANADOLU)- TUZLA DEVLET HASTANESİ",
+      "mesafe": null,
+      "mesafeKm": null,
+      "kurumTurId": 16,
+      "anaKurumAdi": null,
+      "anaKurumKisaAdi": null,
+      "acilHizmetler": [
+        {
+          "id": 45915,
+          "mhrsKurumId": 177339,
+          "lacilPoliklinikTipi": 2,
+          "acilPoliklinikTipi": {"val": 2, "valText": "Genel Acil"},
+          "aktif": true,
+          "aktifDsc": {"val": true, "valText": "Aktif"}
+        }
+      ]
+    },
+    "klinik": {
+      "mhrsKlinikId": 198,
+      "mhrsKlinikAdi": "Diş Hekimliği (Genel Diş)",
+      "kisaAdi": "Diş Hekimliği'ne",
+      "dkKlinikKodu": 198,
+      "parentMhrsKlinikId": 0,
+      "lkarne": 3,
+      "lcetvelTipi": 1,
+      "gorunurluk": true,
+      "sertifika": false,
+      "bitisZamani": null,
+      "yandalList": [],
+      "anadalList": [
+        {
+          "id": 2638,
+          "yandalMhrsKlinikId": 103,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Ağız, Diş ve Çene Cerrahisi",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        },
+        {
+          "id": 2651,
+          "yandalMhrsKlinikId": 104,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Ağız, Diş ve Çene Radyolojisi",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        },
+        {
+          "id": 2633,
+          "yandalMhrsKlinikId": 138,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Endodonti",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        },
+        {
+          "id": 2627,
+          "yandalMhrsKlinikId": 170,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Ortodonti",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        },
+        {
+          "id": 2647,
+          "yandalMhrsKlinikId": 174,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Periodontoloji",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        },
+        {
+          "id": 2605,
+          "yandalMhrsKlinikId": 176,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Protetik Diş Tedavisi",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        },
+        {
+          "id": 2636,
+          "yandalMhrsKlinikId": 179,
+          "anadalMhrsKlinikId": 198,
+          "anadalSirasi": 1,
+          "aktif": true,
+          "yandalKlinikAdi": "Restoratif Diş Tedavisi",
+          "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+        }
+      ],
+      "ozellikDataList": [{"val": 13, "valText": "Farketmez"}],
+      "mesajKodu": null,
+      "siraNo": 330,
+      "aktif": true
+    },
+    "hekim": {
+      "id": "dc873454-b3aa-4acd-97d2-f63713a7f95f",
+      "mhrsHekimId": 23858,
+      "ad": "FATMA",
+      "soyad": "AYDIN",
+      "cinsiyet": {"val": "K", "valText": "Kadın"}
+    },
+    "randevuHastaBilgileri": {
+      "tcKimlikNo": 36613346136,
+      "adi": "MUCAHİD",
+      "soyadi": "YAZAR",
+      "cinsiyet": {"val": "E", "valText": "Erkek"},
+      "dogumTarihi": "1991-10-31",
+      "hastaTipi": {"val": 1, "valText": "Vatandaş"},
+      "dogumYeri": "KARTAL"
+    },
+    "muayeneYeri": {
+      "id": 7352160,
+      "fkKurumKlinikId": 31725,
+      "kurumKlinik": {
+        "id": 31725,
+        "mhrsKlinikId": 198,
+        "klinik": {
+          "mhrsKlinikId": 198,
+          "mhrsKlinikAdi": "Diş Hekimliği (Genel Diş)",
+          "kisaAdi": "Diş Hekimliği'ne",
+          "dkKlinikKodu": 198,
+          "parentMhrsKlinikId": 0,
+          "lkarne": 3,
+          "lcetvelTipi": 1,
+          "gorunurluk": true,
+          "sertifika": false,
+          "bitisZamani": null,
+          "yandalList": [],
+          "anadalList": [
+            {
+              "id": 2638,
+              "yandalMhrsKlinikId": 103,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Ağız, Diş ve Çene Cerrahisi",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            },
+            {
+              "id": 2651,
+              "yandalMhrsKlinikId": 104,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Ağız, Diş ve Çene Radyolojisi",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            },
+            {
+              "id": 2633,
+              "yandalMhrsKlinikId": 138,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Endodonti",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            },
+            {
+              "id": 2627,
+              "yandalMhrsKlinikId": 170,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Ortodonti",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            },
+            {
+              "id": 2647,
+              "yandalMhrsKlinikId": 174,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Periodontoloji",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            },
+            {
+              "id": 2605,
+              "yandalMhrsKlinikId": 176,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Protetik Diş Tedavisi",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            },
+            {
+              "id": 2636,
+              "yandalMhrsKlinikId": 179,
+              "anadalMhrsKlinikId": 198,
+              "anadalSirasi": 1,
+              "aktif": true,
+              "yandalKlinikAdi": "Restoratif Diş Tedavisi",
+              "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+            }
+          ],
+          "ozellikDataList": [{"val": 13, "valText": "Farketmez"}],
+          "mesajKodu": null,
+          "siraNo": 330,
+          "aktif": true
+        },
+        "kurum": {
+          "id": 38097,
+          "mhrsKurumId": 177339,
+          "mhrsAnaKurumId": 0,
+          "dkKurumKodu": 177339,
+          "mhrsIlceId": 2015,
+          "kurumAdi": "İSTANBUL- (ANADOLU)- TUZLA DEVLET HASTANESİ",
+          "kurumKisaAdi": "TUZLA DEVLET H.",
+          "kurumTurId": 16,
+          "kurumTipId": 96,
+          "lashTipi": "A2",
+          "lkurumDurumu": 1,
+          "baslangicTarihi": "2020-12-26",
+          "bitisTarihi": null
+        },
+        "mhrsKurumId": 177339
+      },
+      "adi": "DİŞ 12 ( Kartal Tasocagi Ek Hizmet Binası)",
+      "aktifDsc": {"val": true, "valText": "Aktif"},
+      "tescilOdaKayitNo": 0,
+      "tescil": null
+    },
+    "ek": false,
+    "hrn": "2KMB4GB",
+    "randevuNotu": "",
+    "aileHekimiMi": false,
+    "shmMi": false,
+    "randevuBitisZamaniStr": {
+      "date": "2022-06-14 08:45:00",
+      "gun": "Salı",
+      "zaman": "14.06.2022 08:45",
+      "saat": "08:45",
+      "tarih": "14.06.2022",
+      "tarihAy": "14 Haziran 2022"
+    },
+    "randevuBaslangicZamaniStr": {
+      "date": "2022-06-14 08:30:00",
+      "gun": "Salı",
+      "zaman": "14.06.2022 08:30",
+      "saat": "08:30",
+      "tarih": "14.06.2022",
+      "tarihAy": "14 Haziran 2022"
+    }
+  }
+}

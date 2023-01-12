@@ -1,0 +1,1718 @@
+{
+  "lang": "tr-TR",
+  "success": true,
+  "infos": [
+    {
+      "kodu": "RND4000",
+      "mesaj": "Aradığınız kriterlerde uygun randevular bulunmaktadır. (RND4000)"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "data": [
+    {
+      "hekimSlotList": [
+        {
+          "muayeneYeriSlotList": [
+            {
+              "saatSlotList": [
+                {
+                  "slotList": [
+                    {
+                      "id": 917160342,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 08:30:00",
+                      "bitisZamani": "2022-06-14 08:45:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160342,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 08:30:00",
+                        "bitisZamani": "2022-06-14 08:45:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 08:45:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 08:45",
+                        "gun": "Salı",
+                        "saat": "08:45",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 08:30:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 08:30",
+                        "gun": "Salı",
+                        "saat": "08:30",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160345,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 08:45:00",
+                      "bitisZamani": "2022-06-14 09:00:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160345,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 1,
+                        "kalanKullanim": 0,
+                        "baslangicZamani": "2022-06-14 08:45:00",
+                        "bitisZamani": "2022-06-14 09:00:00",
+                        "kayitZamani": null
+                      },
+                      "bos": false,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 09:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:00",
+                        "gun": "Salı",
+                        "saat": "09:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 08:45:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 08:45",
+                        "gun": "Salı",
+                        "saat": "08:45",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "08:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "08:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160347,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 09:00:00",
+                      "bitisZamani": "2022-06-14 09:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160347,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 09:00:00",
+                        "bitisZamani": "2022-06-14 09:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 09:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:15",
+                        "gun": "Salı",
+                        "saat": "09:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 09:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:00",
+                        "gun": "Salı",
+                        "saat": "09:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160350,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 09:15:00",
+                      "bitisZamani": "2022-06-14 09:30:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160350,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 09:15:00",
+                        "bitisZamani": "2022-06-14 09:30:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 09:30:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:30",
+                        "gun": "Salı",
+                        "saat": "09:30",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 09:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:15",
+                        "gun": "Salı",
+                        "saat": "09:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160352,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 09:30:00",
+                      "bitisZamani": "2022-06-14 09:45:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160352,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 09:30:00",
+                        "bitisZamani": "2022-06-14 09:45:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 09:45:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:45",
+                        "gun": "Salı",
+                        "saat": "09:45",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 09:30:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:30",
+                        "gun": "Salı",
+                        "saat": "09:30",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160354,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 09:45:00",
+                      "bitisZamani": "2022-06-14 10:00:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160354,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 09:45:00",
+                        "bitisZamani": "2022-06-14 10:00:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 10:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:00",
+                        "gun": "Salı",
+                        "saat": "10:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 09:45:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 09:45",
+                        "gun": "Salı",
+                        "saat": "09:45",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "09:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "09:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160356,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 10:00:00",
+                      "bitisZamani": "2022-06-14 10:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160356,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 10:00:00",
+                        "bitisZamani": "2022-06-14 10:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 10:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:15",
+                        "gun": "Salı",
+                        "saat": "10:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 10:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:00",
+                        "gun": "Salı",
+                        "saat": "10:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160358,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 10:15:00",
+                      "bitisZamani": "2022-06-14 10:30:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160358,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 10:15:00",
+                        "bitisZamani": "2022-06-14 10:30:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 10:30:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:30",
+                        "gun": "Salı",
+                        "saat": "10:30",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 10:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:15",
+                        "gun": "Salı",
+                        "saat": "10:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160360,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 10:30:00",
+                      "bitisZamani": "2022-06-14 10:45:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160360,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 10:30:00",
+                        "bitisZamani": "2022-06-14 10:45:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 10:45:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:45",
+                        "gun": "Salı",
+                        "saat": "10:45",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 10:30:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:30",
+                        "gun": "Salı",
+                        "saat": "10:30",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    },
+                    {
+                      "id": 917160362,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 10:45:00",
+                      "bitisZamani": "2022-06-14 11:00:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160362,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 1,
+                        "kalanKullanim": 0,
+                        "baslangicZamani": "2022-06-14 10:45:00",
+                        "bitisZamani": "2022-06-14 11:00:00",
+                        "kayitZamani": null
+                      },
+                      "bos": false,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 11:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 11:00",
+                        "gun": "Salı",
+                        "saat": "11:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 10:45:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 10:45",
+                        "gun": "Salı",
+                        "saat": "10:45",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "10:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "10:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160363,
+                      "fkCetvelId": 2167605103,
+                      "baslangicZamani": "2022-06-14 11:00:00",
+                      "bitisZamani": "2022-06-14 11:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160363,
+                        "fkCetvelId": 2167605103,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 11:00:00",
+                        "bitisZamani": "2022-06-14 11:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 11:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 11:15",
+                        "gun": "Salı",
+                        "saat": "11:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 11:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 11:00",
+                        "gun": "Salı",
+                        "saat": "11:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "11:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "11:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160364,
+                      "fkCetvelId": 2167605104,
+                      "baslangicZamani": "2022-06-14 13:00:00",
+                      "bitisZamani": "2022-06-14 13:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160364,
+                        "fkCetvelId": 2167605104,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-14 13:00:00",
+                        "bitisZamani": "2022-06-14 13:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 13:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 13:15",
+                        "gun": "Salı",
+                        "saat": "13:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 13:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 13:00",
+                        "gun": "Salı",
+                        "saat": "13:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "13:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "13:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160365,
+                      "fkCetvelId": 2167605108,
+                      "baslangicZamani": "2022-06-14 14:00:00",
+                      "bitisZamani": "2022-06-14 14:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160365,
+                        "fkCetvelId": 2167605108,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 1,
+                        "kalanKullanim": 0,
+                        "baslangicZamani": "2022-06-14 14:00:00",
+                        "bitisZamani": "2022-06-14 14:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": false,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 14:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 14:15",
+                        "gun": "Salı",
+                        "saat": "14:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 14:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 14:00",
+                        "gun": "Salı",
+                        "saat": "14:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "14:00:00",
+                  "bos": false,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "14:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160366,
+                      "fkCetvelId": 2167605111,
+                      "baslangicZamani": "2022-06-14 15:00:00",
+                      "bitisZamani": "2022-06-14 15:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160366,
+                        "fkCetvelId": 2167605111,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 1,
+                        "kalanKullanim": 0,
+                        "baslangicZamani": "2022-06-14 15:00:00",
+                        "bitisZamani": "2022-06-14 15:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": false,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 10,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-14 15:15:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 15:15",
+                        "gun": "Salı",
+                        "saat": "15:15",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-14 15:00:00",
+                        "tarih": "14.06.2022",
+                        "zaman": "14.06.2022 15:00",
+                        "gun": "Salı",
+                        "saat": "15:00",
+                        "tarihAy": "14 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 14 gün var)"
+                    }
+                  ],
+                  "saat": "15:00:00",
+                  "bos": false,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 10,
+                  "saatStr": "15:00"
+                }
+              ],
+              "saatSlotListEk": [],
+              "muayeneYeri": {
+                "id": 7352160,
+                "adi": "DİŞ 12 ( Kartal Tasocagi Ek Hizmet Binası)"
+              },
+              "toplamKapasite": 14,
+              "bosKapasite": 10,
+              "toplamEkKapasite": 0,
+              "bosEkKapasite": 0,
+              "bos": true,
+              "bosEk": false
+            }
+          ],
+          "hekim": {
+            "id": "dc873454-b3aa-4acd-97d2-f63713a7f95f",
+            "mhrsHekimId": 23858,
+            "ad": "FATMA",
+            "soyad": "AYDIN",
+            "cinsiyet": {"val": "K", "valText": "Kadın"}
+          },
+          "kurum": {
+            "mhrsKurumId": 177339,
+            "mhrsAnaKurumId": 0,
+            "kurumAdi": "İSTANBUL- (ANADOLU)- TUZLA DEVLET HASTANESİ",
+            "kurumKisaAdi": "TUZLA DEVLET H.",
+            "kurumTurId": 16,
+            "ilIlce": {
+              "mhrsIlId": 342,
+              "dkIlKodu": 342,
+              "ilAdi": "İSTANBUL(ANADOLU)",
+              "mhrsIlceId": 2015,
+              "dkIlceKodu": 2015,
+              "ilceAdi": "TUZLA"
+            }
+          },
+          "klinik": {
+            "mhrsKlinikId": 198,
+            "mhrsKlinikAdi": "Diş Hekimliği (Genel Diş)",
+            "kisaAdi": "Diş Hekimliği'ne",
+            "lcetvelTipi": 1,
+            "yandalList": [],
+            "anadalList": [
+              {
+                "yandalMhrsKlinikId": 103,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Ağız, Diş ve Çene Cerrahisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 104,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Ağız, Diş ve Çene Radyolojisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 138,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Endodonti",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 170,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Ortodonti",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 174,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Periodontoloji",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 176,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Protetik Diş Tedavisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 179,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Restoratif Diş Tedavisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              }
+            ]
+          },
+          "aksiyon": {"id": 200, "aksiyonAdi": "Muayene"},
+          "bos": true,
+          "bosEk": false,
+          "hekimFavori": false,
+          "toplamKapasite": 14,
+          "bosKapasite": 10,
+          "toplamEkKapasite": 0,
+          "bosEkKapasite": 0
+        }
+      ],
+      "gun": "2022-06-14",
+      "bos": true,
+      "kapasite": 14,
+      "kullanim": 4,
+      "kalanKullanim": 10,
+      "gunStr": {
+        "date": "2022-06-14 00:00:00",
+        "tarih": "14.06.2022",
+        "zaman": "14.06.2022 00:00",
+        "gun": "Salı",
+        "saat": "00:00",
+        "tarihAy": "14 Haziran 2022"
+      }
+    },
+    {
+      "hekimSlotList": [
+        {
+          "muayeneYeriSlotList": [
+            {
+              "saatSlotList": [
+                {
+                  "slotList": [
+                    {
+                      "id": 917160447,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 08:30:00",
+                      "bitisZamani": "2022-06-15 08:45:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160447,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 08:30:00",
+                        "bitisZamani": "2022-06-15 08:45:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 08:45:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 08:45",
+                        "gun": "Çarşamba",
+                        "saat": "08:45",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 08:30:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 08:30",
+                        "gun": "Çarşamba",
+                        "saat": "08:30",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160448,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 08:45:00",
+                      "bitisZamani": "2022-06-15 09:00:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160448,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 08:45:00",
+                        "bitisZamani": "2022-06-15 09:00:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 09:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:00",
+                        "gun": "Çarşamba",
+                        "saat": "09:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 08:45:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 08:45",
+                        "gun": "Çarşamba",
+                        "saat": "08:45",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "08:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "08:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160449,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 09:00:00",
+                      "bitisZamani": "2022-06-15 09:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160449,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 09:00:00",
+                        "bitisZamani": "2022-06-15 09:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 09:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:15",
+                        "gun": "Çarşamba",
+                        "saat": "09:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 09:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:00",
+                        "gun": "Çarşamba",
+                        "saat": "09:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160450,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 09:15:00",
+                      "bitisZamani": "2022-06-15 09:30:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160450,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 09:15:00",
+                        "bitisZamani": "2022-06-15 09:30:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 09:30:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:30",
+                        "gun": "Çarşamba",
+                        "saat": "09:30",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 09:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:15",
+                        "gun": "Çarşamba",
+                        "saat": "09:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160451,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 09:30:00",
+                      "bitisZamani": "2022-06-15 09:45:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160451,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 09:30:00",
+                        "bitisZamani": "2022-06-15 09:45:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 09:45:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:45",
+                        "gun": "Çarşamba",
+                        "saat": "09:45",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 09:30:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:30",
+                        "gun": "Çarşamba",
+                        "saat": "09:30",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160452,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 09:45:00",
+                      "bitisZamani": "2022-06-15 10:00:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160452,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 09:45:00",
+                        "bitisZamani": "2022-06-15 10:00:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 10:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:00",
+                        "gun": "Çarşamba",
+                        "saat": "10:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 09:45:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 09:45",
+                        "gun": "Çarşamba",
+                        "saat": "09:45",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "09:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "09:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160454,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 10:00:00",
+                      "bitisZamani": "2022-06-15 10:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160454,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 10:00:00",
+                        "bitisZamani": "2022-06-15 10:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 10:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:15",
+                        "gun": "Çarşamba",
+                        "saat": "10:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 10:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:00",
+                        "gun": "Çarşamba",
+                        "saat": "10:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160456,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 10:15:00",
+                      "bitisZamani": "2022-06-15 10:30:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160456,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 1,
+                        "kalanKullanim": 0,
+                        "baslangicZamani": "2022-06-15 10:15:00",
+                        "bitisZamani": "2022-06-15 10:30:00",
+                        "kayitZamani": null
+                      },
+                      "bos": false,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 10:30:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:30",
+                        "gun": "Çarşamba",
+                        "saat": "10:30",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 10:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:15",
+                        "gun": "Çarşamba",
+                        "saat": "10:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160458,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 10:30:00",
+                      "bitisZamani": "2022-06-15 10:45:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160458,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 10:30:00",
+                        "bitisZamani": "2022-06-15 10:45:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 10:45:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:45",
+                        "gun": "Çarşamba",
+                        "saat": "10:45",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 10:30:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:30",
+                        "gun": "Çarşamba",
+                        "saat": "10:30",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    },
+                    {
+                      "id": 917160460,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 10:45:00",
+                      "bitisZamani": "2022-06-15 11:00:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160460,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 10:45:00",
+                        "bitisZamani": "2022-06-15 11:00:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 11:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 11:00",
+                        "gun": "Çarşamba",
+                        "saat": "11:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 10:45:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 10:45",
+                        "gun": "Çarşamba",
+                        "saat": "10:45",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "10:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "10:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160462,
+                      "fkCetvelId": 2167605129,
+                      "baslangicZamani": "2022-06-15 11:00:00",
+                      "bitisZamani": "2022-06-15 11:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160462,
+                        "fkCetvelId": 2167605129,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 11:00:00",
+                        "bitisZamani": "2022-06-15 11:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 11:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 11:15",
+                        "gun": "Çarşamba",
+                        "saat": "11:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 11:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 11:00",
+                        "gun": "Çarşamba",
+                        "saat": "11:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "11:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "11:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160465,
+                      "fkCetvelId": 2167605132,
+                      "baslangicZamani": "2022-06-15 13:00:00",
+                      "bitisZamani": "2022-06-15 13:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160465,
+                        "fkCetvelId": 2167605132,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 13:00:00",
+                        "bitisZamani": "2022-06-15 13:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 13:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 13:15",
+                        "gun": "Çarşamba",
+                        "saat": "13:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 13:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 13:00",
+                        "gun": "Çarşamba",
+                        "saat": "13:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "13:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "13:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160467,
+                      "fkCetvelId": 2167605135,
+                      "baslangicZamani": "2022-06-15 14:00:00",
+                      "bitisZamani": "2022-06-15 14:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160467,
+                        "fkCetvelId": 2167605135,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 14:00:00",
+                        "bitisZamani": "2022-06-15 14:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 14:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 14:15",
+                        "gun": "Çarşamba",
+                        "saat": "14:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 14:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 14:00",
+                        "gun": "Çarşamba",
+                        "saat": "14:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "14:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "14:00"
+                },
+                {
+                  "slotList": [
+                    {
+                      "id": 917160469,
+                      "fkCetvelId": 2167605137,
+                      "baslangicZamani": "2022-06-15 15:00:00",
+                      "bitisZamani": "2022-06-15 15:15:00",
+                      "cetvelIsKurallari": null,
+                      "slot": {
+                        "id": 917160469,
+                        "fkCetvelId": 2167605137,
+                        "mhrsKurumId": 177339,
+                        "mhrsKlinikId": 198,
+                        "mhrsHekimId": 23858,
+                        "muayeneYeriId": 7352160,
+                        "fkAksiyonId": 200,
+                        "slotHastaSayisi": 1,
+                        "randevuSuresi": 15,
+                        "kullanim": 0,
+                        "kalanKullanim": 1,
+                        "baslangicZamani": "2022-06-15 15:00:00",
+                        "bitisZamani": "2022-06-15 15:15:00",
+                        "kayitZamani": null
+                      },
+                      "bos": true,
+                      "isKurali": false,
+                      "kapasite": 1,
+                      "bosKapasite": 13,
+                      "ek": false,
+                      "uygunRandevuGecmisSlot": false,
+                      "rezerveTuruData": null,
+                      "bitisZamanStr": {
+                        "date": "2022-06-15 15:15:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 15:15",
+                        "gun": "Çarşamba",
+                        "saat": "15:15",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "baslangicZamanStr": {
+                        "date": "2022-06-15 15:00:00",
+                        "tarih": "15.06.2022",
+                        "zaman": "15.06.2022 15:00",
+                        "gun": "Çarşamba",
+                        "saat": "15:00",
+                        "tarihAy": "15 Haziran 2022"
+                      },
+                      "kalanGunMesaj": "(Randevuya 15 gün var)"
+                    }
+                  ],
+                  "saat": "15:00:00",
+                  "bos": true,
+                  "ek": false,
+                  "toplamKapasite": 14,
+                  "bosKapasite": 13,
+                  "saatStr": "15:00"
+                }
+              ],
+              "saatSlotListEk": [],
+              "muayeneYeri": {
+                "id": 7352160,
+                "adi": "DİŞ 12 ( Kartal Tasocagi Ek Hizmet Binası)"
+              },
+              "toplamKapasite": 14,
+              "bosKapasite": 13,
+              "toplamEkKapasite": 0,
+              "bosEkKapasite": 0,
+              "bos": true,
+              "bosEk": false
+            }
+          ],
+          "hekim": {
+            "id": "dc873454-b3aa-4acd-97d2-f63713a7f95f",
+            "mhrsHekimId": 23858,
+            "ad": "FATMA",
+            "soyad": "AYDIN",
+            "cinsiyet": {"val": "K", "valText": "Kadın"}
+          },
+          "kurum": {
+            "mhrsKurumId": 177339,
+            "mhrsAnaKurumId": 0,
+            "kurumAdi": "İSTANBUL- (ANADOLU)- TUZLA DEVLET HASTANESİ",
+            "kurumKisaAdi": "TUZLA DEVLET H.",
+            "kurumTurId": 16,
+            "ilIlce": {
+              "mhrsIlId": 342,
+              "dkIlKodu": 342,
+              "ilAdi": "İSTANBUL(ANADOLU)",
+              "mhrsIlceId": 2015,
+              "dkIlceKodu": 2015,
+              "ilceAdi": "TUZLA"
+            }
+          },
+          "klinik": {
+            "mhrsKlinikId": 198,
+            "mhrsKlinikAdi": "Diş Hekimliği (Genel Diş)",
+            "kisaAdi": "Diş Hekimliği'ne",
+            "lcetvelTipi": 1,
+            "yandalList": [],
+            "anadalList": [
+              {
+                "yandalMhrsKlinikId": 103,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Ağız, Diş ve Çene Cerrahisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 104,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Ağız, Diş ve Çene Radyolojisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 138,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Endodonti",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 170,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Ortodonti",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 174,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Periodontoloji",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 176,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Protetik Diş Tedavisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              },
+              {
+                "yandalMhrsKlinikId": 179,
+                "anadalMhrsKlinikId": 198,
+                "anadalSirasi": 1,
+                "yandalKlinikAdi": "Restoratif Diş Tedavisi",
+                "anadalKlinikAdi": "Diş Hekimliği (Genel Diş)"
+              }
+            ]
+          },
+          "aksiyon": {"id": 200, "aksiyonAdi": "Muayene"},
+          "bos": true,
+          "bosEk": false,
+          "hekimFavori": false,
+          "toplamKapasite": 14,
+          "bosKapasite": 13,
+          "toplamEkKapasite": 0,
+          "bosEkKapasite": 0
+        }
+      ],
+      "gun": "2022-06-15",
+      "bos": true,
+      "kapasite": 14,
+      "kullanim": 1,
+      "kalanKullanim": 13,
+      "gunStr": {
+        "date": "2022-06-15 00:00:00",
+        "tarih": "15.06.2022",
+        "zaman": "15.06.2022 00:00",
+        "gun": "Çarşamba",
+        "saat": "00:00",
+        "tarihAy": "15 Haziran 2022"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "lang": "tr-TR",
+  "success": true,
+  "infos": [{"kodu": "GNL1009", "mesaj": "İşlem Başarılı"}],
+  "warnings": [],
+  "errors": [],
+  "data": {
+    "uuid": "0abc74fe-8be6-4c97-9b2d-972ebfa9b28e",
+    "jwt": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwYWJjNzRmZS04YmU2LTRjOTctOWIyZC05NzJlYmZhOWIyOGUiLCJpYXQiOjE2NTM5OTEyMjcsImV4cCI6MTY1NDA3NzYyNywidXNlciI6eyJ1dWlkIjoiOTcyM2RjNjctZGU2Mi00ZjYwLTg0MGQtYWJiNmMwMWE5NjZlIiwidG9rZW5UaXBpIjoiVkFUQU5EQVMiLCJpc2xlbUthbmFsaSI6IlZBVEFOREFTX1JFU1BPTlNJVkUifX0.Asg4wocI0vUh2ZyoQFa3Al27KOtAB_mfm3nwBseIUm-TSIdh-agRLEzqYOhS-EFsipztXwoFHtiQUdMhR7hvag",
+    "kullaniciUuid": "9723dc67-de62-4f60-840d-abb6c01a966e",
+    "kullaniciAdi": "MUCAHİD",
+    "kullaniciSoyadi": "YAZAR",
+    "kullaniciTipi": {"val": 3, "valText": "VATANDAŞ"},
+    "islemKanali": "VATANDAS_RESPONSIVE",
+    "girisTipi": {"val": 1, "valText": "Parola İle Giriş"}
+  }
+}
