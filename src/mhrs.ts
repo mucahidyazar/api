@@ -11,7 +11,7 @@ import prompts from 'prompts'
 import {logger} from './utils'
 import {CONFIG} from './config'
 import {ICity, IDistrict} from './common'
-import {City, District, Policinic} from './data'
+import {city, district, policinic} from './data'
 import {addAppointments, getDoctors, getHours, getLogin} from './helper'
 
 interface IStartAppArgs {
@@ -38,7 +38,7 @@ const startApp = async ({cityId, districtId, policinicId}: IStartAppArgs) => {
           type: 'select',
           name: 'city',
           message: 'Select city',
-          choices: Object.values(City),
+          choices: Object.values(city),
         })
       }
       if (!districtId) {
@@ -46,7 +46,7 @@ const startApp = async ({cityId, districtId, policinicId}: IStartAppArgs) => {
           type: 'select',
           name: 'district',
           message: (prev: ICity) => `Select district of ${prev.text}`,
-          choices: Object.values(District),
+          choices: Object.values(district),
         })
       }
       if (!policinicId) {
@@ -54,7 +54,7 @@ const startApp = async ({cityId, districtId, policinicId}: IStartAppArgs) => {
           type: 'select',
           name: 'policilinics',
           message: (prev: IDistrict) => `Select policilinics of ${prev.text}`,
-          choices: Object.values(Policinic),
+          choices: Object.values(policinic),
         })
       }
 
@@ -108,29 +108,29 @@ const myArgs = {
 
 //! Start App
 // startApp({
-//   cityId: myArgs.cityId || City['İSTANBUL(ANADOLU)'].value,
-//   districtId: myArgs.districtId || District.TUZLA.value,
+//   cityId: myArgs.cityId || city['İSTANBUL(ANADOLU)'].value,
+//   districtId: myArgs.districtId || district.TUZLA.value,
 //   policinicId:
 //     myArgs.policinicId ||
-//     Policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+//     policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
 // })
 
 const run = async () => {
   const options = [
     {
-      cityId: City['İSTANBUL(ANADOLU)'].value,
-      districtId: District.TUZLA.value,
-      policinicId: Policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+      cityId: city['İSTANBUL(ANADOLU)'].value,
+      districtId: district.TUZLA.value,
+      policinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
     },
     {
-      cityId: City['İSTANBUL(ANADOLU)'].value,
-      districtId: District.PENDİK.value,
-      policinicId: Policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+      cityId: city['İSTANBUL(ANADOLU)'].value,
+      districtId: district.PENDİK.value,
+      policinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
     },
     {
-      cityId: City['İSTANBUL(ANADOLU)'].value,
-      districtId: District.KARTAL.value,
-      policinicId: Policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+      cityId: city['İSTANBUL(ANADOLU)'].value,
+      districtId: district.KARTAL.value,
+      policinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
     },
   ]
 

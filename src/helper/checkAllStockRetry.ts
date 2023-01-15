@@ -2,7 +2,7 @@ import {ICheckStockResult} from '../common'
 import {BRAND, TBrand} from '../constants'
 import {checkStockRetry} from './checkStockRetry'
 import {CONFIG} from '../config'
-import {myLinks} from '../mock/myLinks'
+import {links} from '../data'
 
 export async function checkAllStocksRetry({
   retry = 1,
@@ -14,11 +14,11 @@ export async function checkAllStocksRetry({
   shouldReturn?: boolean
 }) {
   const result: ICheckStockResult[] = []
-  const totalLinks = myLinks.length
+  const totalLinks = links.length
 
   let left = retry
   const interval = setInterval(async () => {
-    for (const link of myLinks) {
+    for (const link of links) {
       const brand = link.match(/https:\/\/www\.(.*?)\./)?.[1] as TBrand
       const response = await checkStockRetry({
         link,

@@ -1,4 +1,4 @@
-export const City = {
+export const city = {
   'İSTANBUL(ANADOLU)': {
     value: 342,
     title: 'İSTANBUL(ANADOLU)',

@@ -1,4 +1,4 @@
-export const District = {
+export const district = {
   ADALAR: {value: '1103', title: 'ADALAR'},
   ATAŞEHİR: {value: '2049', title: 'ATAŞEHİR'},
   BEYKOZ: {value: '1185', title: 'BEYKOZ'},

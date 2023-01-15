@@ -1,3 +1,4 @@
-export * from './City'
-export * from './District'
-export * from './Policinic'
+export * from './city'
+export * from './district'
+export * from './links'
+export * from './policinic'

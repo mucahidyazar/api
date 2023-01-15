@@ -1,4 +1,4 @@
-export const Policinic = {
+export const policinic = {
   'Aile Hekimliği': {
     value: 106,
     title: 'Aile Hekimliği',
