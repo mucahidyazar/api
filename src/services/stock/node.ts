@@ -4,9 +4,10 @@ dotEnv.config({
   path: process.cwd() + '/.env',
 })
 
-import {sendTelegramMessage} from './client'
-import {logger} from './utils'
-import {checkAllStocksRetry} from './helper'
+import {sendTelegramMessage} from '@/client'
+import {logger} from '@/utils'
+
+import {checkAllStocksRetry} from './helpers'
 
 const startApp = async () => {
   try {

@@ -1,8 +1,9 @@
-import {ICheckStockResult} from '../common'
-import {BRAND, TBrand} from '../constants'
+import {ICheckStockResult} from '../../../types'
+import {TBrand} from '../../../constants'
+import {CONFIG} from '../../../config'
+import {links} from '../../../data'
+
 import {checkStockRetry} from './checkStockRetry'
-import {CONFIG} from '../config'
-import {links} from '../data'
 
 export async function checkAllStocksRetry({
   retry = 1,

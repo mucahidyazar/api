@@ -2,7 +2,7 @@ import axios, {AxiosError} from 'axios'
 
 import {logger} from '../utils'
 import {CONFIG} from '../config'
-import {City, District, Policinic} from '../data'
+import {city, district, policinic} from '../data'
 
 export const mhrsApi = axios.create({
   baseURL: 'https://prd.mhrs.gov.tr/api',
@@ -17,13 +17,13 @@ mhrsApi.interceptors.response.use(undefined, async (error: AxiosError) => {
 
   const requestData: any = JSON.parse(originalRequestConfig?.data)
   console.table({
-    City: Object.values(City).find(
+    City: Object.values(city).find(
       (item: any) => item.value === requestData.mhrsIlId,
     ),
-    District: Object.values(District).find(
+    District: Object.values(district).find(
       (item: any) => item.value === requestData.mhrsIlceId,
     ),
-    Policinic: Object.values(Policinic).find(
+    Policinic: Object.values(policinic).find(
       (item: any) => item.value === requestData.mhrsKlinikId,
     ),
   })

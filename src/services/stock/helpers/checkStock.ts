@@ -1,9 +1,9 @@
 import puppeteer, {ElementHandle} from 'puppeteer'
 
-import {IBrand, ICheckStock, ICheckStockResult} from '../common'
-import {sendTelegramMessage} from '../client'
-import {getPrice, logger} from '../utils'
-import {BRAND} from '../constants'
+import {IBrand, ICheckStock, ICheckStockResult} from '@/types'
+import {sendTelegramMessage} from '../../../client'
+import {getPrice, logger} from '../../../utils'
+import {BRAND} from '../../../constants'
 
 export async function checkStock({
   link,

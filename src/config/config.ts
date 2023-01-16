@@ -1,3 +1,5 @@
+const DEFAULT_MONGO_URI = 'mongodb://localhost:27017/api'
+
 export const CONFIG = {
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
   groupChatId: process.env.GROUP_CHAT_ID || '',
@@ -10,4 +12,7 @@ export const CONFIG = {
   ANY_DOCTOR: true,
   MHRS_USERNAME: process.env.MHRS_USERNAME,
   MHRS_PASSWORD: process.env.MHRS_PASSWORD,
+
+  //! DATABASE
+  MONGO_URI: process.env.MONGO_URI || DEFAULT_MONGO_URI,
 }

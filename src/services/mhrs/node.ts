@@ -8,10 +8,11 @@ dotEnv.config({
 import './global'
 import prompts from 'prompts'
 
-import {logger} from './utils'
-import {CONFIG} from './config'
-import {ICity, IDistrict} from './common'
-import {city, district, policinic} from './data'
+import {logger} from '@/utils'
+import {CONFIG} from '@/config'
+import {ICity, IDistrict} from '@/types'
+import {city, district, policinic} from '@/data'
+
 import {addAppointments, getDoctors, getHours, getLogin} from './helper'
 
 interface IStartAppArgs {

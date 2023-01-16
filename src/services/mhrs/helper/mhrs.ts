@@ -1,8 +1,9 @@
-import {mhrsApi} from '../client'
-import {IGetDoctors, IGetHours} from '../types'
-import {CONFIG} from '../config'
-import {ENDPOINTS} from '../constants'
-import {logger} from '../utils'
+import {mhrsApi} from '@/client'
+import {IGetDoctors, IGetHours} from '@/types'
+import {CONFIG} from '@/config'
+import {logger} from '@/utils'
+
+import {ENDPOINTS} from '../endpoints'
 
 const getLogin = async () => {
   logger('Logining...', {type: 'info'})

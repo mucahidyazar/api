@@ -1,7 +1,7 @@
-import {sleep} from '../utils'
-import {ICheckStockRetry, ICheckStockResult} from '../common'
+import {sleep} from '../../../utils'
+import {ICheckStockRetry, ICheckStockResult} from '../../../types'
+
 import {checkStock} from './checkStock'
-import {BRAND} from '../constants'
 
 export async function checkStockRetry({
   link,

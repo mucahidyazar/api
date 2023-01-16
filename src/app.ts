@@ -5,13 +5,20 @@ dotEnv.config({
 })
 
 import express from 'express'
+import cors from 'cors'
 import {createServer} from 'http'
 import {Server} from 'socket.io'
 
+import './config/db'
 import {CONFIG} from './config'
 import {socketRouter, stockRouter} from './routes/v1'
 
 const app = express()
+
+//!REQUIREMENTS
+app.use(express.json())
+app.use(cors())
+app.use(express.urlencoded({extended: true}))
 
 const httpServer = createServer(app)
 

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express'
 import {Socket} from 'socket.io'
 
-import {checkAllStocksRetry} from '../helper'
+import {checkAllStocksRetry} from '../services/stock/helpers'
 
 export function watchList(req: Request, res: Response) {
   try {

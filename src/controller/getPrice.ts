@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 
-import {checkStock} from '../helper'
+import {checkStock} from '../services/stock/helpers'
 import {links} from '../data'
 
 export async function getPrice(req: Request, res: Response) {

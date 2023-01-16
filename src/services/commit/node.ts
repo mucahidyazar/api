@@ -7,7 +7,7 @@ import fs from 'fs'
 
 import {promiseLoop} from '@/utils'
 
-import {DISTRIBUTION, IGetNewDate, IGenerateCommits, ICommit} from './common'
+import {DISTRIBUTION, IGetNewDate, IGenerateCommits, ICommit} from './types'
 
 const time = moment()
 const secretPath = path.resolve(__dirname, '../../secret')
