@@ -5,36 +5,38 @@ import {faker} from '@faker-js/faker'
 import path from 'path'
 import fs from 'fs'
 
+import {promiseLoop} from '@/utils'
+
+import {DISTRIBUTION, IGetNewDate, IGenerateCommits, ICommit} from './common'
+
 const time = moment()
-const filePath = path.resolve(__dirname, './secret/commit/data.json')
+const secretPath = path.resolve(__dirname, '../../secret')
+const getProjectPath = (projectName: 'commit') => {
+  return path.resolve(secretPath, projectName)
+}
+const projectPath = getProjectPath('commit')
+const dataPath = path.resolve(projectPath, 'data.json')
 // const aDayAgo = moment().subtract(1, 'day').format()
 // const aMonthAgo = moment().subtract(1, 'month').format()
 // const aYearAgo = moment().subtract(1, 'year').format()
-
-const DISTRIBUTION = {
-  random: 'random',
-  equal: 'equal',
-} as const
-type TDistribution = keyof typeof DISTRIBUTION
 
 const isWeekend = (date: string) => {
   const day = moment(date).day()
   return day === 0 || day === 6
 }
 
-interface IGenerateCommits {
-  from: string | Date
-  to: string | Date
-  distribution?: TDistribution
-  count: number
-  options?: {
-    excludeWeekends?: boolean
+const getNewDate = ({date, excludeWeekends}: IGetNewDate) => {
+  const defaultDate = moment(date).add(1, 'days').format()
+  let theDate = date || defaultDate
+
+  if (excludeWeekends) {
+    while (isWeekend(theDate)) {
+      theDate = moment(theDate).add(1, 'days').format()
+    }
   }
+  return theDate
 }
-interface ICommit {
-  date: string
-  message: string
-}
+
 export function generateCommits({
   from = time.subtract(1, 'year').format(),
   to = time.format(),
@@ -55,12 +57,7 @@ export function generateCommits({
 
     if (count < diff) {
       for (let i = 0; i < count; i++) {
-        date = fromTime.add(1, 'days').format()
-        if (excludeWeekends) {
-          while (isWeekend(date)) {
-            date = fromTime.add(1, 'days').format()
-          }
-        }
+        date = getNewDate({excludeWeekends})
         const message = 'commit: ' + faker.git.commitMessage()
         commits.push({date, message})
       }
@@ -69,12 +66,7 @@ export function generateCommits({
 
     for (let i = 0; i < count; i++) {
       if (i % commitsPerDay === 0) {
-        date = fromTime.add(1, 'days').format()
-        if (excludeWeekends) {
-          while (isWeekend(date)) {
-            date = fromTime.add(1, 'days').format()
-          }
-        }
+        date = getNewDate({excludeWeekends})
       }
       const message = 'commit: ' + faker.git.commitMessage()
       commits.push({date, message})
@@ -84,12 +76,11 @@ export function generateCommits({
 
   if (distribution === DISTRIBUTION.random) {
     for (let i = 0; i < count; i++) {
-      let date = moment(faker.date.between(from, to)).format()
-      if (excludeWeekends) {
-        while (isWeekend(date)) {
-          date = fromTime.add(1, 'days').format()
-        }
-      }
+      let date = getNewDate({
+        date: moment(faker.date.between(from, to)).format(),
+        excludeWeekends,
+      })
+
       const message = 'commit: ' + faker.git.commitMessage()
       commits.push({date, message})
     }
@@ -105,36 +96,24 @@ async function makeCommit() {
     to: '2018-12-31T10:00:00+12:00',
     count: 1000,
     distribution: DISTRIBUTION.random,
-    options: {
-      excludeWeekends: true,
-    },
+    options: {excludeWeekends: true},
   })
 
   const git = simpleGit()
-  // I created a secret folder in src
-  // go secret folder and init git
   git.cwd(path.resolve(__dirname, './secret'))
-  // check if the file exists
-  const repoName = 'commit'
-  const repoPath = path.resolve(__dirname, `./secret/${repoName}`)
-  if (await fs.existsSync(repoPath)) {
-    // delete commit folder if it exist
-    await fs.rmSync(path.resolve(__dirname, './secret/commit'), {
-      recursive: true,
-    })
+  if (await fs.existsSync(projectPath)) {
+    await fs.rmSync(projectPath, {recursive: true})
   }
   await git.clone('https://github.com/mucahidyazar/commit.git')
-  git.cwd(repoPath)
+  git.cwd(projectPath)
   git.addConfig('user.name', 'Mucahid Yazar')
   git.addConfig('user.email', 'mucahidyazar@gmail.com')
 
-  const jsonCommits = await jsonfile.readFile(filePath)
+  const jsonCommits = await jsonfile.readFile(dataPath)
   await promiseLoop<ICommit>(commits, async commit => {
     jsonCommits.push(commit)
-    await jsonfile.writeFileSync(filePath, jsonCommits, {
-      spaces: 2,
-    })
-    await git.add([filePath])
+    await jsonfile.writeFileSync(dataPath, jsonCommits, {spaces: 2})
+    await git.add([dataPath])
     await git.commit(commit.message, {'--date': commit.date})
   })
   // await git.log().then(log => console.log(log?.total))
@@ -143,9 +122,3 @@ async function makeCommit() {
 }
 
 makeCommit()
-
-function promiseLoop<T = any>(arr: T[], fn: (item: T) => Promise<any>) {
-  return arr.reduce((promise, item) => {
-    return promise.then(() => fn(item))
-  }, Promise.resolve())
-}
