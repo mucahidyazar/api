@@ -1,10 +1,22 @@
 export const ROUTES = {
   v1: {
     stock: {
-      simpleStock: '/api/v1/stock/simple-stock',
+      start: '/api/v1/stock/start',
+      check: '/api/v1/stock/check',
+      stop: '/api/v1/stock/stop',
+      detail: '/api/v1/stock/detail',
+      myInit: '/api/v1/stock/my-init',
+      myStart: '/api/v1/stock/my-start',
+      myCheck: '/api/v1/stock/my-check',
+      myClear: '/api/v1/stock/my-clear',
+      myClearResults: '/api/v1/stock/my-clear-results',
+      myCreate: '/api/v1/stock/my-create',
+      myList: '/api/v1/stock/my-list',
+      myStop: '/api/v1/stock/my-stop',
+      myDetail: '/api/v1/stock/my-detail',
     },
     socket: {
-      simpleSocket: '/api/v1/socket/simple-socket',
+      start: '/api/v1/socket/start',
     },
   },
 }

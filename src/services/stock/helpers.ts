@@ -1,9 +1,17 @@
 import puppeteer, {ElementHandle} from 'puppeteer'
 
-import {IBrand, ICheckStock, ICheckStockResult} from '@/types'
-import {sendTelegramMessage} from '../../../client'
-import {getPrice, logger} from '../../../utils'
-import {BRAND} from '../../../constants'
+import {
+  IBrand,
+  ICheckStock,
+  ICheckStockRetry,
+  ICheckStockResult,
+} from '../../types'
+import {TBrand, BRAND} from '../../constants'
+import {CONFIG} from '../../config'
+import {links} from '../../data'
+import {getPrice, logger, sleep} from '../../utils'
+import {sendTelegramMessage} from '../../client'
+import {MyStock} from '../../model'
 
 export async function checkStock({
   link,
@@ -78,6 +86,103 @@ export async function checkStock({
     await browser.close()
     return {brand, link, hasProduct: false}
   }
+}
+
+export async function checkStockRetry({
+  link,
+  brandName,
+  retry,
+  delay = 1000,
+  condition,
+}: ICheckStockRetry): Promise<ICheckStockResult> {
+  const response = await checkStock({link, brandName})
+
+  if (condition) {
+    const {maxPrice, minPrice, hasFound} = condition
+    const condition1 = retry && retry > 0
+    const condition2 =
+      maxPrice && response.price && Number(response.price) > maxPrice
+    const condition3 =
+      minPrice && response.price && Number(response.price) < minPrice
+    const condition4 = hasFound && response.hasProduct
+
+    if (condition1 && (condition2 || condition3 || condition4)) {
+      await checkStockRetry({link, brandName, retry: retry - 1})
+      await sleep(delay)
+    }
+  }
+
+  return response
+}
+
+const stocks = new Map<string, string>()
+let retryInterval: NodeJS.Timeout
+const checkDB = async (stockId: string) => {
+  const stock = await MyStock.findById(stockId)
+  if (stock?.active === false) {
+    logger('🛑 Stopped by user', {type: 'error'})
+    stocks.delete(stockId)
+    clearInterval(retryInterval)
+    return false
+  }
+
+  const isAlreadyRunning = stocks.has(stockId)
+  if (isAlreadyRunning) {
+    logger('🛑 Already running', {type: 'error'})
+    return false
+  } else {
+    stocks.set(stockId, stockId)
+  }
+
+  return true
+}
+export async function checkAllStocksRetry({
+  retry = 1,
+  socket,
+  shouldReturn,
+  stockId,
+}: {
+  retry?: number
+  socket?: any
+  shouldReturn?: boolean
+  stockId?: string
+}) {
+  let result: ICheckStockResult[] = []
+  const totalLinks = links.length
+
+  let left = retry
+
+  retryInterval = setInterval(async () => {
+    if (stockId) {
+      const shouldContinue = await checkDB(stockId)
+      if (!shouldContinue) return
+    }
+
+    for (const link of links) {
+      const brand = link.match(/https:\/\/www\.(.*?)\./)?.[1] as TBrand
+      const response = await checkStockRetry({
+        link,
+        brandName: brand,
+        delay: CONFIG.checkStockDelay,
+      })
+      result.push(response)
+    }
+
+    if (socket) socket.emit('results', result)
+    if (shouldReturn) return result
+
+    left = left - 1
+    const stock = await MyStock.findById(stockId)
+    if (stock) {
+      stock.results = [...stock.results, ...result]
+      stock.retry = left
+      stock.save()
+    }
+    result.length = 0
+    if (left === 0) {
+      clearInterval(retryInterval)
+    }
+  }, CONFIG.checkStockDelay * (totalLinks + 1))
 }
 
 async function getTextContent(element: ElementHandle<Node>[]): Promise<string> {

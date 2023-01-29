@@ -5,6 +5,7 @@ specifiers:
   '@types/cors': ^2.8.13
   '@types/express': ^4.17.15
   '@types/jsonfile': ^6.1.1
+  '@types/kill-port': ^2.0.0
   '@types/node': ^18.11.18
   '@types/node-telegram-bot-api': ^0.57.6
   '@types/prompts': ^2.4.2
@@ -15,6 +16,7 @@ specifiers:
   dotenv: ^16.0.3
   express: ^4.18.2
   jsonfile: ^6.1.0
+  kill-port: ^2.0.1
   moment: ^2.29.4
   mongoose: ^6.8.3
   node-telegram-bot-api: ^0.60.0
@@ -23,7 +25,6 @@ specifiers:
   simple-git: ^3.15.1
   socket.io: ^4.5.4
   ts-node-dev: ^2.0.0
-  tsconfig-paths: ^4.1.2
   typescript: ^4.9.4
 
 dependencies:
@@ -35,6 +36,7 @@ dependencies:
   dotenv: 16.0.3
   express: 4.18.2
   jsonfile: 6.1.0
+  kill-port: 2.0.1
   moment: 2.29.4
   mongoose: 6.8.3
   node-telegram-bot-api: 0.60.0
@@ -48,11 +50,11 @@ devDependencies:
   '@types/cors': 2.8.13
   '@types/express': 4.17.15
   '@types/jsonfile': 6.1.1
+  '@types/kill-port': 2.0.0
   '@types/node': 18.11.18
   '@types/node-telegram-bot-api': 0.57.6
   '@types/prompts': 2.4.2
   ts-node-dev: 2.0.0_awa2wsr5thmg3i7jqycphctjfq
-  tsconfig-paths: 4.1.2
 
 packages:
 
@@ -1003,6 +1005,13 @@ packages:
       '@types/node': 18.11.18
     dev: true
 
+  /@types/kill-port/2.0.0:
+    resolution: {integrity: sha512-AegaqABFauES4++49NeNX7TyZJ7t48t10+qJn4QGVGQqDogEk89M0iI4W0HXS+TEUk/hYAtEsgJ+6nyuSyYxlw==}
+    dependencies:
+      '@types/node': 18.11.18
+      shell-exec: 1.0.2
+    dev: true
+
   /@types/mime/3.0.1:
     resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
     dev: true
@@ -1866,6 +1875,10 @@ packages:
       get-intrinsic: 1.1.3
     dev: false
 
+  /get-them-args/1.3.2:
+    resolution: {integrity: sha512-LRn8Jlk+DwZE4GTlDbT3Hikd1wSHgLMme/+7ddlqKd7ldwR6LjJgTVWzBnR01wnYGe4KgrXjg287RaI22UHmAw==}
+    dev: false
+
   /getpass/0.1.7:
     resolution: {integrity: sha512-0fzj9JxOLfJ+XGLhR8ze3unN0KZCgZwiSSDz168VERjK8Wl8kVSdcu2kspd4s4wtAa1y/qrVRiAA0WclVsu0ng==}
     dependencies:
@@ -2178,12 +2191,6 @@ packages:
     resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: false
 
-  /json5/2.2.3:
-    resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
-    engines: {node: '>=6'}
-    hasBin: true
-    dev: true
-
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
     dependencies:
@@ -2205,6 +2212,14 @@ packages:
   /kareem/2.5.1:
     resolution: {integrity: sha512-7jFxRVm+jD+rkq3kY0iZDJfsO2/t4BBPeEb2qKn2lR/9KhuksYk5hxzfRYWMPV8P/x2d0kHD306YyWLzjjH+uA==}
     engines: {node: '>=12.0.0'}
+    dev: false
+
+  /kill-port/2.0.1:
+    resolution: {integrity: sha512-e0SVOV5jFo0mx8r7bS29maVWp17qGqLBZ5ricNSajON6//kmb7qqqNnml4twNE8Dtj97UQD+gNFOaipS/q1zzQ==}
+    hasBin: true
+    dependencies:
+      get-them-args: 1.3.2
+      shell-exec: 1.0.2
     dev: false
 
   /kleur/3.0.3:
@@ -2774,6 +2789,9 @@ packages:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
     dev: false
 
+  /shell-exec/1.0.2:
+    resolution: {integrity: sha512-jyVd+kU2X+mWKMmGhx4fpWbPsjvD53k9ivqetutVW/BQ+WIZoDoP4d8vUMGezV6saZsiNoW2f9GIhg9Dondohg==}
+
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
     dependencies:
@@ -3067,15 +3085,6 @@ packages:
       typescript: 4.9.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
-
-  /tsconfig-paths/4.1.2:
-    resolution: {integrity: sha512-uhxiMgnXQp1IR622dUXI+9Ehnws7i/y6xvpZB9IbUVOPy0muvdvgXeZOn88UcGPiT98Vp3rJPTa8bFoalZ3Qhw==}
-    engines: {node: '>=6'}
-    dependencies:
-      json5: 2.2.3
-      minimist: 1.2.7
-      strip-bom: 3.0.0
     dev: true
 
   /tsconfig/7.0.0:

@@ -1,2 +1,2 @@
 export * from './getPrice'
-export * from './watchList'
+export * from './stock'
