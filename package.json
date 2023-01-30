@@ -1,8 +1,24 @@
 {
-  "name": "appointment",
+  "name": "api",
+  "license": "MIT",
   "version": "1.0.0",
-  "description": "",
+  "description": "API repository containing various projects including an appointment, stock control, link preview and URL shortener services.",
   "main": "index.js",
+  "author": {
+    "name": "Mucahid Yazar",
+    "email": "mucahidyazar@gmail.com",
+    "url": "https://mucahid.dev"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "api",
+    "express",
+    "service",
+    "link-preview",
+    "appointment",
+    "stock-control"
+  ],
   "scripts": {
     "dev": "ts-node-dev --files ./src/app.ts",
     "dev:node:commit": "ts-node-dev --files --debug ./src/services/commit/node.ts",
@@ -11,9 +27,6 @@
     "build": "tsc",
     "start": "node ./dist/app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
     "axios": "^1.2.2",
