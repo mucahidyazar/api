@@ -18,5 +18,8 @@ export const ROUTES = {
     socket: {
       start: '/api/v1/socket/start',
     },
+    linkPreview: {
+      linkPreview: '/api/v1/link-preview',
+    },
   },
 }

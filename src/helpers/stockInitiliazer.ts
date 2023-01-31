@@ -11,7 +11,6 @@ export async function myInit() {
     }
 
     myStock.forEach((stock: any) => {
-      console.log({active: stock.active})
       if (stock.active) {
         checkAllStocksRetry({
           retry: stock.retry,
