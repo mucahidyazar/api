@@ -21,5 +21,12 @@ export const ROUTES = {
     linkPreview: {
       linkPreview: '/api/v1/link-preview',
     },
+    urlShortener: {
+      create: '/api/v1/url-shortener/create',
+      open: '/api/v1/url-shortener/open',
+      list: '/api/v1/url-shortener/get',
+      get: '/api/v1/url-shortener/get/:id',
+      delete: '/api/v1/url-shortener/delete/:id',
+    },
   },
 }

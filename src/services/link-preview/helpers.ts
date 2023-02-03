@@ -1,20 +1,26 @@
+import cheerio from 'cheerio'
 import axios from 'axios'
 
 interface IGetLinkPreviewResponse {
-  title: string
-  description: string
-  image: string
+  title?: string
+  description?: string
+  image?: string
 }
+
 export const getLinkPreviewData = async (
   url: string,
 ): Promise<IGetLinkPreviewResponse> => {
-  const response = await axios.get(url)
-  const html = response.data
-  const title = html.match(/<title>(.*?)<\/title>/)?.[1]
-  const description = html.match(
-    /<meta name="description" content="(.*?)">/,
-  )?.[1]
-  const image = html.match(/<meta property="og:image" content="(.*?)">/)?.[1]
+  try {
+    const response = await axios.get(url)
+    const $ = cheerio.load(response.data)
 
-  return {title, description, image}
+    const title = $('head title').text()
+    const description = $('meta[name="description"]').attr('content')
+    const image = $('meta[property="og:image"]').attr('content')
+
+    return {title, description, image}
+  } catch (error) {
+    console.error(`Error while fetching link preview data: ${error}`)
+    return {}
+  }
 }

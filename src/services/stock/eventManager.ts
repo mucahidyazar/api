@@ -10,7 +10,7 @@ import {TBrand, BRAND} from '../../constants'
 import {CONFIG} from '../../config'
 import {links} from '../../data'
 import {getPrice, logger, sleep} from '../../utils'
-import {sendTelegramMessage} from '../../client'
+// import {sendTelegramMessage} from '../../client'
 import {MyStock} from 'model/stock'
 
 // export async function checkAllStocksRetry({

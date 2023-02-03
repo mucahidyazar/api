@@ -12,8 +12,13 @@ import kill from 'kill-port'
 
 import './config/db'
 import {CONFIG} from './config'
-import {linkPreviewRouter, socketRouter, stockRouter} from './routes/v1'
-import {myInit} from './helpers'
+import {
+  linkPreviewRouter,
+  socketRouter,
+  stockRouter,
+  urlShortenerRouter,
+} from './routes/v1'
+// import {myInit} from './helpers'
 
 const app = express()
 
@@ -54,9 +59,8 @@ app.post('/kill', async (_req, res) => {
 app.use(linkPreviewRouter)
 app.use(socketRouter)
 app.use(stockRouter)
+app.use(urlShortenerRouter)
 
 httpServer.listen(CONFIG.port)
 
 // myInit()
-
-process.setMaxListeners(0)

@@ -10,7 +10,7 @@ import {TBrand, BRAND} from '../../constants'
 import {CONFIG} from '../../config'
 import {links} from '../../data'
 import {getPrice, logger, sleep} from '../../utils'
-import {sendTelegramMessage} from '../../client'
+import {telegram} from '../../client'
 import {MyStock} from '../../model'
 
 export async function checkStock({
@@ -72,7 +72,9 @@ export async function checkStock({
       // })
       // await takeScreenshot(screenshot, `${brand.name}+${Date.now()}.png`)
 
-      sendTelegramMessage(`✅ ${brand.name}: ${brand.name}: ${price} \n${link}`)
+      telegram.sendTelegramMessage(
+        `✅ ${brand.name}: ${brand.name}: ${price} \n${link}`,
+      )
       await browser.close()
       return {brand, link, price, hasProduct: true}
     } else {
@@ -82,7 +84,7 @@ export async function checkStock({
     }
   } catch (error) {
     logger(JSON.stringify(error), {type: 'error'})
-    sendTelegramMessage('I am down, please check me!')
+    telegram.sendTelegramMessage('I am down, please check me!')
     await browser.close()
     return {brand, link, hasProduct: false}
   }

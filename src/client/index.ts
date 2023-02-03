@@ -1,2 +1,2 @@
 export * from './mhrsApi'
-export * from './telegram'
+export {default as telegram} from './telegram'

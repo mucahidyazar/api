@@ -4,7 +4,7 @@ dotEnv.config({
   path: process.cwd() + '/.env',
 })
 
-import {sendTelegramMessage} from '@/client'
+import {telegram} from '@/client'
 import {logger} from '@/utils'
 
 import {checkAllStocksRetry} from './helpers'
@@ -28,7 +28,7 @@ const startApp = async () => {
     logger(`The script uses approximately ${used} MB`, {type: 'info'})
   } catch (error) {
     logger(JSON.stringify(error), {type: 'error'})
-    sendTelegramMessage('I am down, please check me!')
+    telegram.sendTelegramMessage('I am down, please check me!')
   }
 }
 
