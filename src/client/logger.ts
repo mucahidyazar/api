@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import {format} from 'date-fns'
+import { format } from 'date-fns'
 
 const LOG_TYPE = {
   info: chalk.blue,
@@ -14,7 +14,7 @@ interface ILoggerOptions {
   date?: boolean
 }
 export function logger(message: string, options?: ILoggerOptions): void {
-  const {type = 'info', date = false} = options || {}
+  const { type = 'info', date = false } = options || {}
   const color = LOG_TYPE[type]
   let messageText = message
 

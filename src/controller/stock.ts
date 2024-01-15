@@ -1,9 +1,9 @@
-import {Request, Response} from 'express'
-import {Socket} from 'socket.io'
+import { Request, Response } from 'express'
+import { Socket } from 'socket.io'
 
-import {Stock, MyStock} from '../model'
-
-import {checkAllStocksRetry} from '../services/stock/helpers'
+import { checkAllStocksRetry } from '../services/stock/helpers'
+import { Stock, MyStock } from '../model'
+import { logger } from '../client'
 
 export function start(req: Request, res: Response) {
   try {
@@ -11,14 +11,14 @@ export function start(req: Request, res: Response) {
     const retry = Number(req.query.retry) || 1
 
     io.on('connection', (socket: Socket) => {
-      console.log('a user connected')
+      logger("connection", { type: "success" })
       checkAllStocksRetry({
         socket,
         retry,
       })
 
       socket.on('disconnect', () => {
-        console.log('user disconnected')
+        logger("user disconnected", { type: "success" })
       })
     })
   } catch (error) {

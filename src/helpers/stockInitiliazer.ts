@@ -1,13 +1,13 @@
-import {MyStock} from '../model'
-import {checkAllStocksRetry} from '../services/stock/helpers'
-import {logger} from '../utils'
+import { MyStock } from '../model'
+import { checkAllStocksRetry } from '../services/stock/helpers'
+import { logger } from '../client'
 
 export async function myInit() {
   try {
     const myStock = await MyStock.find()
 
     if (!myStock.length) {
-      return logger('There is no myStock', {type: 'info'})
+      return logger('There is no myStock', { type: 'info' })
     }
 
     myStock.forEach((stock: any) => {
@@ -19,8 +19,8 @@ export async function myInit() {
       }
     })
 
-    return logger('myStock found', {type: 'info'})
+    return logger('myStock found', { type: 'info' })
   } catch (error) {
-    return logger('error', {type: 'error'})
+    return logger('error', { type: 'error' })
   }
 }

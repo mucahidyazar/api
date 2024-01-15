@@ -15,6 +15,13 @@ export const ROUTES = {
       myStop: '/api/v1/stock/my-stop',
       myDetail: '/api/v1/stock/my-detail',
     },
+    wishList: {
+      list: '/api/v1/wish-list',
+      connect: '/api/v1/wish-list/connect',
+      create: '/api/v1/wish-list/create',
+      get: '/api/v1/wish-list/:id',
+      delete: '/api/v1/wish-list/:id',
+    },
     socket: {
       start: '/api/v1/socket/start',
     },

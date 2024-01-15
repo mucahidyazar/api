@@ -1,4 +1,4 @@
-import {TBrand} from '../constants'
+import { TBrand } from '../constants'
 
 export interface IXPathItem {
   path: string
@@ -11,6 +11,8 @@ export interface IBrand {
     priceElement: string | IXPathItem
     addCartButton: string | IXPathItem
     sellerElement?: IXPathItem
+    productName?: string
+    productImage?: string
   }
 }
 
@@ -31,6 +33,8 @@ export interface ICheckStockResult {
   brand: IBrand
   price?: string
   hasProduct: boolean
+  productName?: string
+  productImage?: string
 }
 
 export interface ICheckStock {

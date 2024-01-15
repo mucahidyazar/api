@@ -8,20 +8,20 @@ dotEnv.config({
 import './global'
 import prompts from 'prompts'
 
-import {logger} from '@/utils'
-import {CONFIG} from '@/config'
-import {ICity, IDistrict} from '@/types'
-import {city, district, policinic} from '@/data'
+import { logger } from '@/client'
+import { CONFIG } from '@/config'
+import { ICity, IDistrict } from '@/types'
+import { city, district, policinic } from '@/data'
 
-import {addAppointments, getDoctors, getHours, getLogin} from './helper'
+import { addAppointments, getDoctors, getHours, getLogin } from './helper'
 
 interface IStartAppArgs {
   cityId?: number | string
   districtId?: number | string
   policinicId?: number | string
 }
-const startApp = async ({cityId, districtId, policinicId}: IStartAppArgs) => {
-  logger('App started', {type: 'info'})
+const startApp = async ({ cityId, districtId, policinicId }: IStartAppArgs) => {
+  logger('App started', { type: 'info' })
 
   try {
     //! Login
@@ -94,7 +94,7 @@ const startApp = async ({cityId, districtId, policinicId}: IStartAppArgs) => {
       ])
     }
   } catch (error) {
-    logger(JSON.stringify(error), {type: 'error'})
+    logger(JSON.stringify(error), { type: 'error' })
   }
 }
 
@@ -146,7 +146,7 @@ const run = async () => {
       item,
       Math.abs(
         CONFIG.REPEAT_REQUEST_TIME / options.length -
-          ((index + 1) * CONFIG.REPEAT_REQUEST_TIME) / options.length,
+        ((index + 1) * CONFIG.REPEAT_REQUEST_TIME) / options.length,
       ),
     )
   })

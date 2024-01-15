@@ -4,14 +4,13 @@ dotEnv.config({
   path: process.cwd() + '/.env',
 })
 
-import {telegram} from '@/client'
-import {logger} from '@/utils'
+import { logger, telegram } from '@/client'
 
-import {checkAllStocksRetry} from './helpers'
+import { checkAllStocksRetry } from './helpers'
 
 const startApp = async () => {
   try {
-    logger('App started', {type: 'success'})
+    logger('App started', { type: 'success' })
 
     // one by one
     // for (const brand of Object.values(BRAND)) {
@@ -22,12 +21,12 @@ const startApp = async () => {
     //   Object.values(BRAND).map(brand => checkStockRetry({brand, retry: 1000})),
     // )
     // Parallel but with delay between all brands
-    await checkAllStocksRetry({retry: 100})
+    await checkAllStocksRetry({ retry: 100 })
 
     const used = process.memoryUsage().heapUsed / 1024 / 1024
-    logger(`The script uses approximately ${used} MB`, {type: 'info'})
+    logger(`The script uses approximately ${used} MB`, { type: 'info' })
   } catch (error) {
-    logger(JSON.stringify(error), {type: 'error'})
+    logger(JSON.stringify(error), { type: 'error' })
     telegram.sendTelegramMessage('I am down, please check me!')
   }
 }

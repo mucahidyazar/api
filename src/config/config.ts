@@ -1,6 +1,9 @@
 const DEFAULT_MONGO_URI = 'mongodb://localhost:27017/api'
 
 export const CONFIG = {
+  isProduction: process.env.NODE_ENV === 'production',
+  isDevelopment: process.env.NODE_ENV === 'development',
+
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
   groupChatId: process.env.GROUP_CHAT_ID || '',
   checkStockDelay: Number(process.env.CHECK_STOCK_DELAY) || 10000,

@@ -1,8 +1,8 @@
-import axios, {AxiosError} from 'axios'
+import axios, { AxiosError } from 'axios'
 
-import {logger} from '../utils'
-import {CONFIG} from '../config'
-import {city, district, policinic} from '../data'
+import { logger } from '../client'
+import { CONFIG } from '../config'
+import { city, district, policinic } from '../data'
 
 export const mhrsApi = axios.create({
   baseURL: 'https://prd.mhrs.gov.tr/api',
@@ -11,9 +11,9 @@ export const mhrsApi = axios.create({
 mhrsApi.interceptors.response.use(undefined, async (error: AxiosError) => {
   const originalRequestConfig = error.config
 
-  logger('Retrying...', {type: 'info'})
-  logger(`Error: ${error.message}`, {type: 'error', date: true})
-  logger(`URL: ${error.config?.url}`, {type: 'error', date: true})
+  logger('Retrying...', { type: 'info' })
+  logger(`Error: ${error.message}`, { type: 'error', date: true })
+  logger(`URL: ${error.config?.url}`, { type: 'error', date: true })
 
   const requestData: any = JSON.parse(originalRequestConfig?.data)
   console.table({

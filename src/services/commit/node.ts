@@ -1,13 +1,13 @@
 import jsonfile from 'jsonfile'
-import {simpleGit} from 'simple-git'
+import { simpleGit } from 'simple-git'
 import moment from 'moment'
-import {faker} from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import path from 'path'
 import fs from 'fs'
 
-import {promiseLoop} from '@/utils'
+import { promiseLoop } from '@/utils'
 
-import {DISTRIBUTION, IGetNewDate, IGenerateCommits, ICommit} from './types'
+import { DISTRIBUTION, IGetNewDate, IGenerateCommits, ICommit } from './types'
 
 const time = moment()
 const secretPath = path.resolve(__dirname, '../../secret')
@@ -25,7 +25,7 @@ const isWeekend = (date: string) => {
   return day === 0 || day === 6
 }
 
-const getNewDate = ({date, excludeWeekends}: IGetNewDate) => {
+const getNewDate = ({ date, excludeWeekends }: IGetNewDate) => {
   const defaultDate = moment(date).add(1, 'days').format()
   let theDate = date || defaultDate
 
@@ -42,9 +42,9 @@ export function generateCommits({
   to = time.format(),
   distribution = DISTRIBUTION.equal,
   count,
-  options = {excludeWeekends: false},
+  options = { excludeWeekends: false },
 }: IGenerateCommits): ICommit[] {
-  const {excludeWeekends} = options
+  const { excludeWeekends } = options
 
   const commits: ICommit[] = []
   const fromTime = moment(from)
@@ -57,19 +57,19 @@ export function generateCommits({
 
     if (count < diff) {
       for (let i = 0; i < count; i++) {
-        date = getNewDate({excludeWeekends})
+        date = getNewDate({ excludeWeekends })
         const message = 'commit: ' + faker.git.commitMessage()
-        commits.push({date, message})
+        commits.push({ date, message })
       }
       return commits
     }
 
     for (let i = 0; i < count; i++) {
       if (i % commitsPerDay === 0) {
-        date = getNewDate({excludeWeekends})
+        date = getNewDate({ excludeWeekends })
       }
       const message = 'commit: ' + faker.git.commitMessage()
-      commits.push({date, message})
+      commits.push({ date, message })
     }
     return commits
   }
@@ -82,7 +82,7 @@ export function generateCommits({
       })
 
       const message = 'commit: ' + faker.git.commitMessage()
-      commits.push({date, message})
+      commits.push({ date, message })
     }
     return commits
   }
@@ -96,13 +96,13 @@ async function makeCommit() {
     to: '2018-12-31T10:00:00+12:00',
     count: 1000,
     distribution: DISTRIBUTION.random,
-    options: {excludeWeekends: true},
+    options: { excludeWeekends: true },
   })
 
   const git = simpleGit()
   git.cwd(path.resolve(__dirname, './secret'))
   if (await fs.existsSync(projectPath)) {
-    await fs.rmSync(projectPath, {recursive: true})
+    await fs.rmSync(projectPath, { recursive: true })
   }
   await git.clone('https://github.com/mucahidyazar/commit.git')
   git.cwd(projectPath)
@@ -112,11 +112,11 @@ async function makeCommit() {
   const jsonCommits = await jsonfile.readFile(dataPath)
   await promiseLoop<ICommit>(commits, async commit => {
     jsonCommits.push(commit)
-    await jsonfile.writeFileSync(dataPath, jsonCommits, {spaces: 2})
+    await jsonfile.writeFileSync(dataPath, jsonCommits, { spaces: 2 })
     await git.add([dataPath])
-    await git.commit(commit.message, {'--date': commit.date})
+    await git.commit(commit.message, { '--date': commit.date })
   })
-  // await git.log().then(log => console.log(log?.total))
+  // await git.log().then(log => logger(log))
   git.push('origin', 'main')
   // git.push('origin', 'main', ['-f'])
 }

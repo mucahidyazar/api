@@ -1,14 +1,13 @@
-import {mhrsApi} from '@/client'
-import {IGetDoctors, IGetHours} from '@/types'
-import {CONFIG} from '@/config'
-import {logger} from '@/utils'
+import { logger, mhrsApi } from '@/client'
+import { IGetDoctors, IGetHours } from '@/types'
+import { CONFIG } from '@/config'
 
-import {ENDPOINTS} from '../endpoints'
+import { ENDPOINTS } from '../endpoints'
 
 const getLogin = async () => {
-  logger('Logining...', {type: 'info'})
+  logger('Logining...', { type: 'info' })
 
-  const {data: loginResponse} = await mhrsApi.post(ENDPOINTS.login(), {
+  const { data: loginResponse } = await mhrsApi.post(ENDPOINTS.login(), {
     kullaniciAdi: CONFIG.MHRS_USERNAME,
     parola: CONFIG.MHRS_PASSWORD,
     islemKanali: 'VATANDAS_WEB',
@@ -21,15 +20,15 @@ const getLogin = async () => {
         Authorization: `Bearer ${loginResponse.data.jwt}`,
       },
     }
-    logger('Login success', {type: 'success'})
-    logger(`Welcome ${loginResponse.data.kullaniciAdi}`, {type: 'info'})
+    logger('Login success', { type: 'success' })
+    logger(`Welcome ${loginResponse.data.kullaniciAdi}`, { type: 'info' })
   }
 }
 
-const getDoctors = async ({cityId, districtId, policinicId}: IGetDoctors) => {
-  logger('Selecting doctor...', {type: 'info'})
+const getDoctors = async ({ cityId, districtId, policinicId }: IGetDoctors) => {
+  logger('Selecting doctor...', { type: 'info' })
 
-  const {data: doctorsResponse} = await mhrsApi.post(
+  const { data: doctorsResponse } = await mhrsApi.post(
     ENDPOINTS.doctors(),
     {
       aksiyonId: 200,
@@ -57,10 +56,10 @@ const getDoctors = async ({cityId, districtId, policinicId}: IGetDoctors) => {
   }))
 }
 
-const getHours = async ({doctorId, cityId, policinicId}: IGetHours) => {
-  logger('Getting hours...', {type: 'info'})
+const getHours = async ({ doctorId, cityId, policinicId }: IGetHours) => {
+  logger('Getting hours...', { type: 'info' })
 
-  const {data: hoursResponse} = await mhrsApi.post(
+  const { data: hoursResponse } = await mhrsApi.post(
     ENDPOINTS.hours(),
     {
       aksiyonId: 200,
@@ -89,7 +88,7 @@ const getHours = async ({doctorId, cityId, policinicId}: IGetHours) => {
 }
 
 const addAppointments = async (appointment: any) => {
-  logger('Creating appointment...', {type: 'info'})
+  logger('Creating appointment...', { type: 'info' })
 
   const oldRandevuTimeStamp = new Date(
     global.myAppointments[appointment.mhrsKlinikId],
@@ -97,11 +96,11 @@ const addAppointments = async (appointment: any) => {
   const newRandevuTimeStamp = new Date(appointment.baslangicZamani).getTime()
 
   if (newRandevuTimeStamp > oldRandevuTimeStamp) {
-    logger('New appointment is in the future', {type: 'error'})
+    logger('New appointment is in the future', { type: 'error' })
     return
   }
 
-  const {data: appointmentResponse} = await mhrsApi.post(
+  const { data: appointmentResponse } = await mhrsApi.post(
     ENDPOINTS.appointment(),
     {
       baslangicZamani: appointment.baslangicZamani,
@@ -115,13 +114,13 @@ const addAppointments = async (appointment: any) => {
   )
 
   if (appointmentResponse.success) {
-    logger('Appointment created', {type: 'success'})
+    logger('Appointment created', { type: 'success' })
     global.hadAppointment = true
     global.myAppointments = {
       [appointmentResponse.data.klinik.mhrsKlinikId]: newRandevuTimeStamp,
     }
   } else {
-    logger('Appointment not created', {type: 'error'})
+    logger('Appointment not created', { type: 'error' })
 
     if (!global.hadAppointment) {
       setTimeout(() => {
@@ -131,4 +130,4 @@ const addAppointments = async (appointment: any) => {
   }
 }
 
-export {getLogin, getDoctors, getHours, addAppointments}
+export { getLogin, getDoctors, getHours, addAppointments }

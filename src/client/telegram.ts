@@ -1,10 +1,10 @@
 import TelegramBot from 'node-telegram-bot-api'
 
-import {CONFIG} from '../config'
+import { CONFIG } from '../config'
 
 const telegram = new TelegramBot(CONFIG.telegramBotToken)
 
-// telegram.on('polling_error', msg => console.log(msg))
+// telegram.on('polling_error', msg => logger(msg, { type: 'error' }))
 
 function sendTelegramMessage(message: string): void {
   telegram.startPolling()

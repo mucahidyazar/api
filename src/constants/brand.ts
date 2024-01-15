@@ -2,13 +2,13 @@ export const BRAND = {
   amazon: {
     name: 'amazon',
     xPath: {
-      priceElement: '//*[@id="corePrice_feature_div"]/div/span/span[1]',
+      priceElement: '//*[@id="corePriceDisplay_desktop_feature_div"]/div[1]/span[2]/span[2]/span[1]',
       addCartButton:
         '//*[@id="pdp-general"]/div[3]/div[3]/div[3]/div[3]/div[2]/button',
       sellerElement: {
-        path: `//*[@id="merchant-info"]/span[1]`,
+        path: `//*[@id="merchantInfoFeature_feature_div"]/div[2]/div/span`,
         condition: (text: string) =>
-          text === 'Amazon.com.tr tarafından satılır ve gönderilir.',
+          text === 'Amazon.com.tr',
       },
     },
   },
@@ -35,8 +35,10 @@ export const BRAND = {
   mediamarkt: {
     name: 'mediamarkt',
     xPath: {
-      priceElement: '//*[@id="product-details"]/div[4]/div[1]/div[2]',
+      priceElement: '//*[@id="product-details"]/div[3]/div[1]/div[2]',
       addCartButton: '//*[@id="pdp-add-to-cart"]',
+      productName: '//*[@id="product-details"]/div[2]/h1',
+      productImage: '//*[@id="product-sidebar"]/div[1]/a/img'
     },
   },
 } as const
