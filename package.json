@@ -29,7 +29,8 @@
     "prisma:generate": "npx prisma generate --schema=../api-prisma/prisma/schema.prisma && cp -rf ../api-prisma/node_modules/.prisma ./node_modules/",
     "prisma:migrate": "npx prisma migrate dev --schema=../api-prisma/prisma/schema.prisma",
     "prisma:copy": "cp -rf ../api-prisma/prisma ./prisma/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
