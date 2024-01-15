@@ -2,3 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 cp -rf ../api-prisma/prisma ./prisma/
+
+git add ./prisma/
