@@ -21,7 +21,7 @@ import {
   wishListRouter,
 } from './routes/v1'
 import { db, logger, telegram } from './client'
-import { checkProduct, getUniqueProductUrls } from 'helpers'
+import { checkProduct, getUniqueProductUrls } from './helpers'
 
 const app = express()
 
