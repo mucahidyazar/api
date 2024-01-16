@@ -80,14 +80,8 @@ cron.schedule('*/120 * * * * *', async () => {
   const timeStr = date.toLocaleTimeString('tr-TR');
   logger(`Cron çalıştı ${dateStr} ${timeStr}`, { type: "success" })
 
-  let uniqueUrls: any;
-  let whishlist: any;
-  try {
-    uniqueUrls = await getUniqueProductUrls();
-    whishlist = await db.wishList.findMany()
-  } catch (error) {
-    console.log(error)
-  }
+  const uniqueUrls = await getUniqueProductUrls();
+  const whishlist = await db.wishList.findMany()
 
   console.log('uniqueUrls', uniqueUrls)
   console.log('whishlist', whishlist)

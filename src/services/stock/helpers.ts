@@ -23,13 +23,17 @@ export async function checkStock({
     headless: 'new',
   })
   try {
+    console.log('x1')
     logger(`Checking ${brand.name}'s website`, { type: 'info' })
 
+    console.log('x2')
     const page = await browser.newPage()
     // const response = await page.goto(link, { timeout: 0, waitUntil: 'load' })
     // wailt also 5 seconds after load
+    console.log('x3')
     const response = await page.goto(link, { timeout: 0, waitUntil: 'load' })
 
+    console.log('x4')
     const status = response?.status()
     if (status != 200) {
       logger(`Probably HTTP response status code 200 OK.`, { type: 'error' })
@@ -39,6 +43,7 @@ export async function checkStock({
       return { brand, link, hasProduct: false }
     }
 
+    console.log('x5')
     const priceElement = await page.$x(brand.xPath.priceElement as string)
 
     let productName = '';
@@ -77,14 +82,17 @@ export async function checkStock({
         return { productName, productImage, brand, link, hasProduct: false }
       }
     }
+    console.log('x6')
     const addCartButtonButton = await page.$x(
       brand.xPath.addCartButton as string,
     )
 
+    console.log('x7')
     const pages = await browser.pages()
     logger(`${pages.length} pages opened`)
     const hasPrice = priceElement.length > 0
 
+    console.log('x8')
     if (hasPrice) {
       const priceText = await priceElement[0].evaluate(
         (node: any) => node.textContent,
