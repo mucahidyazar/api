@@ -30,7 +30,7 @@
     "prisma:migrate": "npx prisma migrate dev --schema=../api-prisma/prisma/schema.prisma",
     "prisma:copy": "cp -rf ../api-prisma/prisma ./prisma/",
     "prepare": "husky install",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && npx puppeteer browsers install chrome"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
