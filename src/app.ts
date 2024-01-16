@@ -72,69 +72,157 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
-//? cron.schedule('*/2 * * * *', async () => { // for every 2 minutes
-//? cron.schedule('*/5 * * * * *', async () => { // for every 5 seconds
-cron.schedule('*/2 * * * *', async () => {
-  const date = new Date();
-  const dateStr = date.toLocaleDateString('tr-TR');
-  const timeStr = date.toLocaleTimeString('tr-TR');
-  logger(`Cron çalıştı ${dateStr} ${timeStr}`, { type: "success" })
+// Enum değerlerine göre cron zamanlamaları
+const CRON_SCHEDULES = {
+  fiveMinutes: '*/5 * * * *',
+  daily: '0 0 * * *',
+  hourly: '0 * * * *',
+  weekly: '0 0 * * 0'
+} as const;
 
-  const uniqueUrls = await getUniqueProductUrls();
-  const whishlist = await db.wishList.findMany()
+type TCronSchedules = keyof typeof CRON_SCHEDULES;
 
-  for (const url of uniqueUrls) {
-    const productData = await checkProduct(url) as any;
+// Her bir checkFrequency için ayrı bir cron görevi oluştur
+const cronSchedules = Object.entries(CRON_SCHEDULES) as [TCronSchedules, string][];
+cronSchedules.forEach(([frequency, schedule]) => {
+  const jobName = `cronJob-${frequency}`; // Benzersiz cron işi ismi
 
-    if (productData?.price) {
-      for (const wish of whishlist) {
-        if (wish.productUrl?.includes(url)) {
+  cron.schedule(schedule, async () => {
+    const date = new Date();
+    const dateStr = date.toLocaleDateString('tr-TR');
+    const timeStr = date.toLocaleTimeString('tr-TR');
+    logger(`${jobName} çalıştı ${dateStr} ${timeStr}.`, { type: "success" })
 
-          const productInfos = {
-            ...(productData.productName && { productName: productData.productName }),
-            ...(productData.productImage && { productImage: productData.productImage }),
-            ...(productData.price && { productPrice: productData.price }),
-          }
+    const wishList = await db.wishList.findMany({
+      where: { checkFrequency: frequency }
+    });
 
-          const history = await db.history.create({
-            data: {
-              inStock: productData.inStock || false,
-              wishListId: wish.id,
-              productUrl: url,
-              ...productInfos
+    // Her gruptaki benzersiz URL'leri toplama
+    const uniqueUrls = new Set<string>();
+    wishList.forEach(wish => {
+      uniqueUrls.add(wish.productUrl);
+    });
+
+    // Sıralı işlem
+    for (const url of uniqueUrls) {
+      const productData = await checkProduct(url);
+
+      if (productData?.price) {
+        for (const wish of wishList) {
+          if (wish.productUrl?.includes(url)) {
+
+            const productInfos = {
+              ...(productData.productName && { productName: productData.productName }),
+              ...(productData.productImage && { productImage: productData.productImage }),
+              ...(productData.price && { productPrice: productData.price }),
             }
-          })
 
-          io.to(wish.userId).emit('newHistory', { history });
+            const history = await db.history.create({
+              data: {
+                inStock: !!productData?.price,
+                wishListId: wish.id,
+                productUrl: url,
+                ...productInfos
+              }
+            })
 
-          await db.wishList.update({
-            where: { id: wish.id },
-            data: {
-              history: { connect: { id: history.id } },
-              ...productInfos
+            io.to(wish.userId).emit('newHistory', { history });
+
+            await db.wishList.update({
+              where: { id: wish.id },
+              data: {
+                history: { connect: { id: history.id } },
+                ...productInfos
+              }
+            });
+
+            const price = Number(productData.price.split(',')[0].replace(/[^0-9]/g, ''));
+
+            const hasPriceFilter = wish.minPrice || wish.maxPrice;
+            const isMinPriceValid = wish.minPrice ? wish.minPrice <= price : false;
+            const isMaxPriceValid = wish.maxPrice ? wish.maxPrice >= price : false;
+
+            if ((hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)) {
+              telegram.sendTelegramMessage(
+                `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
+              )
+            } else if (!hasPriceFilter) {
+              telegram.sendTelegramMessage(
+                `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
+              )
             }
-          });
 
-          const price = Number(productData.price.split(',')[0].replace(/[^0-9]/g, ''));
-
-          const hasPriceFilter = wish.minPrice || wish.maxPrice;
-          const isMinPriceValid = wish.minPrice ? wish.minPrice <= price : false;
-          const isMaxPriceValid = wish.maxPrice ? wish.maxPrice >= price : false;
-
-          if ((hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)) {
-            telegram.sendTelegramMessage(
-              `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
-            )
-          } else if (!hasPriceFilter) {
-            telegram.sendTelegramMessage(
-              `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
-            )
           }
-
         }
       }
     }
-  }
+  });
 });
 
 httpServer.listen(CONFIG.port)
+
+// //? cron.schedule('*/2 * * * *', async () => { // for every 2 minutes
+// //? cron.schedule('*/5 * * * * *', async () => { // for every 5 seconds
+// cron.schedule('*/2 * * * *', async () => {
+//   const date = new Date();
+//   const dateStr = date.toLocaleDateString('tr-TR');
+//   const timeStr = date.toLocaleTimeString('tr-TR');
+//   logger(`Cron çalıştı ${dateStr} ${timeStr}`, { type: "success" })
+
+//   const uniqueUrls = await getUniqueProductUrls();
+//   const whishlist = await db.wishList.findMany()
+
+//   for (const url of uniqueUrls) {
+//     const productData = await checkProduct(url) as any;
+
+//     if (productData?.price) {
+//       for (const wish of whishlist) {
+//         if (wish.productUrl?.includes(url)) {
+
+//           const productInfos = {
+//             ...(productData.productName && { productName: productData.productName }),
+//             ...(productData.productImage && { productImage: productData.productImage }),
+//             ...(productData.price && { productPrice: productData.price }),
+//           }
+
+//           const history = await db.history.create({
+//             data: {
+//               inStock: productData.inStock || false,
+//               wishListId: wish.id,
+//               productUrl: url,
+//               ...productInfos
+//             }
+//           })
+
+//           io.to(wish.userId).emit('newHistory', { history });
+
+//           await db.wishList.update({
+//             where: { id: wish.id },
+//             data: {
+//               history: { connect: { id: history.id } },
+//               ...productInfos
+//             }
+//           });
+
+//           const price = Number(productData.price.split(',')[0].replace(/[^0-9]/g, ''));
+
+//           const hasPriceFilter = wish.minPrice || wish.maxPrice;
+//           const isMinPriceValid = wish.minPrice ? wish.minPrice <= price : false;
+//           const isMaxPriceValid = wish.maxPrice ? wish.maxPrice >= price : false;
+
+//           if ((hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)) {
+//             telegram.sendTelegramMessage(
+//               `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
+//             )
+//           } else if (!hasPriceFilter) {
+//             telegram.sendTelegramMessage(
+//               `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
+//             )
+//           }
+
+//         }
+//       }
+//     }
+//   }
+// });
+
