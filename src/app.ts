@@ -74,7 +74,7 @@ io.on('connection', (socket: Socket) => {
 
 //? cron.schedule('*/2 * * * *', async () => { // for every 2 minutes
 //? cron.schedule('*/5 * * * * *', async () => { // for every 5 seconds
-cron.schedule('*/120 * * * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
   const date = new Date();
   const dateStr = date.toLocaleDateString('tr-TR');
   const timeStr = date.toLocaleTimeString('tr-TR');
