@@ -82,8 +82,9 @@ model User {
   articles    Article[]
   feedbacks   Feedback[]
   mhrsAccount MhrsAccount?
-  WishList    WishList[]
-  Appointment Appointment[]
+  wishList    WishList[]
+  appointment Appointment[]
+  history     History[]
 
   @@map(name: "users")
 }
@@ -156,6 +157,8 @@ model History {
 
   wishListId   String
   wishList     WishList @relation(fields: [wishListId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
   inStock      Boolean
   productPrice String?
   productName  String?
