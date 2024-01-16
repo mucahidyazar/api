@@ -83,8 +83,6 @@ cron.schedule('*/120 * * * * *', async () => {
   const uniqueUrls = await getUniqueProductUrls();
   const whishlist = await db.wishList.findMany()
 
-  console.log('uniqueUrls', uniqueUrls)
-  console.log('whishlist', whishlist)
   for (const url of uniqueUrls) {
     const productData = await checkProduct(url) as any;
 
