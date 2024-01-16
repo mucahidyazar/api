@@ -120,8 +120,9 @@ cronSchedules.forEach(([frequency, schedule]) => {
             const history = await db.history.create({
               data: {
                 inStock: !!productData?.price,
-                wishListId: wish.id,
                 productUrl: url,
+                wishListId: wish.id,
+                userId: wish.userId,
                 ...productInfos
               }
             })
