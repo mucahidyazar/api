@@ -7,12 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//! ENUMS - START
 enum Role {
   USER
   ADMIN
   ARTIST
 }
 
+enum Status {
+  in_progress
+  active
+}
+
+enum CheckStatus {
+  active
+  inactive
+  archived
+}
+
+enum CheckFrequency {
+  fiveMinutes
+  daily
+  hourly
+  weekly
+}
+
+enum Sex {
+  E // Erkek
+  K // Kadin
+  B // Both
+}
+
+//! ENUMS - END
+
+//! MODELS - START
 model MhrsAccount {
   id       String @unique
   password String
@@ -20,6 +48,8 @@ model MhrsAccount {
   user        User          @relation(fields: [userId], references: [id])
   userId      String        @unique
   Appointment Appointment[]
+
+  @@map(name: "mhrs_accounts")
 }
 
 model Account {
@@ -100,11 +130,6 @@ model VerificationToken {
   @@map(name: "verification_tokens")
 }
 
-enum Status {
-  in_progress
-  active
-}
-
 model Feedback {
   id String @id @default(cuid())
 
@@ -119,6 +144,8 @@ model Feedback {
 
   createdBy   User   @relation(fields: [createdById], references: [id])
   createdById String
+
+  @@map(name: "feedbacks")
 }
 
 model Article {
@@ -136,19 +163,8 @@ model Article {
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
-}
 
-enum CheckStatus {
-  active
-  inactive
-  archived
-}
-
-enum CheckFrequency {
-  fiveMinutes
-  daily
-  hourly
-  weekly
+  @@map(name: "articles")
 }
 
 model History {
@@ -166,6 +182,8 @@ model History {
   productName  String?
   productImage String?
   productUrl   String
+
+  @@map(name: "histories")
 }
 
 model WishList {
@@ -187,12 +205,8 @@ model WishList {
   maxPrice       Float?
   history        History[]
   status         CheckStatus    @default(active)
-}
 
-enum Sex {
-  E // Erkek
-  K // Kadin
-  B // Both
+  @@map(name: "wish_lists")
 }
 
 model Cookie {
@@ -209,6 +223,8 @@ model Cookie {
   key       String
   value     String
   expiresAt DateTime
+
+  @@map(name: "cookies")
 }
 
 model Appointment {
@@ -237,4 +253,6 @@ model Appointment {
   anyTime          Boolean @default(true)
 
   token Cookie?
+
+  @@map(name: "appointments")
 }
