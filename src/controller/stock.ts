@@ -11,14 +11,14 @@ export function start(req: Request, res: Response) {
     const retry = Number(req.query.retry) || 1
 
     io.on('connection', (socket: Socket) => {
-      logger("connection", { type: "success" })
+      logger.info("connection")
       checkAllStocksRetry({
         socket,
         retry,
       })
 
       socket.on('disconnect', () => {
-        logger("user disconnected", { type: "success" })
+        logger.info("user disconnected")
       })
     })
   } catch (error) {

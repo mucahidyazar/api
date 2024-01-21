@@ -17,8 +17,9 @@ model MhrsAccount {
   id       String @unique
   password String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String        @unique
+  Appointment Appointment[]
 }
 
 model Account {
@@ -85,6 +86,7 @@ model User {
   wishList    WishList[]
   appointment Appointment[]
   history     History[]
+  Cookie      Cookie[]
 
   @@map(name: "users")
 }
@@ -187,14 +189,52 @@ model WishList {
   status         CheckStatus    @default(active)
 }
 
-model Appointment {
+enum Sex {
+  E // Erkek
+  K // Kadin
+  B // Both
+}
+
+model Cookie {
   id String @id @default(cuid())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  appoinmentId String      @unique
+  appoinment   Appointment @relation(fields: [appoinmentId], references: [id])
+
+  key       String
+  value     String
+  expiresAt DateTime
+}
+
+model Appointment {
+  id String @id @default(cuid())
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  reservedAt DateTime?
+
   userId         String
   user           User           @relation(fields: [userId], references: [id])
+  mhrsAccountId  String
+  mhrsAccount    MhrsAccount    @relation(fields: [mhrsAccountId], references: [id])
   checkFrequency CheckFrequency @default(daily)
   status         CheckStatus    @default(active)
+
+  cityId       Int
+  districtId   Int
+  polyclinicId Int
+  doctorId     Int?
+
+  localHospitals   Boolean @default(true)
+  firstExamination Boolean @default(false)
+  sex              Sex     @default(B)
+  anyDoctor        Boolean @default(true)
+  anyTime          Boolean @default(true)
+
+  token Cookie?
 }

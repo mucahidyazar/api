@@ -30,7 +30,7 @@ import { MyStock } from 'model/stock'
 
 //   if (db) {
 //     if (!db.active) {
-//       logger('🛑 Stopped by user', {type: 'error'})
+//       logger.error('🛑 Stopped by user')
 //       return
 //     }
 //   }

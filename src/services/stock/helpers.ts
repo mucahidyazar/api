@@ -23,36 +23,35 @@ export async function checkStock({
     headless: 'new',
   })
   try {
-    console.log('x1')
-    logger(`Checking ${brand.name}'s website`, { type: 'info' })
-
-    console.log('x2')
+    logger.info(`Checking ${brand.name}'s website`)
     const page = await browser.newPage()
-    // const response = await page.goto(link, { timeout: 0, waitUntil: 'load' })
-    // wailt also 5 seconds after load
-    console.log('x3')
+
+    logger.info(`Puppeter is going to ${link}`)
     const response = await page.goto(link, { timeout: 0, waitUntil: 'load' })
 
-    console.log('x4')
+    logger.debug('STOCK -> before -> const status = response?.status()')
     const status = response?.status()
     if (status != 200) {
-      logger(`Probably HTTP response status code 200 OK.`, { type: 'error' })
+      logger.error(`Probably HTTP response status code 200 OK.`)
       await browser.close()
 
       //! RETURN
       return { brand, link, hasProduct: false }
     }
 
-    console.log('x5')
+    logger.debug('STOCK -> before -> const priceElement = await page.$x(brand.xPath.priceElement as string)')
     const priceElement = await page.$x(brand.xPath.priceElement as string)
 
     let productName = '';
     let productImage = '';
 
+    logger.debug('STOCK -> before -> if (brand.xPath.productName) {')
     if (brand.xPath.productName) {
       const productNameElement = await page.$x(brand.xPath.productName)
       productName = await getTextContent(productNameElement)
     }
+
+    logger.debug('STOCK -> before -> if (brand.xPath.productImage) {')
     if (brand.xPath.productImage) {
       const productImageElement = await page.$x(brand.xPath.productImage)
       // it is an image element
@@ -61,6 +60,7 @@ export async function checkStock({
       productImage = src.includes('http') ? src : `https:${src}`
     }
 
+    logger.debug('STOCK -> before -> if (brand.xPath.sellerElement) {')
     if (brand.xPath.sellerElement) {
       const sellerElement = await page.$x(brand.xPath.sellerElement.path)
       if (sellerElement?.length) {
@@ -68,41 +68,40 @@ export async function checkStock({
 
         const isSellerValid = brand.xPath.sellerElement.condition(sellerText)
         if (!isSellerValid) {
-          logger(`❌ ${brand.name}: Seller is not valid`, { type: 'error' })
+          logger.error(`❌ ${brand.name}: Seller is not valid`)
           await browser.close()
 
           //! RETURN
           return { productName, productImage, brand, link, hasProduct: false }
         }
       } else {
-        logger(`❌ ${brand.name}: Seller is not valid`, { type: 'error' })
+        logger.error(`❌ ${brand.name}: Seller is not valid`)
         await browser.close()
 
         //! RETURN
         return { productName, productImage, brand, link, hasProduct: false }
       }
     }
-    console.log('x6')
-    const addCartButtonButton = await page.$x(
-      brand.xPath.addCartButton as string,
-    )
 
-    console.log('x7')
+    // const addCartButtonButton = await page.$x(
+    //   brand.xPath.addCartButton as string,
+    // )
+
+    logger.debug('STOCK -> before -> const pages = await browser.pages()')
     const pages = await browser.pages()
-    logger(`${pages.length} pages opened`)
-    const hasPrice = priceElement.length > 0
+    logger.debug(`${pages.length} pages opened`)
 
-    console.log('x8')
+    logger.debug('STOCK -> before -> const hasPrice = priceElement.length > 0')
+    const hasPrice = priceElement.length > 0
     if (hasPrice) {
       const priceText = await priceElement[0].evaluate(
         (node: any) => node.textContent,
       )
       const price = getPrice({ price: priceText })
-
-      logger(`💰 ${brand.name}: ${price}`, { type: 'success' })
+      logger.debug(`STOCK -> 💰 ${brand.name}: ${price}`)
 
       // await page.waitForXPath(brand.xPath)
-      // logger(`📷 ${brand.name}: Screenshot taken`, {type: 'success'})
+      // logger.info(`📷 ${brand.name}: Screenshot taken`)
       // const screenshot = await page.screenshot({
       //   path: `screenshots/${brand.name}+${Date.now()}.png`,
       //   fullPage: true,
@@ -114,14 +113,14 @@ export async function checkStock({
       //! RETURN
       return { productName, productImage, brand, link, price, hasProduct: true }
     } else {
-      logger(`❌ ${brand.name}: Product not found`, { type: 'error' })
+      logger.error(`❌ ${brand.name}: Product not found`)
       await browser.close()
 
       //! RETURN
       return { productName, productImage, brand, link, hasProduct: false }
     }
   } catch (error) {
-    logger(JSON.stringify(error), { type: 'error' })
+    logger.error(JSON.stringify(error))
     telegram.sendTelegramMessage('I am down, please check me!')
     await browser.close()
     return { brand, link, hasProduct: false }
@@ -160,7 +159,7 @@ let retryInterval: NodeJS.Timeout
 const checkDB = async (stockId: string) => {
   const stock = await MyStock.findById(stockId)
   if (stock?.active === false) {
-    logger('🛑 Stopped by user', { type: 'error' })
+    logger.error('🛑 Stopped by user')
     stocks.delete(stockId)
     clearInterval(retryInterval)
     return false
@@ -168,7 +167,7 @@ const checkDB = async (stockId: string) => {
 
   const isAlreadyRunning = stocks.has(stockId)
   if (isAlreadyRunning) {
-    logger('🛑 Already running', { type: 'error' })
+    logger.error('🛑 Already running')
     return false
   } else {
     stocks.set(stockId, stockId)

@@ -20,8 +20,8 @@ import {
   urlShortenerRouter,
   wishListRouter,
 } from './routes/v1'
-import { db, logger, telegram } from './client'
-import { checkProduct, getUniqueProductUrls } from './helpers'
+import { db, errorHandler, logger, telegram } from './client'
+import { checkProduct, searchAppointment, searchStock } from './helpers'
 
 const app = express()
 
@@ -63,12 +63,12 @@ app.use(wishListRouter)
 
 //! socket.io
 io.on('connection', (socket: Socket) => {
-  logger("connection", { type: "success" })
+  logger.info("connection")
 
   // Kullanıcıyı kendi kanalına katılma işlemi
   socket.on('join', (userId) => {
     socket.join(userId);
-    logger(`Kullanıcı ${userId} kendi kanalına katıldı.`, { type: "success" })
+    logger.info(`Kullanıcı ${userId} kendi kanalına katıldı.`)
   });
 });
 
@@ -85,13 +85,10 @@ type TCronSchedules = keyof typeof CRON_SCHEDULES;
 // Her bir checkFrequency için ayrı bir cron görevi oluştur
 const cronSchedules = Object.entries(CRON_SCHEDULES) as [TCronSchedules, string][];
 cronSchedules.forEach(([frequency, schedule]) => {
-  const jobName = `cronJob-${frequency}`; // Benzersiz cron işi ismi
+  const jobName = `stock-cronJob-${frequency}`; // Benzersiz cron işi ismi
 
   cron.schedule(schedule, async () => {
-    const date = new Date();
-    const dateStr = date.toLocaleDateString('tr-TR');
-    const timeStr = date.toLocaleTimeString('tr-TR');
-    logger(`${jobName} çalıştı ${dateStr} ${timeStr}.`, { type: "success" })
+    logger.info(`${jobName} çalıştı.`)
 
     const wishList = await db.wishList.findMany({
       where: { checkFrequency: frequency }
@@ -104,126 +101,38 @@ cronSchedules.forEach(([frequency, schedule]) => {
     });
 
     // Sıralı işlem
-    for (const url of uniqueUrls) {
-      const productData = await checkProduct(url);
-
-      if (productData?.price) {
-        for (const wish of wishList) {
-          if (wish.productUrl?.includes(url)) {
-
-            const productInfos = {
-              ...(productData.productName && { productName: productData.productName }),
-              ...(productData.productImage && { productImage: productData.productImage }),
-              ...(productData.price && { productPrice: productData.price }),
-            }
-
-            const history = await db.history.create({
-              data: {
-                inStock: !!productData?.price,
-                productUrl: url,
-                wishListId: wish.id,
-                userId: wish.userId,
-                ...productInfos
-              }
-            })
-
-            io.to(wish.userId).emit('newHistory', { history });
-
-            await db.wishList.update({
-              where: { id: wish.id },
-              data: {
-                history: { connect: { id: history.id } },
-                ...productInfos
-              }
-            });
-
-            const price = Number(productData.price.split(',')[0].replace(/[^0-9]/g, ''));
-
-            const hasPriceFilter = wish.minPrice || wish.maxPrice;
-            const isMinPriceValid = wish.minPrice ? wish.minPrice <= price : false;
-            const isMaxPriceValid = wish.maxPrice ? wish.maxPrice >= price : false;
-
-            if ((hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)) {
-              telegram.sendTelegramMessage(
-                `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
-              )
-            } else if (!hasPriceFilter) {
-              telegram.sendTelegramMessage(
-                `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
-              )
-            }
-
-          }
-        }
-      }
+    for (const link of uniqueUrls) {
+      await searchStock({ io, link, wishList });
     }
+  });
+});
+
+cronSchedules.forEach(([frequency, schedule]) => {
+  const jobName = `appointment-cronJob-${frequency}`; // Benzersiz cron işi ismi
+
+  cron.schedule(schedule, async () => {
+    logger.info(`${jobName} çalıştı.`)
+
+    const appointments = await db.appointment.findMany({
+      where: { checkFrequency: frequency }
+    });
+
+    appointments.forEach(appointment => {
+      searchAppointment({ appointment, io });
+    });
   });
 });
 
 httpServer.listen(CONFIG.port)
 
-// //? cron.schedule('*/2 * * * *', async () => { // for every 2 minutes
-// //? cron.schedule('*/5 * * * * *', async () => { // for every 5 seconds
-// cron.schedule('*/2 * * * *', async () => {
-//   const date = new Date();
-//   const dateStr = date.toLocaleDateString('tr-TR');
-//   const timeStr = date.toLocaleTimeString('tr-TR');
-//   logger(`Cron çalıştı ${dateStr} ${timeStr}`, { type: "success" })
+// get the unhandled rejection and throw it to another fallback handler we already have.
+process.on('unhandledRejection', (reason: Error, promise: Promise<any>) => {
+  throw reason;
+});
 
-//   const uniqueUrls = await getUniqueProductUrls();
-//   const whishlist = await db.wishList.findMany()
-
-//   for (const url of uniqueUrls) {
-//     const productData = await checkProduct(url) as any;
-
-//     if (productData?.price) {
-//       for (const wish of whishlist) {
-//         if (wish.productUrl?.includes(url)) {
-
-//           const productInfos = {
-//             ...(productData.productName && { productName: productData.productName }),
-//             ...(productData.productImage && { productImage: productData.productImage }),
-//             ...(productData.price && { productPrice: productData.price }),
-//           }
-
-//           const history = await db.history.create({
-//             data: {
-//               inStock: productData.inStock || false,
-//               wishListId: wish.id,
-//               productUrl: url,
-//               ...productInfos
-//             }
-//           })
-
-//           io.to(wish.userId).emit('newHistory', { history });
-
-//           await db.wishList.update({
-//             where: { id: wish.id },
-//             data: {
-//               history: { connect: { id: history.id } },
-//               ...productInfos
-//             }
-//           });
-
-//           const price = Number(productData.price.split(',')[0].replace(/[^0-9]/g, ''));
-
-//           const hasPriceFilter = wish.minPrice || wish.maxPrice;
-//           const isMinPriceValid = wish.minPrice ? wish.minPrice <= price : false;
-//           const isMaxPriceValid = wish.maxPrice ? wish.maxPrice >= price : false;
-
-//           if ((hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)) {
-//             telegram.sendTelegramMessage(
-//               `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
-//             )
-//           } else if (!hasPriceFilter) {
-//             telegram.sendTelegramMessage(
-//               `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${url}`,
-//             )
-//           }
-
-//         }
-//       }
-//     }
-//   }
-// });
-
+process.on('uncaughtException', (error: Error) => {
+  errorHandler.handleError(error);
+  if (!errorHandler.isTrustedError(error)) {
+    process.exit(1);
+  }
+});

@@ -1,28 +1,80 @@
-import chalk from 'chalk'
-import { format } from 'date-fns'
+import winston from 'winston';
 
-const LOG_TYPE = {
-  info: chalk.blue,
-  success: chalk.green,
-  error: chalk.red,
-} as const
+import { CONFIG } from '../config'
 
-type TLogType = keyof typeof LOG_TYPE
+const customLevels = {
+  levels: {
+    trace: 5,
+    debug: 4,
+    info: 3,
+    warn: 2,
+    error: 1,
+    fatal: 0,
+  },
+  colors: {
+    trace: 'white',
+    debug: 'green',
+    info: 'green',
+    warn: 'yellow',
+    error: 'red',
+    fatal: 'red',
+  },
+};
 
-interface ILoggerOptions {
-  type?: TLogType
-  date?: boolean
-}
-export function logger(message: string, options?: ILoggerOptions): void {
-  const { type = 'info', date = false } = options || {}
-  const color = LOG_TYPE[type]
-  let messageText = message
+const formatter = winston.format.combine(
+  winston.format.colorize(),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.splat(),
+  winston.format.printf((info) => {
+    const { timestamp, level, message, ...meta } = info;
 
-  // const time = new Date().toLocaleTimeString('tr-TR', {
-  //   timeZone: 'Europe/Istanbul',
-  // })
-  if (date) {
-    messageText = `${format(new Date(), 'yyyy-MM-dd HH:mm:ss')} ${messageText}`
+    return `${timestamp} [${level}]: ${message} ${Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''
+      }`;
+  }),
+);
+
+class Logger {
+  private logger: winston.Logger;
+
+  constructor() {
+    const prodTransport = new winston.transports.File({
+      filename: 'logs/error.log',
+      level: 'error',
+    });
+    const transport = new winston.transports.Console({
+      format: formatter,
+    });
+    this.logger = winston.createLogger({
+      level: CONFIG.isDevelopment ? 'trace' : 'error',
+      levels: customLevels.levels,
+      transports: [CONFIG.isDevelopment ? transport : prodTransport],
+    });
+    winston.addColors(customLevels.colors);
   }
-  console.log(color(messageText))
+
+  trace(msg: any, meta?: any) {
+    this.logger.log('trace', msg, meta);
+  }
+
+  debug(msg: any, meta?: any) {
+    this.logger.debug(msg, meta);
+  }
+
+  info(msg: any, meta?: any) {
+    this.logger.info(msg, meta);
+  }
+
+  warn(msg: any, meta?: any) {
+    this.logger.warn(msg, meta);
+  }
+
+  error(msg: any, meta?: any) {
+    this.logger.error(msg, meta);
+  }
+
+  fatal(msg: any, meta?: any) {
+    this.logger.log('fatal', msg, meta);
+  }
 }
+
+export const logger = new Logger();

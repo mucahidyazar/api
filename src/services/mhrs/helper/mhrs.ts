@@ -5,7 +5,7 @@ import { CONFIG } from '@/config'
 import { ENDPOINTS } from '../endpoints'
 
 const getLogin = async () => {
-  logger('Logining...', { type: 'info' })
+  logger.info('Logining...')
 
   const { data: loginResponse } = await mhrsApi.post(ENDPOINTS.login(), {
     kullaniciAdi: CONFIG.MHRS_USERNAME,
@@ -20,13 +20,13 @@ const getLogin = async () => {
         Authorization: `Bearer ${loginResponse.data.jwt}`,
       },
     }
-    logger('Login success', { type: 'success' })
-    logger(`Welcome ${loginResponse.data.kullaniciAdi}`, { type: 'info' })
+    logger.info('Login success')
+    logger.info(`Welcome ${loginResponse.data.kullaniciAdi}`)
   }
 }
 
-const getDoctors = async ({ cityId, districtId, policinicId }: IGetDoctors) => {
-  logger('Selecting doctor...', { type: 'info' })
+const getDoctors = async ({ cityId, districtId, polyclinicId }: IGetDoctors) => {
+  logger.info('Selecting doctor...')
 
   const { data: doctorsResponse } = await mhrsApi.post(
     ENDPOINTS.doctors(),
@@ -37,7 +37,7 @@ const getDoctors = async ({ cityId, districtId, policinicId }: IGetDoctors) => {
       mhrsHekimId: -1,
       mhrsIlId: cityId,
       mhrsIlceId: districtId,
-      mhrsKlinikId: policinicId,
+      mhrsKlinikId: polyclinicId,
       mhrsKurumId: 177339,
       muayeneYeriId: -1,
       randevuZamaniList: [],
@@ -56,8 +56,8 @@ const getDoctors = async ({ cityId, districtId, policinicId }: IGetDoctors) => {
   }))
 }
 
-const getHours = async ({ doctorId, cityId, policinicId }: IGetHours) => {
-  logger('Getting hours...', { type: 'info' })
+const getHours = async ({ doctorId, cityId, polyclinicId }: IGetHours) => {
+  logger.info('Getting hours...')
 
   const { data: hoursResponse } = await mhrsApi.post(
     ENDPOINTS.hours(),
@@ -67,7 +67,7 @@ const getHours = async ({ doctorId, cityId, policinicId }: IGetHours) => {
       ekRandevu: true,
       mhrsHekimId: doctorId,
       mhrsIlId: cityId,
-      mhrsKlinikId: policinicId,
+      mhrsKlinikId: polyclinicId,
       mhrsKurumId: 177339,
       muayeneYeriId: -1,
       randevuZamaniList: [],
@@ -88,7 +88,7 @@ const getHours = async ({ doctorId, cityId, policinicId }: IGetHours) => {
 }
 
 const addAppointments = async (appointment: any) => {
-  logger('Creating appointment...', { type: 'info' })
+  logger.info('Creating appointment...')
 
   const oldRandevuTimeStamp = new Date(
     global.myAppointments[appointment.mhrsKlinikId],
@@ -96,7 +96,7 @@ const addAppointments = async (appointment: any) => {
   const newRandevuTimeStamp = new Date(appointment.baslangicZamani).getTime()
 
   if (newRandevuTimeStamp > oldRandevuTimeStamp) {
-    logger('New appointment is in the future', { type: 'error' })
+    logger.error('New appointment is in the future')
     return
   }
 
@@ -114,13 +114,13 @@ const addAppointments = async (appointment: any) => {
   )
 
   if (appointmentResponse.success) {
-    logger('Appointment created', { type: 'success' })
+    logger.info('Appointment created')
     global.hadAppointment = true
     global.myAppointments = {
       [appointmentResponse.data.klinik.mhrsKlinikId]: newRandevuTimeStamp,
     }
   } else {
-    logger('Appointment not created', { type: 'error' })
+    logger.error('Appointment not created')
 
     if (!global.hadAppointment) {
       setTimeout(() => {

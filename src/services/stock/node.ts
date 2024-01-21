@@ -10,7 +10,7 @@ import { checkAllStocksRetry } from './helpers'
 
 const startApp = async () => {
   try {
-    logger('App started', { type: 'success' })
+    logger.info('App started')
 
     // one by one
     // for (const brand of Object.values(BRAND)) {
@@ -24,9 +24,9 @@ const startApp = async () => {
     await checkAllStocksRetry({ retry: 100 })
 
     const used = process.memoryUsage().heapUsed / 1024 / 1024
-    logger(`The script uses approximately ${used} MB`, { type: 'info' })
+    logger.info(`The script uses approximately ${used} MB`)
   } catch (error) {
-    logger(JSON.stringify(error), { type: 'error' })
+    logger.error(JSON.stringify(error))
     telegram.sendTelegramMessage('I am down, please check me!')
   }
 }

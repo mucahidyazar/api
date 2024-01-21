@@ -1,0 +1,16 @@
+export const DISTRICT = {
+  1103: 'ADALAR',
+  2049: 'ATAŞEHİR',
+  1185: 'BEYKOZ',
+  2052: 'ÇEKMEKÖY',
+  1421: 'KADIKÖY',
+  1449: 'KARTAL',
+  2012: 'MALTEPE',
+  1835: 'PENDİK',
+  2054: 'SANCAKTEPE',
+  2014: 'SULTANBEYLİ',
+  1659: 'ŞİLE',
+  2015: 'TUZLA',
+  1852: 'ÜMRANİYE',
+  1708: 'ÜSKÜDAR',
+} as Record<string, string>

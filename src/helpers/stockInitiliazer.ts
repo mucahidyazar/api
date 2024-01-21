@@ -7,7 +7,7 @@ export async function myInit() {
     const myStock = await MyStock.find()
 
     if (!myStock.length) {
-      return logger('There is no myStock', { type: 'info' })
+      return logger.info('There is no myStock')
     }
 
     myStock.forEach((stock: any) => {
@@ -19,8 +19,8 @@ export async function myInit() {
       }
     })
 
-    return logger('myStock found', { type: 'info' })
+    return logger.info('myStock found')
   } catch (error) {
-    return logger('error', { type: 'error' })
+    return logger.error('error')
   }
 }

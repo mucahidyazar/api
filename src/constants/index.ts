@@ -1,2 +1,5 @@
 export * from './brand'
+export * from './city'
+export * from './district'
+export * from './polyclinic'
 export * from './routes'

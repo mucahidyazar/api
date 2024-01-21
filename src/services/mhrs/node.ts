@@ -11,17 +11,17 @@ import prompts from 'prompts'
 import { logger } from '@/client'
 import { CONFIG } from '@/config'
 import { ICity, IDistrict } from '@/types'
-import { city, district, policinic } from '@/data'
+import { CITY, DISTRICT, POLYCLINIC } from '@/constants'
 
 import { addAppointments, getDoctors, getHours, getLogin } from './helper'
 
 interface IStartAppArgs {
   cityId?: number | string
   districtId?: number | string
-  policinicId?: number | string
+  polyclinicId?: number | string
 }
-const startApp = async ({ cityId, districtId, policinicId }: IStartAppArgs) => {
-  logger('App started', { type: 'info' })
+const startApp = async ({ cityId, districtId, polyclinicId }: IStartAppArgs) => {
+  logger.info('App started')
 
   try {
     //! Login
@@ -39,7 +39,7 @@ const startApp = async ({ cityId, districtId, policinicId }: IStartAppArgs) => {
           type: 'select',
           name: 'city',
           message: 'Select city',
-          choices: Object.values(city),
+          choices: Object.entries(CITY).map(([value, title]) => ({ title, value })),
         })
       }
       if (!districtId) {
@@ -47,22 +47,22 @@ const startApp = async ({ cityId, districtId, policinicId }: IStartAppArgs) => {
           type: 'select',
           name: 'district',
           message: (prev: ICity) => `Select district of ${prev.text}`,
-          choices: Object.values(district),
+          choices: Object.entries(DISTRICT).map(([value, title]) => ({ title, value })),
         })
       }
-      if (!policinicId) {
+      if (!polyclinicId) {
         copyOfPrompts.push({
           type: 'select',
           name: 'policilinics',
           message: (prev: IDistrict) => `Select policilinics of ${prev.text}`,
-          choices: Object.values(policinic),
+          choices: Object.entries(POLYCLINIC).map(([value, title]) => ({ title, value })),
         })
       }
 
       const doctors = await getDoctors({
         cityId: cityId || (await prompts(copyOfPrompts)).city,
         districtId: districtId || (await prompts(copyOfPrompts)).district,
-        policinicId: policinicId || (await prompts(copyOfPrompts)).policilinics,
+        polyclinicId: polyclinicId || (await prompts(copyOfPrompts)).policilinics,
       })
 
       if (!CONFIG.ANY_DOCTOR) {
@@ -85,7 +85,7 @@ const startApp = async ({ cityId, districtId, policinicId }: IStartAppArgs) => {
             const appointment = await getHours({
               doctorId: values?.doctors?.value || doctors,
               cityId: cityId || values.city.value,
-              policinicId: policinicId || values.policilinics.value,
+              polyclinicId: polyclinicId || values.policilinics.value,
             })
 
             addAppointments(appointment)
@@ -94,7 +94,7 @@ const startApp = async ({ cityId, districtId, policinicId }: IStartAppArgs) => {
       ])
     }
   } catch (error) {
-    logger(JSON.stringify(error), { type: 'error' })
+    logger.error(JSON.stringify(error))
   }
 }
 
@@ -104,52 +104,52 @@ const serializeArgs = args.join(' ')
 const myArgs = {
   cityId: serializeArgs.match(/--cityId=(\d+)/)?.[1],
   districtId: serializeArgs.match(/--districtId=(\d+)/)?.[1],
-  policinicId: serializeArgs.match(/--policinicId=(\d+)/)?.[1],
+  polyclinicId: serializeArgs.match(/--polyclinicId=(\d+)/)?.[1],
 }
 
 //! Start App
 // startApp({
 //   cityId: myArgs.cityId || city['İSTANBUL(ANADOLU)'].value,
 //   districtId: myArgs.districtId || district.TUZLA.value,
-//   policinicId:
-//     myArgs.policinicId ||
+//   polyclinicId:
+//     myArgs.polyclinicId ||
 //     policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
 // })
 
-const run = async () => {
-  const options = [
-    {
-      cityId: city['İSTANBUL(ANADOLU)'].value,
-      districtId: district.TUZLA.value,
-      policinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
-    },
-    {
-      cityId: city['İSTANBUL(ANADOLU)'].value,
-      districtId: district.PENDİK.value,
-      policinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
-    },
-    {
-      cityId: city['İSTANBUL(ANADOLU)'].value,
-      districtId: district.KARTAL.value,
-      policinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
-    },
-  ]
+// const run = async () => {
+//   const options = [
+//     {
+//       cityId: city['İSTANBUL(ANADOLU)'].value,
+//       districtId: district.TUZLA.value,
+//       polyclinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+//     },
+//     {
+//       cityId: city['İSTANBUL(ANADOLU)'].value,
+//       districtId: district.PENDİK.value,
+//       polyclinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+//     },
+//     {
+//       cityId: city['İSTANBUL(ANADOLU)'].value,
+//       districtId: district.KARTAL.value,
+//       polyclinicId: policinic['Deri ve Zührevi Hastalıkları (Cildiye)'].value,
+//     },
+//   ]
 
-  const startWithTimeout = async (options: any, timeout: number) => {
-    setTimeout(() => {
-      startApp(options)
-    }, timeout)
-  }
+//   const startWithTimeout = async (options: any, timeout: number) => {
+//     setTimeout(() => {
+//       startApp(options)
+//     }, timeout)
+//   }
 
-  options.forEach(function (item, index) {
-    startWithTimeout(
-      item,
-      Math.abs(
-        CONFIG.REPEAT_REQUEST_TIME / options.length -
-        ((index + 1) * CONFIG.REPEAT_REQUEST_TIME) / options.length,
-      ),
-    )
-  })
-}
+//   options.forEach(function (item, index) {
+//     startWithTimeout(
+//       item,
+//       Math.abs(
+//         CONFIG.REPEAT_REQUEST_TIME / options.length -
+//         ((index + 1) * CONFIG.REPEAT_REQUEST_TIME) / options.length,
+//       ),
+//     )
+//   })
+// }
 
-run()
+// run()
