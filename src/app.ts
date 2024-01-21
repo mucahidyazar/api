@@ -20,8 +20,10 @@ import {
   urlShortenerRouter,
   wishListRouter,
 } from './routes/v1'
-import { db, errorHandler, logger, telegram } from './client'
-import { checkProduct, searchAppointment, searchStock } from './helpers'
+import { db, errorHandler, logger } from './client'
+import { searchAppointment, searchStock } from './helpers'
+
+logger.debug(`app.ts -> env: ${process.env.NODE_ENV}`)
 
 const app = express()
 
@@ -117,6 +119,7 @@ cronSchedules.forEach(([frequency, schedule]) => {
       where: { checkFrequency: frequency }
     });
 
+    logger.debug('Appointment -> before -> appointments.forEach(appointment => {')
     appointments.forEach(appointment => {
       searchAppointment({ appointment, io });
     });
@@ -126,11 +129,13 @@ cronSchedules.forEach(([frequency, schedule]) => {
 httpServer.listen(CONFIG.port)
 
 // get the unhandled rejection and throw it to another fallback handler we already have.
-process.on('unhandledRejection', (reason: Error, promise: Promise<any>) => {
-  throw reason;
+process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
+  console.log('unhandledRejection', error)
+  throw error;
 });
 
 process.on('uncaughtException', (error: Error) => {
+  console.log('uncaughtException', error)
   errorHandler.handleError(error);
   if (!errorHandler.isTrustedError(error)) {
     process.exit(1);

@@ -45,9 +45,11 @@ class Logger {
       format: formatter,
     });
     this.logger = winston.createLogger({
-      level: CONFIG.isDevelopment ? 'trace' : 'error',
+      // level: CONFIG.isDevelopment ? 'trace' : 'error',
+      // transports: [CONFIG.isDevelopment ? transport : prodTransport],
+      level: 'trace',
       levels: customLevels.levels,
-      transports: [CONFIG.isDevelopment ? transport : prodTransport],
+      transports: [transport],
     });
     winston.addColors(customLevels.colors);
   }

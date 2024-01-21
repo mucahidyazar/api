@@ -1,9 +1,8 @@
 import { checkStock } from '../services/stock/helpers'
-import { db, telegram } from "../client";
+import { db, logger, telegram } from "../client";
 import { TBrand } from '../constants'
 import { WishList } from '@prisma/client';
 import { Server } from 'socket.io';
-import { Response } from 'model/response';
 
 //? create an unique array of product urls
 async function getUniqueProductUrls() {
@@ -37,8 +36,10 @@ type SearchStockArgs = {
 async function searchStock({ io, link, wishList }: SearchStockArgs) {
   const productData = await checkProduct({ link });
 
+  logger.debug('STOCK -> before -> if (productData?.price) {')
   if (productData?.price) {
     for (const wish of wishList) {
+      logger.debug('STOCK -> before -> for (const wish of wishList) {')
       if (wish.productUrl?.includes(link)) {
 
         const productInfos = {
@@ -47,6 +48,7 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
           ...(productData.price && { productPrice: productData.price }),
         }
 
+        logger.debug('STOCK -> before -> await db.history.create({')
         const history = await db.history.create({
           data: {
             inStock: !!productData?.price,
@@ -57,8 +59,10 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
           }
         })
 
+        logger.debug('STOCK -> before -> io.to(wish.userId).emit(newHistory, { history })')
         io.to(wish.userId).emit('newHistory', { history });
 
+        logger.debug('STOCK -> before -> await db.wishList.update({')
         await db.wishList.update({
           where: { id: wish.id },
           data: {
@@ -74,10 +78,12 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
         const isMaxPriceValid = wish.maxPrice ? wish.maxPrice >= price : false;
 
         if ((hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)) {
+          logger.debug('STOCK -> inside -> (hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)')
           telegram.sendTelegramMessage(
             `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${link}`,
           )
         } else if (!hasPriceFilter) {
+          logger.debug('STOCK -> inside -> } else if (!hasPriceFilter) {')
           telegram.sendTelegramMessage(
             `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${link}`,
           )
