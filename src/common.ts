@@ -8,7 +8,6 @@ export interface IAppointment {
   favori: boolean
 }
 
-
 export interface ICheckStock {
   link: string
   brandName: TBrandName
@@ -45,20 +44,16 @@ export interface ICity {
   favori: boolean
 }
 
-
 export interface IDistrict {
   value: number
   text: string
 }
-
-
 
 export interface IGetDoctors {
   cityId: number | string
   districtId: number | string
   polyclinicId: number | string
 }
-
 
 export interface IGetHours {
   doctorId: number | string
@@ -88,4 +83,4 @@ export type TBrand = {
   }
 }
 
-export type TBrandName = "amazon" | "mediamarkt"
+export type TBrandName = 'amazon' | 'mediamarkt'

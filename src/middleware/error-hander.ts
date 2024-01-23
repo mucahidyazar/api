@@ -1,7 +1,7 @@
 import {
   // Request,
   Response,
-  // NextFunction 
+  // NextFunction
 } from 'express'
 
 export function errorHandler(

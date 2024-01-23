@@ -11,14 +11,14 @@ async function start(req: Request, res: Response) {
     const retry = Number(req.query.retry) || 1
 
     io.on('connection', (socket: Server) => {
-      logger.info("connection")
+      logger.info('connection')
       checkAllStocksRetry({
         socket,
         retry,
       })
 
       socket.on('disconnect', () => {
-        logger.info("user disconnected")
+        logger.info('user disconnected')
       })
     })
   } catch (error) {

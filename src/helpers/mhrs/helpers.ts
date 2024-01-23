@@ -25,7 +25,12 @@ const getLogin = async () => {
   return { data: { token: loginResponse.data.jwt } }
 }
 
-const getDoctors = async ({ cityId, districtId, polyclinicId, token }: IGetDoctors & { token: string }) => {
+const getDoctors = async ({
+  cityId,
+  districtId,
+  polyclinicId,
+  token,
+}: IGetDoctors & { token: string }) => {
   logger.info('Selecting doctor...')
 
   try {
@@ -55,14 +60,18 @@ const getDoctors = async ({ cityId, districtId, polyclinicId, token }: IGetDocto
       title: `${item.hekim.ad} ${item.hekim.soyad} / ${item.kurum.kurumKisaAdi}`,
       value: item.hekim.mhrsHekimId,
     }))
-
   } catch (error) {
     logger.error('Doctor not found')
     return error
   }
 }
 
-const getHours = async ({ doctorId, cityId, polyclinicId, token }: IGetHours & { token: string }) => {
+const getHours = async ({
+  doctorId,
+  cityId,
+  polyclinicId,
+  token,
+}: IGetHours & { token: string }) => {
   logger.info('Getting hours...')
 
   const { data: hoursResponse } = await mhrsApi.post(
@@ -106,11 +115,19 @@ type AddAppointmentsArgs = {
   appointment: Appointment
   token: string
 }
-const addAppointments = async ({ appointmentHours, appointment, token }: AddAppointmentsArgs) => {
+const addAppointments = async ({
+  appointmentHours,
+  appointment,
+  token,
+}: AddAppointmentsArgs) => {
   logger.info('Creating appointment...')
 
-  const oldRandevuTimeStamp = appointment.reservedAt ? new Date(appointment.reservedAt).getTime() : 0
-  const newRandevuTimeStamp = new Date(appointmentHours.baslangicZamani).getTime()
+  const oldRandevuTimeStamp = appointment.reservedAt
+    ? new Date(appointment.reservedAt).getTime()
+    : 0
+  const newRandevuTimeStamp = new Date(
+    appointmentHours.baslangicZamani,
+  ).getTime()
 
   if (newRandevuTimeStamp > oldRandevuTimeStamp) {
     logger.error('New appointment is in the future')

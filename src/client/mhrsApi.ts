@@ -20,7 +20,9 @@ mhrsApi.interceptors.response.use(undefined, async (error: AxiosError) => {
   const city = CITY[requestData.mhrsIlId]
   const district = DISTRICT[requestData.mhrsIlceId]
   const polyclinic = POLYCLINIC[requestData.mhrsKlinikId]
-  logger.debug(`AXIOS -> inside interceptors -> ${polyclinic} / ${city} / ${district}\n\n`)
+  logger.debug(
+    `AXIOS -> inside interceptors -> ${polyclinic} / ${city} / ${district}\n\n`,
+  )
 
   setTimeout(() => {
     mhrsApi.request(originalRequestConfig as any)

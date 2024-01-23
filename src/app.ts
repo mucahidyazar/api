@@ -25,9 +25,11 @@ logger.debug(`app.ts -> env: ${process.env.NODE_ENV}`)
 const app = express()
 
 //!REQUIREMENTS
-app.use(cors({
-  origin: 'http://localhost:3000',
-}))
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+  }),
+)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -62,81 +64,86 @@ app.use(wishListRouter)
 
 //! socket.io
 io.on('connection', (socket: Socket) => {
-  logger.info("connection")
+  logger.info('connection')
 
   // Kullanıcıyı kendi kanalına katılma işlemi
-  socket.on('join', (userId) => {
-    socket.join(userId);
+  socket.on('join', userId => {
+    socket.join(userId)
     logger.info(`Kullanıcı ${userId} kendi kanalına katıldı.`)
-  });
-});
+  })
+})
 
 // Enum değerlerine göre cron zamanlamaları
 const CRON_SCHEDULES = {
   fiveMinutes: '*/5 * * * *',
   daily: '0 0 * * *',
   hourly: '0 * * * *',
-  weekly: '0 0 * * 0'
-} as const;
+  weekly: '0 0 * * 0',
+} as const
 
-type TCronSchedules = keyof typeof CRON_SCHEDULES;
+type TCronSchedules = keyof typeof CRON_SCHEDULES
 
 // Her bir checkFrequency için ayrı bir cron görevi oluştur
-const cronSchedules = Object.entries(CRON_SCHEDULES) as [TCronSchedules, string][];
+const cronSchedules = Object.entries(CRON_SCHEDULES) as [
+  TCronSchedules,
+  string,
+][]
 cronSchedules.forEach(([frequency, schedule]) => {
-  const jobName = `stock-cronJob-${frequency}`; // Benzersiz cron işi ismi
+  const jobName = `stock-cronJob-${frequency}` // Benzersiz cron işi ismi
 
   cron.schedule(schedule, async () => {
     logger.info(`${jobName} çalıştı.`)
 
     const wishList = await db.wishList.findMany({
-      where: { checkFrequency: frequency }
-    });
+      where: { checkFrequency: frequency },
+    })
 
     // Her gruptaki benzersiz URL'leri toplama
-    const uniqueUrls = new Set<string>();
+    const uniqueUrls = new Set<string>()
     wishList.forEach(wish => {
-      uniqueUrls.add(wish.productUrl);
-    });
+      uniqueUrls.add(wish.productUrl)
+    })
 
     // Sıralı işlem
     for (const link of uniqueUrls) {
-      await searchStock({ io, link, wishList });
+      await searchStock({ io, link, wishList })
     }
-  });
-});
+  })
+})
 
 cronSchedules.forEach(([frequency, schedule]) => {
-  const jobName = `appointment-cronJob-${frequency}`; // Benzersiz cron işi ismi
+  const jobName = `appointment-cronJob-${frequency}` // Benzersiz cron işi ismi
 
   cron.schedule(schedule, async () => {
     logger.info(`${jobName} çalıştı.`)
 
     const appointments = await db.appointment.findMany({
-      where: { checkFrequency: frequency }
-    });
+      where: { checkFrequency: frequency },
+    })
 
-    logger.debug('Appointment -> before -> appointments.forEach(appointment => {')
+    logger.debug(
+      'Appointment -> before -> appointments.forEach(appointment => {',
+    )
     appointments.forEach(appointment => {
-      searchAppointment({ appointment, io });
-    });
-  });
-});
+      searchAppointment({ appointment, io })
+    })
+  })
+})
 
 httpServer.listen(CONFIG.port)
 
 // get the unhandled rejection and throw it to another fallback handler we already have.
 process.on('unhandledRejection', (error: Error, _promise: Promise<any>) => {
   logger.error('unhandledRejection')
-  logger.error(error);
-  throw error;
-});
+  logger.error(error)
+  throw error
+})
 
 process.on('uncaughtException', (error: Error) => {
-  logger.error('uncaughtException');
-  logger.error(error);
-  errorHandler.handleError(error);
+  logger.error('uncaughtException')
+  logger.error(error)
+  errorHandler.handleError(error)
   if (!errorHandler.isTrustedError(error)) {
-    process.exit(1);
+    process.exit(1)
   }
-});
+})

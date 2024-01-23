@@ -1,11 +1,7 @@
 import express from 'express'
 
 import { ROUTES } from '../../constants'
-import {
-  connectWishList,
-  createWishList,
-  listWishList
-} from '../../controller'
+import { connectWishList, createWishList, listWishList } from '../../controller'
 import { tryCatch } from '../../utils'
 
 const router = express.Router()

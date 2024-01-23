@@ -1,4 +1,4 @@
-import { BaseError } from '../model';
+import { BaseError } from '../model'
 
 import { logger } from './logger'
 
@@ -7,16 +7,16 @@ class ErrorHandler {
     await logger.error(
       'Error message from the centralized error-handling component',
       err,
-    );
+    )
     // await sendMailToAdminIfCritical();
     // await sendEventsToSentry();
   }
 
   public isTrustedError(error: Error) {
     if (error instanceof BaseError) {
-      return error.isOperational;
+      return error.isOperational
     }
-    return false;
+    return false
   }
 }
-export const errorHandler = new ErrorHandler();
+export const errorHandler = new ErrorHandler()

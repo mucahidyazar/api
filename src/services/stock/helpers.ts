@@ -2,7 +2,12 @@ import puppeteer, { ElementHandle } from 'puppeteer'
 import { Server } from 'socket.io'
 
 import { logger, telegram } from '../../client'
-import { ICheckStock, ICheckStockResult, ICheckStockRetry, TBrandName } from '../../common'
+import {
+  ICheckStock,
+  ICheckStockResult,
+  ICheckStockRetry,
+  TBrandName,
+} from '../../common'
 import { CONFIG } from '../../config'
 import { BRAND } from '../../constants'
 import { links } from '../../data'
@@ -25,37 +30,40 @@ export async function checkAllStocksRetry({
 
   let left = retry
 
-  retryInterval = setInterval(async () => {
-    if (stockId) {
-      const shouldContinue = await checkDB(stockId)
-      if (!shouldContinue) return
-    }
+  retryInterval = setInterval(
+    async () => {
+      if (stockId) {
+        const shouldContinue = await checkDB(stockId)
+        if (!shouldContinue) return
+      }
 
-    for (const link of links) {
-      const brand = link.match(/https:\/\/www\.(.*?)\./)?.[1] as TBrandName
-      const response = await checkStockRetry({
-        link,
-        brandName: brand,
-        delay: CONFIG.checkStockDelay,
-      })
-      result.push(response)
-    }
+      for (const link of links) {
+        const brand = link.match(/https:\/\/www\.(.*?)\./)?.[1] as TBrandName
+        const response = await checkStockRetry({
+          link,
+          brandName: brand,
+          delay: CONFIG.checkStockDelay,
+        })
+        result.push(response)
+      }
 
-    if (socket) socket.emit('results', result)
-    if (shouldReturn) return result
+      if (socket) socket.emit('results', result)
+      if (shouldReturn) return result
 
-    left = left - 1
-    const stock = await MyStock.findById(stockId)
-    if (stock) {
-      stock.results = [...stock.results, ...result]
-      stock.retry = left
-      stock.save()
-    }
-    result.length = 0
-    if (left === 0) {
-      clearInterval(retryInterval)
-    }
-  }, CONFIG.checkStockDelay * (totalLinks + 1))
+      left = left - 1
+      const stock = await MyStock.findById(stockId)
+      if (stock) {
+        stock.results = [...stock.results, ...result]
+        stock.retry = left
+        stock.save()
+      }
+      result.length = 0
+      if (left === 0) {
+        clearInterval(retryInterval)
+      }
+    },
+    CONFIG.checkStockDelay * (totalLinks + 1),
+  )
 }
 
 export async function checkStock({
@@ -84,11 +92,13 @@ export async function checkStock({
       return { brand, link, hasProduct: false }
     }
 
-    logger.debug('STOCK -> before -> const priceElement = await page.$x(brand.xPath.priceElement as string)')
+    logger.debug(
+      'STOCK -> before -> const priceElement = await page.$x(brand.xPath.priceElement as string)',
+    )
     const priceElement = await page.$x(brand.xPath.priceElement as string)
 
-    let productName = '';
-    let productImage = '';
+    let productName = ''
+    let productImage = ''
 
     logger.debug('STOCK -> before -> if (brand.xPath.productName) {')
     if (brand.xPath.productName) {
@@ -101,7 +111,9 @@ export async function checkStock({
       const productImageElement = await page.$x(brand.xPath.productImage)
       // it is an image element
       // so get its src
-      const src = await productImageElement[0].evaluate((node: any) => node.getAttribute('src'))
+      const src = await productImageElement[0].evaluate((node: any) =>
+        node.getAttribute('src'),
+      )
       productImage = src.includes('http') ? src : `https:${src}`
     }
 
