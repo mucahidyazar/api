@@ -1,7 +1,7 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
 
-import { logger } from '@/client'
+import { logger } from '../../client'
 
 interface IGetLinkPreviewResponse {
   title?: string

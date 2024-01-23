@@ -4,8 +4,7 @@ dotEnv.config({
   path: process.cwd() + '/.env',
 })
 
-// eslint-disable-next-line sort-imports
-import { logger, telegram } from '@/client'
+import { logger, telegram } from '../../client'
 
 import { checkAllStocksRetry } from './helpers'
 
