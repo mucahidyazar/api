@@ -2,7 +2,7 @@ import { Appointment } from '@prisma/client'
 import { Server } from 'socket.io'
 
 import { db, logger } from '../../client'
-import { Response } from '../../model'
+import { Response, SocketMessage } from '../../model'
 
 import { addAppointments, getDoctors, getHours, getLogin } from './helpers'
 
@@ -15,10 +15,15 @@ export async function searchAppointment({
   io,
 }: SearchAppointmentArgs) {
   logger.info('Appointment search is started')
+  let socketMessage = new SocketMessage(appointment.userId, 'Appointment search is started', null)
+  io.to(appointment.userId).emit('searchAppointment', socketMessage)
   const { cityId, districtId, polyclinicId, anyDoctor } = appointment
 
   try {
     // increment checkCount
+    logger.debug('Appointment -> before -> await db.appointment.update({')
+    socketMessage = new SocketMessage(appointment.userId, 'Appointment checkCount is incremented', null)
+    io.to(appointment.userId).emit('searchAppointment', socketMessage)
     await db.appointment.update({
       where: { id: appointment.id },
       data: { checkCount: { increment: 1 } },
@@ -26,31 +31,36 @@ export async function searchAppointment({
 
     // remove expired cookies
     logger.debug('Appointment -> before -> await db.cookie.deleteMany({')
+    socketMessage = new SocketMessage(appointment.userId, 'Expired cookies are deleted', null)
+    io.to(appointment.userId).emit('searchAppointment', socketMessage)
     await db.cookie.deleteMany({ where: { expiresAt: { lt: new Date() } } })
 
     // check not expired unique token
     logger.debug(
       'Appointment -> before -> const tokenData = await db.cookie.findUnique({',
     )
-    const tokenData = await db.cookie.findUnique({
-      where: {
-        userId: appointment.userId,
-        appoinmentId: appointment.id,
-        expiresAt: { gt: new Date() },
-      },
+    socketMessage = new SocketMessage(appointment.userId, 'User mhrsToken is checked', null)
+    io.to(appointment.userId).emit('searchAppointment', socketMessage)
+    const userData = await db.user.findUnique({
+      where: { id: appointment.userId },
+      select: { mhrsToken: true },
     })
 
-    let token = tokenData?.value
+    let token = userData?.mhrsToken?.value
 
     //! Login
     logger.debug('Appointment -> before -> if (!tokenData) {')
-    if (!tokenData) {
+    if (!token) {
       logger.debug('Appointment -> before -> const { data } = await getLogin()')
+      socketMessage = new SocketMessage(appointment.userId, 'User is logging in', null)
+      io.to(appointment.userId).emit('searchAppointment', socketMessage)
       const { data } = await getLogin()
       if (data?.token) {
         logger.debug(
           'Appointment -> before -> const response = await db.cookie.create({',
         )
+        socketMessage = new SocketMessage(appointment.userId, 'User mhrsToken is created', null)
+        io.to(appointment.userId).emit('searchAppointment', socketMessage)
         const response = await db.cookie.create({
           data: {
             userId: appointment.userId,
@@ -76,6 +86,8 @@ export async function searchAppointment({
       logger.debug(
         'Appointment -> before -> const doctors = await getDoctors({ cityId, districtId, polyclinicId, token })',
       )
+      socketMessage = new SocketMessage(appointment.userId, 'Doctors are getting', null)
+      io.to(appointment.userId).emit('searchAppointment', socketMessage)
       const doctors = await getDoctors({
         cityId,
         districtId,
@@ -83,14 +95,12 @@ export async function searchAppointment({
         token,
       })
 
-      logger.debug(
-        'Appointment -> before -> if (!appointment.doctorId && !anyDoctor) {',
-      )
       if (!appointment.doctorId && !anyDoctor) {
-        io.to(appointment.userId).emit('doctors', {
-          appointmentId: appointment.id,
-          doctors,
-        })
+        logger.debug(
+          'Appointment -> after -> io.to(appointment.userId).emit(\'doctors\', {',
+        )
+        socketMessage = new SocketMessage(appointment.userId, 'There is no doctor id so you should choose some of these doctors', doctors)
+        io.to(appointment.userId).emit('doctors', socketMessage)
         return new Response(200, null, 'There is no doctorId')
       }
 
@@ -99,6 +109,8 @@ export async function searchAppointment({
       logger.debug(
         'Appointment -> before -> const appointmentHours = await getHours({',
       )
+      socketMessage = new SocketMessage(appointment.userId, 'Appointment hours are getting', null)
+      io.to(appointment.userId).emit('searchAppointment', socketMessage)
       const appointmentHours = await getHours({
         doctorId,
         cityId,
@@ -109,6 +121,8 @@ export async function searchAppointment({
       logger.debug(
         'Appointment -> before -> const response = await addAppointments({',
       )
+      socketMessage = new SocketMessage(appointment.userId, 'Appointment is creating', null)
+      io.to(appointment.userId).emit('searchAppointment', socketMessage)
       const response = await addAppointments({
         appointment,
         appointmentHours,
@@ -117,7 +131,8 @@ export async function searchAppointment({
 
       if (response.data) {
         logger.debug('Appointment -> inside -> if (response.data) {')
-        io.to(appointment.userId).emit('appointment', { data: response.data })
+        socketMessage = new SocketMessage(appointment.userId, 'Appointment is created', response.data)
+        io.to(appointment.userId).emit('searchAppointment', socketMessage)
         db.appointment.update({
           where: { id: appointment.id },
           data: {
@@ -133,6 +148,8 @@ export async function searchAppointment({
     }
   } catch (error) {
     logger.error(JSON.stringify(error))
+    socketMessage = new SocketMessage(appointment.userId, 'Something went wrong', null)
+    io.to(appointment.userId).emit('searchAppointment', socketMessage)
     return new Response(400, null, 'Something went wrong')
   }
 }

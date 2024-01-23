@@ -110,13 +110,13 @@ model User {
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
-  articles    Article[]
-  feedbacks   Feedback[]
-  mhrsAccount MhrsAccount?
-  wishList    WishList[]
-  appointment Appointment[]
-  history     History[]
-  Cookie      Cookie[]
+  articles     Article[]
+  feedbacks    Feedback[]
+  mhrsAccount  MhrsAccount?
+  wishList     WishList[]
+  appointments Appointment[]
+  histories    History[]
+  mhrsToken    Cookie?
 
   @@map(name: "users")
 }
@@ -215,7 +215,7 @@ model Cookie {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId       String
+  userId       String      @unique
   user         User        @relation(fields: [userId], references: [id])
   appoinmentId String      @unique
   appoinment   Appointment @relation(fields: [appoinmentId], references: [id])
