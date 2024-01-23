@@ -18,6 +18,12 @@ export async function searchAppointment({
   const { cityId, districtId, polyclinicId, anyDoctor } = appointment
 
   try {
+    // increment checkCount
+    await db.appointment.update({
+      where: { id: appointment.id },
+      data: { checkCount: { increment: 1 } },
+    })
+
     // remove expired cookies
     logger.debug('Appointment -> before -> await db.cookie.deleteMany({')
     await db.cookie.deleteMany({ where: { expiresAt: { lt: new Date() } } })

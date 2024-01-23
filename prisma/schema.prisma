@@ -252,6 +252,8 @@ model Appointment {
   anyDoctor        Boolean @default(true)
   anyTime          Boolean @default(true)
 
+  checkCount Int @default(0)
+
   token Cookie?
 
   @@map(name: "appointments")
