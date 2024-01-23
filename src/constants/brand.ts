@@ -1,4 +1,6 @@
-export const BRAND = {
+import { TBrand, TBrandName } from "../common";
+
+export const BRAND: Record<TBrandName, TBrand> = {
   amazon: {
     name: 'amazon',
     xPath: {
@@ -10,6 +12,8 @@ export const BRAND = {
         condition: (text: string) =>
           text === 'Amazon.com.tr',
       },
+      productName: '',
+      productImage: ''
     },
   },
   // Arcelik: {
@@ -41,6 +45,5 @@ export const BRAND = {
       productImage: '//*[@id="product-sidebar"]/div[1]/a/img'
     },
   },
-} as const
+}
 
-export type TBrand = keyof typeof BRAND

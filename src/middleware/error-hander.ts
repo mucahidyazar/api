@@ -1,10 +1,14 @@
-import { Request, Response, NextFunction } from 'express'
+import {
+  // Request,
+  Response,
+  // NextFunction 
+} from 'express'
 
 export function errorHandler(
   err: Error,
-  req: Request,
+  // req: Request,
   res: Response,
-  next: NextFunction,
+  // next: NextFunction,
 ) {
   res.status(500).json(err)
 }

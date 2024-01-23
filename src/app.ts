@@ -1,18 +1,17 @@
-import dotEnv from 'dotenv'
+import './client/env'
+import './config/db'
 
-dotEnv.config({
-  path: process.cwd() + '/.env',
-})
-
-import express from 'express'
-import cors from 'cors'
 import { createServer } from 'http'
-import { Server, Socket } from 'socket.io'
+
+import cors from 'cors'
+import express from 'express'
 import kill from 'kill-port'
 import cron from 'node-cron'
+import { Server, Socket } from 'socket.io'
 
-import './config/db'
+import { db, errorHandler, logger } from './client'
 import { CONFIG } from './config'
+import { searchAppointment, searchStock } from './helpers'
 import {
   linkPreviewRouter,
   socketRouter,
@@ -20,8 +19,6 @@ import {
   urlShortenerRouter,
   wishListRouter,
 } from './routes/v1'
-import { db, errorHandler, logger } from './client'
-import { searchAppointment, searchStock } from './helpers'
 
 logger.debug(`app.ts -> env: ${process.env.NODE_ENV}`)
 
@@ -129,13 +126,15 @@ cronSchedules.forEach(([frequency, schedule]) => {
 httpServer.listen(CONFIG.port)
 
 // get the unhandled rejection and throw it to another fallback handler we already have.
-process.on('unhandledRejection', (error: Error, promise: Promise<any>) => {
-  console.log('unhandledRejection', error)
+process.on('unhandledRejection', (error: Error, _promise: Promise<any>) => {
+  logger.error('unhandledRejection')
+  logger.error(error);
   throw error;
 });
 
 process.on('uncaughtException', (error: Error) => {
-  console.log('uncaughtException', error)
+  logger.error('uncaughtException');
+  logger.error(error);
   errorHandler.handleError(error);
   if (!errorHandler.isTrustedError(error)) {
     process.exit(1);

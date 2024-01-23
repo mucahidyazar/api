@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 // const validator = require("validator");
 // const bcrypt = require("bcryptjs");
 // const jwt = require("jsonwebtoken");
@@ -45,4 +45,4 @@ const mystockSchema = new mongoose.Schema({
 const Stock = mongoose.model('Stock', stockSchema)
 const MyStock = mongoose.model('MyStock', mystockSchema)
 
-export {Stock, MyStock}
+export { MyStock, Stock }

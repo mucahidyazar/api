@@ -2,8 +2,8 @@
 import { Appointment } from '@prisma/client'
 import { Server } from 'socket.io'
 
-import { Response } from '../../model'
 import { db, logger } from '../../client'
+import { Response } from '../../model'
 
 import { addAppointments, getDoctors, getHours, getLogin } from './helpers'
 
@@ -83,7 +83,7 @@ export async function searchAppointment({ appointment, io }: SearchAppointmentAr
         io.to(appointment.userId).emit('appointment', { data: response.data })
         db.appointment.update({
           where: { id: appointment.id },
-          data: { reservedAt: response.data.data.randevuId }
+          data: { reservedAt: (response.data as { data: { randevuId: string } }).data.randevuId }
         })
         return new Response(200, null, 'Appointment created')
       }

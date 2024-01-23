@@ -1,0 +1,46 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:security/recommended-legacy"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "unused-imports", "sort-exports", "import"],
+  "root": true,
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console": "error",
+    "unused-imports/no-unused-imports": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "sort-exports/sort-exports": ["error", { "sortDir": "asc" }],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "unknown",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          { "pattern": "@**", "group": "external", "position": "after" }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ]
+  }
+}

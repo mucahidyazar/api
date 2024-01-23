@@ -1,7 +1,7 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 
-import {checkStock} from '../services/stock/helpers'
-import {links} from '../data'
+import { links } from '../data'
+import { checkStock } from '../services/stock/helpers'
 
 export async function getPrice(req: Request, res: Response) {
   try {

@@ -1,5 +1,7 @@
-import cheerio from 'cheerio'
 import axios from 'axios'
+import cheerio from 'cheerio'
+
+import { logger } from '@/client'
 
 interface IGetLinkPreviewResponse {
   title?: string
@@ -18,9 +20,9 @@ export const getLinkPreviewData = async (
     const description = $('meta[name="description"]').attr('content')
     const image = $('meta[property="og:image"]').attr('content')
 
-    return {title, description, image}
+    return { title, description, image }
   } catch (error) {
-    console.error(`Error while fetching link preview data: ${error}`)
+    logger.error(`Error while fetching link preview data: ${error}`)
     return {}
   }
 }

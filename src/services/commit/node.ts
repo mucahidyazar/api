@@ -1,9 +1,10 @@
-import jsonfile from 'jsonfile'
-import { simpleGit } from 'simple-git'
-import moment from 'moment'
-import { faker } from '@faker-js/faker'
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+
+import { faker } from '@faker-js/faker'
+import jsonfile from 'jsonfile'
+import moment from 'moment'
+import { simpleGit } from 'simple-git'
 
 import { promiseLoop } from '@/utils'
 
@@ -76,7 +77,7 @@ export function generateCommits({
 
   if (distribution === DISTRIBUTION.random) {
     for (let i = 0; i < count; i++) {
-      let date = getNewDate({
+      const date = getNewDate({
         date: moment(faker.date.between(from, to)).format(),
         excludeWeekends,
       })
@@ -101,6 +102,7 @@ async function makeCommit() {
 
   const git = simpleGit()
   git.cwd(path.resolve(__dirname, './secret'))
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   if (await fs.existsSync(projectPath)) {
     await fs.rmSync(projectPath, { recursive: true })
   }

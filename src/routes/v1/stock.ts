@@ -1,5 +1,6 @@
 import express from 'express'
 
+import { ROUTES } from '../../constants'
 import {
   check,
   detail,
@@ -15,8 +16,7 @@ import {
   myStart,
   myStop,
 } from '../../controller'
-import {tryCatch} from '../../utils'
-import {ROUTES} from '../../constants'
+import { tryCatch } from '../../utils'
 
 const router = express.Router()
 
@@ -35,4 +35,4 @@ router.post(ROUTES.v1.stock.myCreate, tryCatch(myCreate))
 router.post(ROUTES.v1.stock.myStart, tryCatch(myStart))
 router.post(ROUTES.v1.stock.myStop, tryCatch(myStop))
 
-export {router as stockRouter}
+export { router as stockRouter }

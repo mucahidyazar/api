@@ -1,6 +1,6 @@
+import { logger } from '../client'
 import { MyStock } from '../model'
 import { checkAllStocksRetry } from '../services/stock/helpers'
-import { logger } from '../client'
 
 export async function myInit() {
   try {

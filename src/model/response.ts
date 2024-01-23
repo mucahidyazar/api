@@ -1,18 +1,15 @@
 export class Response {
   public status: number
-  public data: any
+  public data: unknown
   public message: string
-  public error?: any
 
   constructor(
     status: number,
-    data: any,
+    data: unknown,
     message: string,
-    error?: any,
   ) {
     this.status = status
     this.data = data
     this.message = message
-    this.error = error
   }
 }

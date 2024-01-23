@@ -1,6 +1,6 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 
-import {getLinkPreviewData} from '../services/link-preview/helpers'
+import { getLinkPreviewData } from '../services/link-preview/helpers'
 
 export async function getLinkPreview(req: Request, res: Response) {
   try {

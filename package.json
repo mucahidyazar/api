@@ -29,6 +29,10 @@
     "prisma:generate": "npx prisma generate --schema=../api-prisma/prisma/schema.prisma && cp -rf ../api-prisma/node_modules/.prisma ./node_modules/",
     "prisma:migrate": "npx prisma migrate dev --schema=../api-prisma/prisma/schema.prisma",
     "prisma:copy": "cp -rf ../api-prisma/prisma ./",
+    "lint": "eslint --ext .ts ./src",
+    "lint:fix": "eslint --fix --ext .ts ./src",
+    "prettier": "prettier --check \"src/**/*.ts\"",
+    "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "prepare": "husky install",
     "postinstall": "prisma generate && npx puppeteer browsers install chrome"
   },
@@ -66,7 +70,15 @@
     "@types/node-cron": "^3.0.11",
     "@types/node-telegram-bot-api": "^0.57.6",
     "@types/prompts": "^2.4.2",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-security": "^2.1.0",
+    "eslint-plugin-sort-exports": "^0.8.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "husky": "^7.0.0",
+    "prettier": "^3.2.4",
     "prisma": "^5.5.2",
     "ts-node-dev": "^2.0.0"
   }

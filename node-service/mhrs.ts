@@ -1,8 +1,8 @@
-import { logger, mhrsApi } from '@/client'
-import { IGetDoctors, IGetHours } from '@/types'
-import { CONFIG } from '@/config'
+import { logger, mhrsApi } from '../src/client'
+import { IGetDoctors, IGetHours } from '../src/common'
+import { CONFIG } from '../src/config'
 
-import { ENDPOINTS } from '../endpoints'
+import { ENDPOINTS } from './endpoints'
 
 const getLogin = async () => {
   logger.info('Logining...')
@@ -130,4 +130,4 @@ const addAppointments = async (appointment: any) => {
   }
 }
 
-export { getLogin, getDoctors, getHours, addAppointments }
+export { addAppointments, getDoctors, getHours, getLogin }

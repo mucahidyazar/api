@@ -1,4 +1,6 @@
 import process from 'process'
+
+// eslint-disable-next-line import/order
 import dotEnv from 'dotenv'
 
 dotEnv.config({
@@ -8,18 +10,19 @@ dotEnv.config({
 import './global'
 import prompts from 'prompts'
 
-import { logger } from '@/client'
-import { CONFIG } from '@/config'
-import { ICity, IDistrict } from '@/types'
-import { CITY, DISTRICT, POLYCLINIC } from '@/constants'
+import { logger } from '../src/client'
+import { ICity, IDistrict } from '../src/common'
+import { CONFIG } from '../src/config'
+import { CITY, DISTRICT, POLYCLINIC } from '../src/constants'
 
-import { addAppointments, getDoctors, getHours, getLogin } from './helper'
+import { addAppointments, getDoctors, getHours, getLogin } from './mhrs'
 
 interface IStartAppArgs {
   cityId?: number | string
   districtId?: number | string
   polyclinicId?: number | string
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const startApp = async ({ cityId, districtId, polyclinicId }: IStartAppArgs) => {
   logger.info('App started')
 
@@ -31,7 +34,7 @@ const startApp = async ({ cityId, districtId, polyclinicId }: IStartAppArgs) => 
 
     if (token) {
       //? Prompt data
-      let copyOfPrompts: any = []
+      const copyOfPrompts: any = []
 
       //! Get cities
       if (!cityId) {
@@ -80,7 +83,7 @@ const startApp = async ({ cityId, districtId, polyclinicId }: IStartAppArgs) => 
         {
           type: 'select',
           name: 'appointments',
-          message: (prev: any) => `Select appointments.`,
+          message: (_prev: any) => `Select appointments.`,
           choices: async (prev: any, values) => {
             const appointment = await getHours({
               doctorId: values?.doctors?.value || doctors,
@@ -101,6 +104,7 @@ const startApp = async ({ cityId, districtId, polyclinicId }: IStartAppArgs) => 
 // CLI arguments
 const args = process.argv.slice(2)
 const serializeArgs = args.join(' ')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const myArgs = {
   cityId: serializeArgs.match(/--cityId=(\d+)/)?.[1],
   districtId: serializeArgs.match(/--districtId=(\d+)/)?.[1],

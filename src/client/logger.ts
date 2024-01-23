@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-import { CONFIG } from '../config'
+// import { CONFIG } from '../config'
 
 const customLevels = {
   levels: {
@@ -37,10 +37,10 @@ class Logger {
   private logger: winston.Logger;
 
   constructor() {
-    const prodTransport = new winston.transports.File({
-      filename: 'logs/error.log',
-      level: 'error',
-    });
+    // const prodTransport = new winston.transports.File({
+    //   filename: 'logs/error.log',
+    //   level: 'error',
+    // });
     const transport = new winston.transports.Console({
       format: formatter,
     });

@@ -1,8 +1,9 @@
-import { checkStock } from '../services/stock/helpers'
-import { db, logger, telegram } from "../client";
-import { TBrand } from '../constants'
 import { WishList } from '@prisma/client';
+import { TBrandName } from 'common';
 import { Server } from 'socket.io';
+
+import { db, logger, telegram } from "../client";
+import { checkStock } from '../services/stock/helpers'
 
 //? create an unique array of product urls
 async function getUniqueProductUrls() {
@@ -17,13 +18,13 @@ async function getUniqueProductUrls() {
 async function checkProduct({ link }: { link: string }) {
   try {
     const urlOrigin = new URL(link).origin; // ex => https://www.amazon.com
-    const brandName = urlOrigin.match(/https:\/\/www\.(.*?)\./)?.[1] as TBrand; // ex => amazon
+    const brandName = urlOrigin.match(/https:\/\/www\.(.*?)\./)?.[1] as TBrandName; // ex => amazon
 
     const stockData = await checkStock({ link, brandName })
 
     return stockData
   } catch (error) {
-    console.error('Fiyat kontrolünde hata:', error);
+    logger.error(`Fiyat kontrolünde hata: ${error}`);
     return null;
   }
 }
@@ -93,4 +94,4 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
     }
   }
 }
-export { getUniqueProductUrls, checkProduct, searchStock }
+export { checkProduct, getUniqueProductUrls, searchStock }

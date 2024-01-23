@@ -1,18 +1,18 @@
-import puppeteer, { ElementHandle } from 'puppeteer'
+// import puppeteer, { ElementHandle } from 'puppeteer'
 
-import {
-  IBrand,
-  ICheckStock,
-  ICheckStockRetry,
-  ICheckStockResult,
-} from '../../types'
-import { TBrand, BRAND } from '../../constants'
-import { CONFIG } from '../../config'
-import { links } from '../../data'
-import { logger } from '../../client'
-import { getPrice, sleep } from '../../utils'
+// import {
+//   IBrand,
+//   ICheckStock,
+//   ICheckStockRetry,
+//   ICheckStockResult,
+// } from '../../common'
+// import { TBrand, BRAND } from '../../constants'
+// import { CONFIG } from '../../config'
+// import { links } from '../../data'
+// import { logger } from '../../client'
+// import { getPrice, sleep } from '../../utils'
 // import {sendTelegramMessage} from '../../client'
-import { MyStock } from 'model/stock'
+// import { MyStock } from 'model/stock'
 
 // export async function checkAllStocksRetry({
 //   retry = 1,

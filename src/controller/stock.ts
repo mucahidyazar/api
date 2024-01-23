@@ -1,16 +1,16 @@
 import { Request, Response } from 'express'
-import { Socket } from 'socket.io'
+import { Server } from 'socket.io'
 
-import { checkAllStocksRetry } from '../services/stock/helpers'
-import { Stock, MyStock } from '../model'
 import { logger } from '../client'
+import { Stock, MyStock } from '../model'
+import { checkAllStocksRetry } from '../services/stock/helpers'
 
-export function start(req: Request, res: Response) {
+async function start(req: Request, res: Response) {
   try {
     const io = req.io
     const retry = Number(req.query.retry) || 1
 
-    io.on('connection', (socket: Socket) => {
+    io.on('connection', (socket: Server) => {
       logger.info("connection")
       checkAllStocksRetry({
         socket,
@@ -28,7 +28,7 @@ export function start(req: Request, res: Response) {
   }
 }
 
-export async function check(req: Request, res: Response) {
+async function check(req: Request, res: Response) {
   try {
     const id = req.query.id
     const stock = await Stock.findById(id)
@@ -52,7 +52,7 @@ export async function check(req: Request, res: Response) {
   }
 }
 
-export async function stop(req: Request, res: Response) {
+async function stop(req: Request, res: Response) {
   try {
     const id = req.query.id
     const stock = await Stock.findById(id)
@@ -79,7 +79,7 @@ export async function stop(req: Request, res: Response) {
   }
 }
 
-export async function detail(req: Request, res: Response) {
+async function detail(req: Request, res: Response) {
   try {
     const id = req.query.id
     const stock = await Stock.findById(id)
@@ -103,7 +103,7 @@ export async function detail(req: Request, res: Response) {
   }
 }
 
-export async function myClear(req: Request, res: Response) {
+async function myClear(req: Request, res: Response) {
   try {
     const myStock = await MyStock.deleteMany({})
     return res.status(200).json({
@@ -119,10 +119,17 @@ export async function myClear(req: Request, res: Response) {
   }
 }
 
-export async function myClearResults(req: Request, res: Response) {
+async function myClearResults(req: Request, res: Response) {
   try {
     const id = req.body.id
     const myStock = await MyStock.findById(id)
+
+    if (!myStock) {
+      return res.status(404).json({
+        message: 'myStock not found',
+      })
+    }
+
     myStock.results = []
     myStock.save()
 
@@ -139,7 +146,7 @@ export async function myClearResults(req: Request, res: Response) {
   }
 }
 
-export async function myCreate(req: Request, res: Response) {
+async function myCreate(req: Request, res: Response) {
   try {
     const myStock = await MyStock.create({
       active: true,
@@ -148,7 +155,7 @@ export async function myCreate(req: Request, res: Response) {
 
     checkAllStocksRetry({
       retry: myStock.retry,
-      stockId: myStock._id,
+      stockId: String(myStock._id),
     })
 
     return res.status(200).json({
@@ -164,7 +171,7 @@ export async function myCreate(req: Request, res: Response) {
   }
 }
 
-export async function myStart(req: Request, res: Response) {
+async function myStart(req: Request, res: Response) {
   try {
     const id = req.body.id
     const myStock = await MyStock.findById(id)
@@ -180,7 +187,7 @@ export async function myStart(req: Request, res: Response) {
 
     checkAllStocksRetry({
       retry: myStock.retry,
-      stockId: myStock._id,
+      stockId: String(myStock._id),
     })
 
     return res.status(200).json({
@@ -196,7 +203,7 @@ export async function myStart(req: Request, res: Response) {
   }
 }
 
-export async function myCheck(req: Request, res: Response) {
+async function myCheck(req: Request, res: Response) {
   try {
     const id = req.query.id
     const myStock = await MyStock.findById(id)
@@ -220,7 +227,7 @@ export async function myCheck(req: Request, res: Response) {
   }
 }
 
-export async function myInit(req: Request, res: Response) {
+async function myInit(req: Request, res: Response) {
   try {
     const myStock = await MyStock.find()
 
@@ -252,7 +259,7 @@ export async function myInit(req: Request, res: Response) {
   }
 }
 
-export async function myList(req: Request, res: Response) {
+async function myList(req: Request, res: Response) {
   try {
     const myStock = await MyStock.find()
 
@@ -275,7 +282,7 @@ export async function myList(req: Request, res: Response) {
   }
 }
 
-export async function myStop(req: Request, res: Response) {
+async function myStop(req: Request, res: Response) {
   try {
     const id = req.body.id
 
@@ -303,7 +310,7 @@ export async function myStop(req: Request, res: Response) {
   }
 }
 
-export async function myDetail(req: Request, res: Response) {
+async function myDetail(req: Request, res: Response) {
   try {
     const id = req.query.id
     const myStock = await MyStock.findById(id)
@@ -325,4 +332,20 @@ export async function myDetail(req: Request, res: Response) {
       message: 'error',
     })
   }
+}
+
+export {
+  check,
+  detail,
+  myCheck,
+  myClear,
+  myClearResults,
+  myCreate,
+  myDetail,
+  myInit,
+  myList,
+  myStart,
+  myStop,
+  start,
+  stop,
 }

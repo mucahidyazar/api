@@ -1,5 +1,6 @@
 import express from 'express'
 
+import { ROUTES } from '../../constants'
 import {
   createShortUrl,
   openShortUrl,
@@ -7,8 +8,7 @@ import {
   getShortUrl,
   deleteShortUrl,
 } from '../../controller'
-import {tryCatch} from '../../utils'
-import {ROUTES} from '../../constants'
+import { tryCatch } from '../../utils'
 
 const router = express.Router()
 
@@ -18,4 +18,4 @@ router.get(ROUTES.v1.urlShortener.list, tryCatch(getShortUrls))
 router.get(ROUTES.v1.urlShortener.get, tryCatch(getShortUrl))
 router.delete(ROUTES.v1.urlShortener.delete, tryCatch(deleteShortUrl))
 
-export {router as urlShortenerRouter}
+export { router as urlShortenerRouter }

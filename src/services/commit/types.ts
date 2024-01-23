@@ -25,4 +25,4 @@ interface IGetNewDate {
   excludeWeekends?: boolean
 }
 
-export {DISTRIBUTION, TDistribution, IGenerateCommits, ICommit, IGetNewDate}
+export { DISTRIBUTION, ICommit, IGenerateCommits, IGetNewDate, TDistribution }

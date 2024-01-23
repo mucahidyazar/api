@@ -1,9 +1,9 @@
 import { Appointment } from '@prisma/client'
 
 import { logger, mhrsApi } from '../../client'
+import { IGetDoctors, IGetHours } from '../../common'
 import { CONFIG } from '../../config'
 import { Response } from '../../model'
-import { IGetDoctors, IGetHours } from '../../types'
 
 import { ENDPOINTS } from './endpoints'
 
@@ -140,4 +140,4 @@ const addAppointments = async ({ appointmentHours, appointment, token }: AddAppo
   }
 }
 
-export { getLogin, getDoctors, getHours, addAppointments }
+export { addAppointments, getDoctors, getHours, getLogin }

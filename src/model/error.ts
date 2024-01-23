@@ -1,5 +1,5 @@
 
-export class BaseError extends Error {
+class BaseError extends Error {
   public readonly name: string;
   public readonly httpCode: HttpStatusCode;
   public readonly isOperational: boolean;
@@ -16,15 +16,17 @@ export class BaseError extends Error {
   }
 }
 
-export enum HttpStatusCode {
+enum HttpStatusCode {
   OK = 200,
   BAD_REQUEST = 400,
   NOT_FOUND = 404,
   INTERNAL_SERVER = 500,
 }
 
-export class APIError extends BaseError {
+class APIError extends BaseError {
   constructor(name: string, httpCode = HttpStatusCode.INTERNAL_SERVER, isOperational = true, description = 'internal server error') {
     super(name, httpCode, description, isOperational);
   }
 }
+
+export { APIError, BaseError, HttpStatusCode };

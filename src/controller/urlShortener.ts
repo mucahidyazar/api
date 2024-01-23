@@ -1,8 +1,8 @@
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 
-import {ShortUrl} from '../model'
+import { ShortUrl } from '../model'
 
-export async function createShortUrl(req: Request, res: Response) {
+async function createShortUrl(req: Request, res: Response) {
   try {
     const url = String(req.body.url)
 
@@ -21,7 +21,7 @@ export async function createShortUrl(req: Request, res: Response) {
   }
 }
 
-export async function openShortUrl(req: Request, res: Response) {
+async function openShortUrl(req: Request, res: Response) {
   try {
     const short = String(req.params.id)
 
@@ -46,7 +46,7 @@ export async function openShortUrl(req: Request, res: Response) {
   }
 }
 
-export async function getShortUrls(req: Request, res: Response) {
+async function getShortUrls(req: Request, res: Response) {
   try {
     const data = await ShortUrl.find()
 
@@ -61,7 +61,7 @@ export async function getShortUrls(req: Request, res: Response) {
   }
 }
 
-export async function getShortUrl(req: Request, res: Response) {
+async function getShortUrl(req: Request, res: Response) {
   try {
     const short = String(req.params.id)
     const increment = Boolean(req.query.increment)
@@ -92,7 +92,7 @@ export async function getShortUrl(req: Request, res: Response) {
   }
 }
 
-export async function deleteShortUrl(req: Request, res: Response) {
+async function deleteShortUrl(req: Request, res: Response) {
   try {
     const id = String(req.query.id)
     const url = String(req.query.url)
@@ -121,4 +121,12 @@ export async function deleteShortUrl(req: Request, res: Response) {
       message: 'error',
     })
   }
+}
+
+export {
+  createShortUrl,
+  deleteShortUrl,
+  getShortUrl,
+  getShortUrls,
+  openShortUrl,
 }
