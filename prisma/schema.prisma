@@ -110,13 +110,14 @@ model User {
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
-  articles     Article[]
-  feedbacks    Feedback[]
-  mhrsAccount  MhrsAccount?
-  wishList     WishList[]
-  appointments Appointment[]
-  histories    History[]
-  mhrsToken    Cookie?
+  articles             Article[]
+  feedbacks            Feedback[]
+  mhrsAccount          MhrsAccount?
+  wishList             WishList[]
+  appointments         Appointment[]
+  mhrsToken            Cookie?
+  stockHistories       StockHistory[]
+  appointmentHistories AppointmentHistory[]
 
   @@map(name: "users")
 }
@@ -167,7 +168,7 @@ model Article {
   @@map(name: "articles")
 }
 
-model History {
+model StockHistory {
   id String @id @default(cuid())
 
   createdAt DateTime @default(now())
@@ -183,7 +184,7 @@ model History {
   productImage String?
   productUrl   String
 
-  @@map(name: "histories")
+  @@map(name: "stock_histories")
 }
 
 model WishList {
@@ -203,7 +204,7 @@ model WishList {
   inStock        Boolean        @default(false)
   minPrice       Float?
   maxPrice       Float?
-  history        History[]
+  stockHistories StockHistory[]
   status         CheckStatus    @default(active)
 
   @@map(name: "wish_lists")
@@ -225,6 +226,24 @@ model Cookie {
   expiresAt DateTime
 
   @@map(name: "cookies")
+}
+
+model AppointmentHistory {
+  id String @id @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  appoinmentId String
+  appoinment   Appointment @relation(fields: [appoinmentId], references: [id])
+
+  key       String
+  value     String
+  expiresAt DateTime
+
+  @@map(name: "appointment_histories")
 }
 
 model Appointment {
@@ -254,7 +273,8 @@ model Appointment {
 
   checkCount Int @default(0)
 
-  token Cookie?
+  token              Cookie?
+  appointmentHistory AppointmentHistory[]
 
   @@map(name: "appointments")
 }

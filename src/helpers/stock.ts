@@ -3,6 +3,7 @@ import { TBrandName } from 'common'
 import { Server } from 'socket.io'
 
 import { db, logger, telegram } from '../client'
+import { SocketMessage } from '../model/socketMessage'
 import { checkStock } from '../services/stock/helpers'
 
 //? create an unique array of product urls
@@ -39,7 +40,9 @@ type SearchStockArgs = {
 async function searchStock({ io, link, wishList }: SearchStockArgs) {
   const productData = await checkProduct({ link })
 
-  logger.debug('STOCK -> before -> if (productData?.price) {')
+  logger.debug('Stock search is started')
+  let socketMessage = new SocketMessage('Server', 'Stock search is started', "", null)
+
   if (productData?.price) {
     for (const wish of wishList) {
       logger.debug('STOCK -> before -> for (const wish of wishList) {')
@@ -55,7 +58,9 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
         }
 
         logger.debug('STOCK -> before -> await db.history.create({')
-        const history = await db.history.create({
+        socketMessage = new SocketMessage(wish.userId, 'New stock history is creating', "", null)
+        io.to(wish.userId).emit('newHistory', socketMessage)
+        const history = await db.stockHistory.create({
           data: {
             inStock: !!productData?.price,
             productUrl: link,
@@ -64,20 +69,16 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
             ...productInfos,
           },
         })
-
-        logger.debug(
-          'STOCK -> before -> io.to(wish.userId).emit(newHistory, { history })',
-        )
-        io.to(wish.userId).emit('newHistory', { history })
+        socketMessage = new SocketMessage(wish.userId, 'New stock history is created', "", { history })
+        io.to(wish.userId).emit('newHistory', socketMessage)
 
         logger.debug('STOCK -> before -> await db.wishList.update({')
+        new SocketMessage(wish.userId, 'WishList is updating', "", null)
         await db.wishList.update({
           where: { id: wish.id },
-          data: {
-            history: { connect: { id: history.id } },
-            ...productInfos,
-          },
+          data: productInfos
         })
+        socketMessage = new SocketMessage(wish.userId, 'WishList is updated', "", null)
 
         const price = Number(
           productData.price.split(',')[0].replace(/[^0-9]/g, ''),
@@ -94,11 +95,15 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
           logger.debug(
             'STOCK -> inside -> (hasPriceFilter && isMinPriceValid) || (hasPriceFilter && isMaxPriceValid)',
           )
+          socketMessage = new SocketMessage(wish.userId, 'There is a price filter and price is valid. Sending message to Telegram', "telegram", null)
+          io.to(wish.userId).emit('newHistory', socketMessage)
           telegram.sendTelegramMessage(
             `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${link}`,
           )
         } else if (!hasPriceFilter) {
           logger.debug('STOCK -> inside -> } else if (!hasPriceFilter) {')
+          socketMessage = new SocketMessage(wish.userId, 'There is no price filter. Sending message to Telegram', "telegram", null)
+          io.to(wish.userId).emit('newHistory', socketMessage)
           telegram.sendTelegramMessage(
             `✅ ${productData.brand.name}: ${productData.brand.name}: ${productData.price} \n${link}`,
           )
@@ -106,5 +111,8 @@ async function searchStock({ io, link, wishList }: SearchStockArgs) {
       }
     }
   }
+
+  socketMessage = new SocketMessage('Server', 'Stock search is finished', "", null)
+  io.emit('stockSearchFinished', socketMessage)
 }
 export { checkProduct, getUniqueProductUrls, searchStock }
