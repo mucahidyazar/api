@@ -14,11 +14,9 @@ export async function searchAppointment({
   appointment,
   io,
 }: SearchAppointmentArgs) {
-  logger.info('Appointment search is started')
-  let socketMessage = new SocketMessage(appointment.userId, 'Appointment search is started', "", null)
-  io.to(appointment.userId).emit('searchAppointment', socketMessage)
   const { cityId, districtId, polyclinicId, anyDoctor } = appointment
 
+  let socketMessage = new SocketMessage(appointment.userId, '', "", null)
   try {
     // increment checkCount
     logger.debug('Appointment -> before -> await db.appointment.update({')

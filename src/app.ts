@@ -12,6 +12,7 @@ import { Server, Socket } from 'socket.io'
 import { db, errorHandler, logger } from './client'
 import { CONFIG } from './config'
 import { searchAppointment, searchStock } from './helpers'
+import { SocketMessage } from './model'
 import {
   linkPreviewRouter,
   socketRouter,
@@ -124,8 +125,30 @@ cronSchedules.forEach(([frequency, schedule]) => {
     logger.debug(
       'Appointment -> before -> appointments.forEach(appointment => {',
     )
-    appointments.forEach(appointment => {
-      searchAppointment({ appointment, io })
+    appointments.forEach(async appointment => {
+      logger.info('Appointment search is started')
+      let socketMessage = new SocketMessage(appointment.userId, 'Appointment search is started', "", null)
+      io.to(appointment.userId).emit('searchAppointment', socketMessage)
+      await db.appointmentHistory.create({
+        data: {
+          appoinment: { connect: { id: appointment.id } },
+          user: { connect: { id: appointment.userId } },
+          message: 'Appointment search is started',
+        },
+      })
+
+      await searchAppointment({ appointment, io })
+
+      logger.info('Appointment search is finished')
+      socketMessage = new SocketMessage(appointment.userId, 'Appointment search is finished', "", null)
+      io.to(appointment.userId).emit('searchAppointment', socketMessage)
+      await db.appointmentHistory.create({
+        data: {
+          appoinment: { connect: { id: appointment.id } },
+          user: { connect: { id: appointment.userId } },
+          message: 'Appointment search is finished',
+        },
+      })
     })
   })
 })

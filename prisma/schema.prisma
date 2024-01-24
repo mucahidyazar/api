@@ -239,9 +239,7 @@ model AppointmentHistory {
   appoinmentId String
   appoinment   Appointment @relation(fields: [appoinmentId], references: [id])
 
-  key       String
-  value     String
-  expiresAt DateTime
+  message String
 
   @@map(name: "appointment_histories")
 }
@@ -273,8 +271,8 @@ model Appointment {
 
   checkCount Int @default(0)
 
-  token              Cookie?
-  appointmentHistory AppointmentHistory[]
+  token                Cookie?
+  appointmentHistories AppointmentHistory[]
 
   @@map(name: "appointments")
 }
