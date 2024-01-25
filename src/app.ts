@@ -96,7 +96,7 @@ cronSchedules.forEach(([frequency, schedule]) => {
     logger.info(`${jobName} çalıştı.`)
 
     const wishList = await db.wishList.findMany({
-      where: { checkFrequency: frequency },
+      where: { checkFrequency: frequency, status: "active" },
     })
 
     // Her gruptaki benzersiz URL'leri toplama
@@ -119,7 +119,7 @@ cronSchedules.forEach(([frequency, schedule]) => {
     logger.info(`${jobName} çalıştı.`)
 
     const appointments = await db.appointment.findMany({
-      where: { checkFrequency: frequency },
+      where: { checkFrequency: frequency, status: "active" },
     })
 
     logger.debug(
