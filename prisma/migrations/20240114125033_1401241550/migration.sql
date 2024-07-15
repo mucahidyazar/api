@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "History" ALTER COLUMN "price" SET DATA TYPE TEXT;

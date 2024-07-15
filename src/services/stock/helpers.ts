@@ -73,7 +73,7 @@ export async function checkStock({
   const brand = BRAND[brandName as TBrandName]
 
   const browser = await puppeteer.launch({
-    headless: 'new',
+    headless: 'shell',
   })
   try {
     logger.info(`Checking ${brand.name}'s website`)
@@ -95,20 +95,20 @@ export async function checkStock({
     logger.debug(
       'STOCK -> before -> const priceElement = await page.$x(brand.xPath.priceElement as string)',
     )
-    const priceElement = await page.$x(brand.xPath.priceElement as string)
+    const priceElement = await page.$$(brand.xPath.priceElement as string)
 
     let productName = ''
     let productImage = ''
 
     logger.debug('STOCK -> before -> if (brand.xPath.productName) {')
     if (brand.xPath.productName) {
-      const productNameElement = await page.$x(brand.xPath.productName)
+      const productNameElement = await page.$$(brand.xPath.productName)
       productName = await getTextContent(productNameElement)
     }
 
     logger.debug('STOCK -> before -> if (brand.xPath.productImage) {')
     if (brand.xPath.productImage) {
-      const productImageElement = await page.$x(brand.xPath.productImage)
+      const productImageElement = await page.$$(brand.xPath.productImage)
       // it is an image element
       // so get its src
       const src = await productImageElement[0].evaluate((node: any) =>
@@ -119,7 +119,7 @@ export async function checkStock({
 
     logger.debug('STOCK -> before -> if (brand.xPath.sellerElement) {')
     if (brand.xPath.sellerElement) {
-      const sellerElement = await page.$x(brand.xPath.sellerElement.path)
+      const sellerElement = await page.$$(brand.xPath.sellerElement.path)
       if (sellerElement?.length) {
         const sellerText = await getTextContent(sellerElement)
 
