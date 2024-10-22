@@ -84,3 +84,21 @@ export type TBrand = {
 }
 
 export type TBrandName = 'amazon' | 'mediamarkt'
+
+export type TResponseOptionsSuccess = {
+  status: 'success';
+  message: string;
+  code?: number;
+  data: any;
+  metadata?: object;
+  links?: object;
+};
+
+export type TResponseOptionsError = {
+  status: 'error';
+  message: string;
+  code?: number;
+  details?: object;
+};
+
+export type TResponseOptions = TResponseOptionsSuccess | TResponseOptionsError;

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1721280728432" clover="3.2.0">
+  <project timestamp="1721280728433" name="All files">
+    <metrics statements="19" coveredstatements="19" conditionals="35" coveredconditionals="35" methods="3" coveredmethods="3" elements="57" coveredelements="57" complexity="0" loc="19" ncloc="19" packages="1" files="1" classes="1"/>
+    <file name="cleanEmptyFields.ts" path="/Users/mucahidyazar/Desktop/workspace/repositories/api/src/utils/cleanEmptyFields.ts">
+      <metrics statements="19" coveredstatements="19" conditionals="35" coveredconditionals="35" methods="3" coveredmethods="3"/>
+      <line num="17" count="8" type="stmt"/>
+      <line num="28" count="8" type="stmt"/>
+      <line num="31" count="649" type="stmt"/>
+      <line num="45" count="657" type="cond" truecount="3" falsecount="0"/>
+      <line num="46" count="328" type="cond" truecount="1" falsecount="0"/>
+      <line num="48" count="327" type="cond" truecount="2" falsecount="0"/>
+      <line num="49" count="327" type="stmt"/>
+      <line num="51" count="327" type="cond" truecount="2" falsecount="0"/>
+      <line num="52" count="7" type="stmt"/>
+      <line num="53" count="10" type="stmt"/>
+      <line num="54" count="10" type="cond" truecount="1" falsecount="0"/>
+      <line num="55" count="6" type="stmt"/>
+      <line num="59" count="320" type="stmt"/>
+      <line num="60" count="639" type="stmt"/>
+      <line num="61" count="639" type="cond" truecount="1" falsecount="0"/>
+      <line num="62" count="619" type="stmt"/>
+      <line num="67" count="327" type="cond" truecount="2" falsecount="0"/>
+      <line num="70" count="8" type="stmt"/>
+      <line num="73" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

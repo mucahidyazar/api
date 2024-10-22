@@ -10,11 +10,20 @@ import { Server, Socket } from 'socket.io'
 
 import { errorHandler, logger } from './client'
 import { CONFIG } from './config'
+import { middlewareAuth, middlewareResponse } from './middleware'
 import {
+  userRouter,
+  authRouter,
+  groupRouter,
   linkPreviewRouter,
   socketRouter,
   stockRouter,
+  transactionBrandRouter,
+  transactionCategoryRouter,
+  transactionRouter,
   urlShortenerRouter,
+  walletRouter,
+  walletTypeRouter
 } from './routes/v1'
 
 logger.debug(`app.ts -> env: ${process.env.NODE_ENV}`)
@@ -53,6 +62,15 @@ app.post('/kill', async (_req, res) => {
 })
 
 //! routes
+app.use(middlewareResponse)
+app.use(authRouter)
+app.use(middlewareAuth, userRouter)
+app.use(middlewareAuth, transactionRouter)
+app.use(middlewareAuth, transactionBrandRouter)
+app.use(middlewareAuth, transactionCategoryRouter)
+app.use(middlewareAuth, groupRouter)
+app.use(middlewareAuth, walletRouter)
+app.use(middlewareAuth, walletTypeRouter)
 app.use(linkPreviewRouter)
 app.use(socketRouter)
 app.use(stockRouter)

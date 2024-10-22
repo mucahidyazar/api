@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { Server } from 'socket.io'
 
-import { logger } from '../client'
-import { Stock, MyStock } from '../model'
-import { checkAllStocksRetry } from '../services/stock/helpers'
+import { logger } from '../../client'
+import { Stock, MyStock } from '../../model'
+import { checkAllStocksRetry } from '../../services/stock/helpers'
 
 async function start(req: Request, res: Response) {
   try {

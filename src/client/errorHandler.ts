@@ -1,4 +1,4 @@
-import { BaseError } from '../model'
+import { BaseError } from '../model/general/error'
 
 import { logger } from './logger'
 
