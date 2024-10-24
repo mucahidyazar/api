@@ -26,18 +26,18 @@ const walletSchema = new mongoose.Schema({
     maxlength: 50,
     default: ''
   },
-  accessors: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Accessor',
-    }
-  ],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
     immutable: true,
   },
+  walletAccessors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'WalletAccessor',
+    }
+  ],
   walletBalances: [
     {
       type: mongoose.Schema.Types.ObjectId,

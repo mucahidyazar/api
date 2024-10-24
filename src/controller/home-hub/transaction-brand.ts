@@ -9,9 +9,20 @@ async function transactionBrandCreate(req: Request, res: Response) {
       user: req.user?.id
     });
     await transactionBrand.save();
-    return res.status(201).json({ data: transactionBrand });
+
+    return res.response({
+      status: 'success',
+      code: 201,
+      message: 'Transaction brand created successfully',
+      data: transactionBrand
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
@@ -20,7 +31,6 @@ async function transactionBrandList(req: Request, res: Response) {
     const response = await TransactionBrand.find({
       $or: [{ user: req.user?.id }, { user: "6714c1614412e8a0efa8f5ff" }]
     });
-    console.log('response', response)
 
     return res.response({
       status: 'success',
@@ -46,11 +56,25 @@ async function transactionBrandGet(req: Request, res: Response) {
     });
 
     if (!transactionBrand) {
-      return res.status(404).json({ message: 'Transaction brand not found' });
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Transaction brand not found'
+      });
     }
-    return res.json({ data: transactionBrand });
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Transaction brand fetched successfully',
+      data: transactionBrand
+    })
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
@@ -65,7 +89,11 @@ async function transactionBrandUpdate(req: Request, res: Response) {
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
-      return res.status(400).json({ message: 'Invalid updates' });
+      return res.response({
+        status: 'error',
+        code: 400,
+        message: 'Invalid updates'
+      })
     }
 
     const transactionBrand = await TransactionBrand.findOneAndUpdate(
@@ -75,12 +103,26 @@ async function transactionBrandUpdate(req: Request, res: Response) {
     );
 
     if (!transactionBrand) {
-      return res.status(404).json({ message: 'Transaction brand not found' });
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Transaction brand not found'
+      });
     }
 
-    return res.json({ data: transactionBrand });
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Transaction brand updated successfully',
+      data: transactionBrand
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
@@ -91,12 +133,26 @@ async function transactionBrandDelete(req: Request, res: Response) {
       userId: req.user?.id
     });
     if (!transactionBrand) {
-      return res.status(404).json({ message: 'Transaction brand not found' });
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Transaction brand not found'
+      });
     }
 
-    return res.json({ message: 'Transaction brand deleted successfully' });
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Transaction brand deleted successfully',
+      data: transactionBrand
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 

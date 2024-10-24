@@ -14,7 +14,6 @@ import { middlewareAuth, middlewareResponse } from './middleware'
 import {
   userRouter,
   authRouter,
-  groupRouter,
   linkPreviewRouter,
   socketRouter,
   stockRouter,
@@ -48,7 +47,7 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.status(200).json({ message: 'ok' })
 })
 
@@ -57,7 +56,7 @@ app.post('/kill', async (_req, res) => {
     res.status(200).json({ message: 'ok' })
     await kill(CONFIG.port)
   } catch (error) {
-    res.send('error')
+    res.status(500).json({ message: 'error' })
   }
 })
 
@@ -68,7 +67,6 @@ app.use(middlewareAuth, userRouter)
 app.use(middlewareAuth, transactionRouter)
 app.use(middlewareAuth, transactionBrandRouter)
 app.use(middlewareAuth, transactionCategoryRouter)
-app.use(middlewareAuth, groupRouter)
 app.use(middlewareAuth, walletRouter)
 app.use(middlewareAuth, walletTypeRouter)
 app.use(linkPreviewRouter)

@@ -10,14 +10,19 @@ async function createShortUrl(req: Request, res: Response) {
       full: url,
     })
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'ok',
       data,
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
-    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
+    });
   }
 }
 
@@ -30,7 +35,9 @@ async function openShortUrl(req: Request, res: Response) {
     })
 
     if (!data) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'not found',
       })
     }
@@ -39,10 +46,13 @@ async function openShortUrl(req: Request, res: Response) {
     await data.save()
 
     return res.redirect(data.full)
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
-    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
+    });
   }
 }
 
@@ -50,14 +60,19 @@ async function getShortUrls(req: Request, res: Response) {
   try {
     const data = await ShortUrl.find()
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'ok',
       data,
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
-    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
+    });
   }
 }
 
@@ -71,7 +86,9 @@ async function getShortUrl(req: Request, res: Response) {
     })
 
     if (!data) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'not found',
       })
     }
@@ -81,14 +98,19 @@ async function getShortUrl(req: Request, res: Response) {
       await data.save()
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'ok',
-      data: data,
+      data,
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
-    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
+    });
   }
 }
 
@@ -107,19 +129,26 @@ async function deleteShortUrl(req: Request, res: Response) {
     }
 
     if (!data) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'ok',
       data,
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
-    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
+    });
   }
 }
 

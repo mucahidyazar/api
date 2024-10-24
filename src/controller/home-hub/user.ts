@@ -140,8 +140,6 @@ async function userList(req: Request, res: Response) {
 
 async function userUpdate(req: Request, res: Response) {
   try {
-    console.log('params', req.params)
-    console.log('body', req.body)
     const allowedUpdates = [
       'firstName',
       'lastName',

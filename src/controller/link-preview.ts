@@ -8,18 +8,25 @@ export async function getLinkPreview(req: Request, res: Response) {
     const data = await getLinkPreviewData(url)
 
     if (!data) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'ok',
       data,
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: "There was an error while fetching the link preview",
+      details: error,
     })
   }
 }

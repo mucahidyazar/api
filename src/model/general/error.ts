@@ -27,15 +27,4 @@ enum HttpStatusCode {
   INTERNAL_SERVER = 500,
 }
 
-class APIError extends BaseError {
-  constructor(
-    name: string,
-    httpCode = HttpStatusCode.INTERNAL_SERVER,
-    isOperational = true,
-    description = 'internal server error',
-  ) {
-    super(name, httpCode, description, isOperational)
-  }
-}
-
-export { APIError, BaseError, HttpStatusCode }
+export { BaseError }

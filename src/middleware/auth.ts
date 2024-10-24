@@ -4,7 +4,11 @@ import { User } from '../model/home-hub/user';
 export const middlewareAuth = async (req, res, next) => {
   const accessToken = req.header('x-access-token');
   if (!accessToken) {
-    return res.status(401).json({ message: 'No token provided' });
+    return res.response({
+      status: 'error',
+      code: 401,
+      message: 'No token provided',
+    });
   }
 
   try {
@@ -12,6 +16,11 @@ export const middlewareAuth = async (req, res, next) => {
     req.user = await User.findById(decoded.id);
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Invalid token' });
+    return res.response({
+      status: 'error',
+      code: 401,
+      message: 'Invalid token',
+      details: err,
+    });
   }
 };

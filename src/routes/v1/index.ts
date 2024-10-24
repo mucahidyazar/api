@@ -1,5 +1,4 @@
 export * from './home-hub/auth'
-export * from './home-hub/group'
 export * from './home-hub/transaction'
 export * from './home-hub/transaction-brand'
 export * from './home-hub/transaction-category'

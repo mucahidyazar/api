@@ -32,7 +32,7 @@ export function queryHelper({ queries, query }: TQueryHelperArgs) {
   let metadata;
   if (queries.totalItems) {
     const page = parseInt(queries.page || '1');
-    const limit = parseInt(queries.limit || '100');
+    const limit = parseInt(queries.limit || '50');
     const skip = (page - 1) * limit;
 
     query.skip(skip).limit(limit)

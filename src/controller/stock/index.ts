@@ -21,9 +21,12 @@ async function start(req: Request, res: Response) {
         logger.info('user disconnected')
       })
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -34,20 +37,27 @@ async function check(req: Request, res: Response) {
     const stock = await Stock.findById(id)
 
     if (!stock) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'stock not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'stock found',
       data: {
         active: stock.active,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -58,7 +68,9 @@ async function stop(req: Request, res: Response) {
     const stock = await Stock.findById(id)
 
     if (!stock) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'stock not found',
       })
     }
@@ -66,15 +78,20 @@ async function stop(req: Request, res: Response) {
     stock.active = false
     stock.save()
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'stock found',
       data: {
         active: stock.active,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -85,20 +102,27 @@ async function detail(req: Request, res: Response) {
     const stock = await Stock.findById(id)
 
     if (!stock) {
-      return res.status(404).json({
+      return res.response({
+        status: 'error',
+        code: 404,
         message: 'stock not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'stock found',
       data: {
         stock,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -106,15 +130,21 @@ async function detail(req: Request, res: Response) {
 async function myClear(req: Request, res: Response) {
   try {
     const myStock = await MyStock.deleteMany({})
-    return res.status(200).json({
+
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'myStock deleted',
       data: {
-        myStock,
-      },
+        myStock
+      }
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -125,23 +155,30 @@ async function myClearResults(req: Request, res: Response) {
     const myStock = await MyStock.findById(id)
 
     if (!myStock) {
-      return res.status(404).json({
-        message: 'myStock not found',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
     myStock.results = []
     myStock.save()
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'Results of the stock is deleted',
       data: {
         myStock,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -158,15 +195,18 @@ async function myCreate(req: Request, res: Response) {
       stockId: String(myStock._id),
     })
 
-    return res.status(200).json({
-      message: 'myStock started',
-      data: {
-        myStock,
-      },
+    return res.response({
+      status: 'success',
+      code: 201,
+      message: 'myStock created successfully',
+      data: { myStock }
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -177,8 +217,10 @@ async function myStart(req: Request, res: Response) {
     const myStock = await MyStock.findById(id)
 
     if (!myStock) {
-      return res.status(404).json({
-        message: 'myStock not found',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
@@ -190,15 +232,18 @@ async function myStart(req: Request, res: Response) {
       stockId: String(myStock._id),
     })
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'myStock started',
-      data: {
-        myStock,
-      },
+      data: { myStock }
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -209,20 +254,27 @@ async function myCheck(req: Request, res: Response) {
     const myStock = await MyStock.findById(id)
 
     if (!myStock) {
-      return res.status(404).json({
-        message: 'myStock not found',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'myStock found',
       data: {
         active: myStock.active,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -232,8 +284,10 @@ async function myInit(req: Request, res: Response) {
     const myStock = await MyStock.find()
 
     if (!myStock) {
-      return res.status(404).json({
-        message: 'myStock not found 1',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
@@ -246,15 +300,20 @@ async function myInit(req: Request, res: Response) {
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'myStock found',
       data: {
         myStock,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -264,20 +323,27 @@ async function myList(req: Request, res: Response) {
     const myStock = await MyStock.find()
 
     if (!myStock) {
-      return res.status(404).json({
-        message: 'myStock not found 1',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'myStock found',
       data: {
         myStock,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -289,23 +355,28 @@ async function myStop(req: Request, res: Response) {
     const myStop = await MyStock.findById(id)
 
     if (!myStop) {
-      return res.status(404).json({
-        message: 'myStop not found',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
     myStop.active = false
     myStop.save()
 
-    return res.status(200).json({
-      message: 'myStop found',
-      data: {
-        active: myStop.active,
-      },
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'myStock stopped',
+      data: { myStop }
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }
@@ -316,20 +387,27 @@ async function myDetail(req: Request, res: Response) {
     const myStock = await MyStock.findById(id)
 
     if (!myStock) {
-      return res.status(404).json({
-        message: 'myStock not found',
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'stock not found',
       })
     }
 
-    return res.status(200).json({
+    return res.response({
+      status: 'success',
+      code: 200,
       message: 'myStock found',
       data: {
         myStock,
       },
     })
-  } catch (error) {
-    return res.status(500).json({
-      message: 'error',
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error
     })
   }
 }

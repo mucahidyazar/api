@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 
-import { Wallet } from '../../model/home-hub/wallet';
-import { WalletBalance } from '../../model/home-hub/wallet-balance';
 import { Transaction } from '../../model/home-hub/transaction';
-import { Accessor } from '../../model/home-hub/accessor';
+import { Wallet } from '../../model/home-hub/wallet';
+import { WalletAccessor } from '../../model/home-hub/wallet-accessor';
+import { WalletBalance } from '../../model/home-hub/wallet-balance';
+import { User } from '../../model/home-hub/user';
 import { queryHelper } from '../../helpers/query-helper';
 
 async function walletCreate(req: Request, res: Response) {
@@ -17,26 +18,37 @@ async function walletCreate(req: Request, res: Response) {
       user: req.user?.id,
     });
     await wallet.save();
-    return res.status(201).json({ data: wallet });
+
+    return res.response({
+      status: 'success',
+      code: 201,
+      message: 'Wallet created successfully',
+      data: wallet
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
 async function walletList(req, res: Response) {
   try {
-    const accessors = await Accessor.find({ user: req.user?.id }).select('modelId');
-    const accessorWalletIds = accessors.map(accessor => accessor.modelId);
+    const accessors = await WalletAccessor.find({ user: req.user?.id })
+    const accessorWalletIds = accessors.map(accessor => accessor.id);
     const totalItems = await Wallet.countDocuments({
       $or: [
         { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
-        { _id: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+        { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
       ]
     });
     const query = Wallet.find({
       $or: [
         { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
-        { _id: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+        { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
       ]
     })
     const { metadata } = queryHelper({
@@ -54,37 +66,85 @@ async function walletList(req, res: Response) {
       metadata
     });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
 async function walletGet(req: Request, res: Response) {
   try {
-    const query = Wallet.findById(req.params.id);
+    const accessors = await WalletAccessor.find({ user: req.user?.id })
+    const accessorWalletIds = accessors.map(accessor => accessor.id);
+
+    const query = Wallet.findOne({
+      _id: req.params.id,
+      $or: [
+        { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
+        { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+      ]
+    });
     queryHelper({
       queries: { ...req.query },
       query,
-    });
+    })
+    query.populate({
+      path: 'walletAccessors',
+      populate: {
+        path: 'user',
+      }
+    })
 
     const wallet = await query.exec();
 
     if (!wallet) {
-      return res.status(404).json({ message: 'Wallet not found' });
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Wallet not found',
+      });
     }
 
-    return res.json({ data: wallet });
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Wallet fetched successfully',
+      data: wallet,
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
 async function walletUpdate(req: Request, res: Response) {
   try {
     const { walletBalances = [], ...restBody } = req.body
+
+    const accessors = await WalletAccessor.find({ user: req.user?.id })
+    const accessorWalletIds = accessors.map(accessor => accessor.id);
+
     if (walletBalances.length) {
-      const wallet = await Wallet.findById(req.params.id);
+      const wallet = await Wallet.findOne({
+        _id: req.params.id,
+        $or: [
+          { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
+          { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+        ]
+      });
       if (!wallet) {
-        return res.status(404).json({ message: 'Wallet not found' });
+        return res.response({
+          status: 'error',
+          code: 404,
+          message: 'Wallet not found',
+        });
       }
       const walletBalanceIds = wallet.walletBalances.map(balance => balance._id);
       await WalletBalance.deleteMany({ _id: { $in: walletBalanceIds } });
@@ -92,34 +152,84 @@ async function walletUpdate(req: Request, res: Response) {
       restBody.walletBalances = savedWalletBalances.map(balance => balance.id);
     }
 
-    const wallet = await Wallet.findByIdAndUpdate(req.params.id, restBody, { new: true });
+    const wallet = await Wallet.findOneAndUpdate({
+      _id: req.params.id,
+      $or: [
+        { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
+        { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+      ]
+    }, restBody, { new: true });
     if (!wallet) {
-      return res.status(404).json({ message: 'Wallet not found' });
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Wallet not found',
+      });
     }
-    return res.json({ data: wallet });
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Wallet updated successfully',
+      data: wallet
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
 async function walletDelete(req: Request, res: Response) {
   try {
-    const wallet = await Wallet.findOneAndDelete({ _id: req.params.id });
-    if (!wallet) {
-      return res.status(404).json({ message: 'Wallet not found' });
-    }
+    const accessors = await WalletAccessor.find({ user: req.user?.id })
+    const accessorWalletIds = accessors.map(accessor => accessor.id);
 
-    return res.json({ message: 'Wallet deleted successfully' });
+    const wallet = await Wallet.findOneAndDelete({
+      _id: req.params.id,
+      $or: [
+        { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
+        { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+      ]
+    });
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Wallet deleted successfully',
+      data: wallet
+    });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
   }
 }
 
-async function walletTransactionsList(req: Request, res: Response) {
+async function walletTransactionList(req: Request, res: Response) {
   try {
-    const wallet = await Wallet.findById(req.params.id).populate('walletBalances');
+    const accessors = await WalletAccessor.find({ user: req.user?.id })
+    const accessorWalletIds = accessors.map(accessor => accessor.id);
+
+    const wallet = await Wallet.findById({
+      _id: req.params.id,
+      $or: [
+        { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
+        { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+      ]
+    }).populate('walletBalances');
     if (!wallet) {
-      return res.status(404).json({ message: 'Wallet not found.' });
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Wallet not found',
+      });
     }
     const walletBalanceIds = wallet.walletBalances.map(balance => balance._id);
 
@@ -151,8 +261,7 @@ async function walletTransactionsList(req: Request, res: Response) {
       metadata
     });
   } catch (error) {
-    console.error(error);
-    res.response({
+    return res.response({
       status: 'error',
       code: 500,
       message: "An error occurred while fetching wallet transactions.",
@@ -160,4 +269,101 @@ async function walletTransactionsList(req: Request, res: Response) {
   }
 }
 
-export { walletCreate, walletDelete, walletGet, walletList, walletUpdate, walletTransactionsList };
+async function walletAccessorsCreate(req: Request, res: Response) {
+  try {
+    const response = await Wallet.findOne({
+      _id: req.params.id,
+      user: req.user?.id,
+    });
+    if (!response) {
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Wallet not found.',
+      });
+    }
+
+    const isAdmin = req.user.role === "admin"
+    const isWalletOwner = response.user.toString() === req.user.id
+    if (!isAdmin && !isWalletOwner) {
+      return res.response({
+        status: 'error',
+        code: 403,
+        message: 'Forbidden',
+      });
+    }
+
+    const accessorEmails = req.body.accessors;
+    const accessorsUsersResponse = await User.find({ email: { $in: accessorEmails } });
+
+    const accessorsResponse = await WalletAccessor.insertMany(accessorsUsersResponse.map(user => ({
+      user: user.id,
+    })));
+    const allAccessorrs = response.walletAccessors.concat(accessorsResponse.map(accessor => accessor.id));
+    const uniqueAccessors = [...new Set(allAccessorrs)];
+    response.walletAccessors = uniqueAccessors;
+    response.save();
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Accessors added successfully',
+      data: response,
+    });
+  } catch (error) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: "An error occurred while fetching wallet transactions.",
+    });
+  }
+}
+
+async function walletAccessorsDelete(req: Request, res: Response) {
+  try {
+    const accessorId = req.params.accessorId;
+    const walletId = req.params.id
+
+    const response = await Wallet.findOne({
+      _id: walletId,
+      user: req.user?.id,
+    });
+    if (!response) {
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Wallet not found.',
+      });
+    }
+
+    const isAdmin = req.user.role === "admin"
+    const isWalletOwner = response.user.toString() === req.user.id
+    const isAccessor = accessorId === req.user.id
+    if (!isAdmin && !isWalletOwner && !isAccessor) {
+      return res.response({
+        status: 'error',
+        code: 403,
+        message: 'Forbidden',
+      });
+    }
+
+    await WalletAccessor.deleteOne({ user: accessorId });
+    response.walletAccessors = response.walletAccessors.filter(accessor => accessor._id.toString() !== accessorId);
+    response.save();
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Accessors deleted successfully',
+      data: response,
+    });
+  } catch (error) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: "An error occurred while fetching wallet transactions.",
+    });
+  }
+}
+
+export { walletCreate, walletDelete, walletGet, walletList, walletUpdate, walletTransactionList, walletAccessorsCreate, walletAccessorsDelete };

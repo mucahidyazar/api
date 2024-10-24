@@ -1,5 +1,4 @@
 export * from './general/error'
-export * from './general/response'
 export * from './general/socket-message'
 export * from './stock'
 export * from './url-shortener'

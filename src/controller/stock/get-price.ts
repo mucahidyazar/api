@@ -9,10 +9,19 @@ export async function getPrice(req: Request, res: Response) {
       link: links[0],
       brandName: 'amazon',
     })
-    res.status(200).json(result)
-  } catch (error) {
-    return res.status(500).json({
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'ok',
+      data: result
+    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
       message: 'error',
+      details: error,
     })
   }
 }

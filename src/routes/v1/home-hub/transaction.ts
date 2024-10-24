@@ -7,6 +7,7 @@ import {
   transactionDelete,
   transactionGet,
   transactionList,
+  transactionStatsGet,
   transactionUpdate
 } from '../../../controller/home-hub/transaction'
 import { tryCatch } from '../../../utils'
@@ -19,5 +20,6 @@ router.get(ROUTES.v1.homeHub.transaction.get, tryCatch(transactionGet))
 router.get(ROUTES.v1.homeHub.transaction.list, tryCatch(transactionList))
 router.put(ROUTES.v1.homeHub.transaction.update, tryCatch(transactionUpdate))
 router.get(ROUTES.v1.homeHub.transaction.chart, tryCatch(transactionChartGet))
+router.get(ROUTES.v1.homeHub.transaction.stats, tryCatch(transactionStatsGet))
 
 export { router as transactionRouter }

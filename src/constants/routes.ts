@@ -15,19 +15,6 @@ export const ROUTES = {
         list: '/api/v1/home-hub/user',
         update: '/api/v1/home-hub/user/:id([0-9a-fA-F]{24})',
       },
-      group: {
-        create: '/api/v1/home-hub/group',
-        delete: '/api/v1/home-hub/group/:id([0-9a-fA-F]{24})',
-        get: '/api/v1/home-hub/group/:id([0-9a-fA-F]{24})',
-        list: '/api/v1/home-hub/group',
-        update: '/api/v1/home-hub/group/:id([0-9a-fA-F]{24})',
-
-        invite: {
-          answer: '/api/v1/home-hub/group/:id([0-9a-fA-F]{24})/invite/answer',
-          list: '/api/v1/home-hub/group/invite',
-          send: '/api/v1/home-hub/group/:id([0-9a-fA-F]{24})/invite/send',
-        }
-      },
       transaction: {
         create: '/api/v1/home-hub/transaction',
         delete: '/api/v1/home-hub/transaction/:id([0-9a-fA-F]{24})',
@@ -35,6 +22,7 @@ export const ROUTES = {
         list: '/api/v1/home-hub/transaction',
         update: '/api/v1/home-hub/transaction/:id([0-9a-fA-F]{24})',
         chart: '/api/v1/home-hub/transaction/chart',
+        stats: '/api/v1/home-hub/transaction/stats',
       },
       transactionBrand: {
         create: '/api/v1/home-hub/transaction-brand',
@@ -57,8 +45,12 @@ export const ROUTES = {
         list: '/api/v1/home-hub/wallet',
         update: '/api/v1/home-hub/wallet/:id([0-9a-fA-F]{24})',
 
-        transactions: {
-          list: '/api/v1/home-hub/wallet/:id([0-9a-fA-F]{24})/transactions',
+        accessor: {
+          create: '/api/v1/home-hub/wallet/:id([0-9a-fA-F]{24})/accessor',
+          delete: '/api/v1/home-hub/wallet/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})',
+        },
+        transaction: {
+          list: '/api/v1/home-hub/wallet/:id([0-9a-fA-F]{24})/transaction',
         }
       },
       walletBalance: {
