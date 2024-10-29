@@ -52,7 +52,7 @@ async function transactionBrandGet(req: Request, res: Response) {
   try {
     const transactionBrand = await TransactionBrand.findOne({
       _id: req.params.id,
-      $or: [{ userId: req.user?.id }]
+      $or: [{ user: req.user?.id }]
     });
 
     if (!transactionBrand) {
@@ -97,7 +97,7 @@ async function transactionBrandUpdate(req: Request, res: Response) {
     }
 
     const transactionBrand = await TransactionBrand.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user?.id },
+      { _id: req.params.id, user: req.user?.id },
       { $set: req.body },
       { new: true, runValidators: true }
     );
@@ -130,7 +130,7 @@ async function transactionBrandDelete(req: Request, res: Response) {
   try {
     const transactionBrand = await TransactionBrand.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user?.id
+      user: req.user?.id
     });
     if (!transactionBrand) {
       return res.response({

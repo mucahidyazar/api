@@ -1,11 +1,11 @@
 export class SocketMessage {
-  public userId: string
+  public user: string
   public message: string
   public type: string
   public data: unknown
 
-  constructor(userId: string, message: string, type: string = "custom", data: unknown) {
-    this.userId = userId
+  constructor(user: string, message: string, type: string = "custom", data: unknown) {
+    this.user = user
     this.message = message
     this.type = type
     this.data = data

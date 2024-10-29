@@ -32,12 +32,6 @@ const walletSchema = new mongoose.Schema({
     required: true,
     immutable: true,
   },
-  walletAccessors: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'WalletAccessor',
-    }
-  ],
   walletBalances: [
     {
       type: mongoose.Schema.Types.ObjectId,

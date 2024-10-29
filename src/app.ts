@@ -8,12 +8,14 @@ import express from 'express'
 import kill from 'kill-port'
 import { Server, Socket } from 'socket.io'
 
+
 import { errorHandler, logger } from './client'
 import { CONFIG } from './config'
 import { middlewareAuth, middlewareResponse } from './middleware'
 import {
   userRouter,
   authRouter,
+  calculationRouter,
   linkPreviewRouter,
   socketRouter,
   stockRouter,
@@ -22,7 +24,8 @@ import {
   transactionRouter,
   urlShortenerRouter,
   walletRouter,
-  walletTypeRouter
+  walletTypeRouter,
+  wishlistRouter,
 } from './routes/v1'
 
 logger.debug(`app.ts -> env: ${process.env.NODE_ENV}`)
@@ -64,11 +67,13 @@ app.post('/kill', async (_req, res) => {
 app.use(middlewareResponse)
 app.use(authRouter)
 app.use(middlewareAuth, userRouter)
+app.use(middlewareAuth, calculationRouter)
 app.use(middlewareAuth, transactionRouter)
 app.use(middlewareAuth, transactionBrandRouter)
 app.use(middlewareAuth, transactionCategoryRouter)
 app.use(middlewareAuth, walletRouter)
 app.use(middlewareAuth, walletTypeRouter)
+app.use(middlewareAuth, wishlistRouter)
 app.use(linkPreviewRouter)
 app.use(socketRouter)
 app.use(stockRouter)
@@ -79,9 +84,9 @@ io.on('connection', (socket: Socket) => {
   logger.info('connection')
 
   // Kullanıcıyı kendi kanalına katılma işlemi
-  socket.on('join', userId => {
-    socket.join(userId)
-    logger.info(`Kullanıcı ${userId} kendi kanalına katıldı.`)
+  socket.on('join', user => {
+    socket.join(user)
+    logger.info(`Kullanıcı ${user} kendi kanalına katıldı.`)
   })
 })
 

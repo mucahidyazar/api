@@ -52,7 +52,7 @@ async function transactionCategoryGet(req: Request, res: Response) {
   try {
     const transactionCategory = await TransactionCategory.findOne({
       _id: req.params.id,
-      $or: [{ userId: req.user?.id }]
+      $or: [{ user: req.user?.id }]
     });
 
     if (!transactionCategory) {
@@ -131,7 +131,7 @@ async function transactionCategoryDelete(req: Request, res: Response) {
   try {
     const transactionCategory = await TransactionCategory.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user?.id
+      user: req.user?.id
     });
     if (!transactionCategory) {
       return res.response({

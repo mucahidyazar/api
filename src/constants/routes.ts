@@ -7,6 +7,13 @@ export const ROUTES = {
         signUp: '/api/v1/home-hub/auth/sign-up',
         refreshToken: '/api/v1/home-hub/auth/refresh-token',
       },
+      calculation: {
+        create: '/api/v1/home-hub/calculation',
+        delete: '/api/v1/home-hub/calculation/:id([0-9a-fA-F]{24})',
+        get: '/api/v1/home-hub/calculation/:id([0-9a-fA-F]{24})',
+        list: '/api/v1/home-hub/calculation',
+        update: '/api/v1/home-hub/calculation/:id([0-9a-fA-F]{24})',
+      },
       user: {
         me: '/api/v1/home-hub/user/me',
         create: '/api/v1/home-hub/user',
@@ -66,6 +73,21 @@ export const ROUTES = {
         get: '/api/v1/home-hub/wallet-type/:id([0-9a-fA-F]{24})',
         list: '/api/v1/home-hub/wallet-type',
         update: '/api/v1/home-hub/wallet-type/update',
+      },
+      wishlist: {
+        create: '/api/v1/home-hub/wishlist',
+        delete: '/api/v1/home-hub/wishlist/:id([0-9a-fA-F]{24})',
+        get: '/api/v1/home-hub/wishlist/:id([0-9a-fA-F]{24})',
+        list: '/api/v1/home-hub/wishlist',
+        update: '/api/v1/home-hub/wishlist/:id([0-9a-fA-F]{24})',
+
+        item: {
+          update: '/api/v1/home-hub/wishlist/:id([0-9a-fA-F]{24})/item/:itemId([0-9a-fA-F]{24})',
+        },
+        accessor: {
+          create: '/api/v1/home-hub/wishlist/:id([0-9a-fA-F]{24})/accessor',
+          delete: '/api/v1/home-hub/wishlist/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})',
+        },
       },
     },
     stock: {

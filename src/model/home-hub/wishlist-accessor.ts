@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import { MODEL_OPTIONS } from '../../constants';
 
-export const walletAccessorchema = new mongoose.Schema({
+export const wishlistAccessorSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['active', 'pending'],
@@ -12,10 +12,10 @@ export const walletAccessorchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  wallet: {
+  wishlist: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Wallet',
+    ref: 'Wishlist',
   }
 }, MODEL_OPTIONS);
 
-export const WalletAccessor = mongoose.model('WalletAccessor', walletAccessorchema);
+export const WishlistAccessor = mongoose.model('WishlistAccessor', wishlistAccessorSchema);

@@ -82,7 +82,7 @@ async function transactionList(req: Request, res: Response) {
     const walletObjectId = new mongoose.Types.ObjectId(wallet as string);
     const isAccessorSubscriptions = req.query.isAccessorSubscriptions;
 
-    const userId = req.user?.id;
+    const user = req.user?.id;
 
     let walletIds: Object[] = [];
     if (isAccessorSubscriptions !== 'false') {
@@ -90,8 +90,8 @@ async function transactionList(req: Request, res: Response) {
       const accessorWalletIds = accessors.map(accessor => accessor.id);
       const accessibleWallets = await Wallet.find({
         $or: [
-          { user: userId },
-          { walletAccessors: { $in: accessorWalletIds } }
+          { user: user },
+          { accessors: { $in: accessorWalletIds } }
         ]
       }).select('_id');
 
@@ -100,7 +100,7 @@ async function transactionList(req: Request, res: Response) {
 
     const totalItems = await Transaction.countDocuments({
       $or: [
-        { user: userId },
+        { user: user },
         { wallet: { $in: [...walletIds, walletObjectId] } }
       ],
       ...(req.query.isRecurring && { isRecurring: true }),
@@ -108,7 +108,7 @@ async function transactionList(req: Request, res: Response) {
 
     const query = Transaction.find({
       $or: [
-        { user: userId },
+        { user: user },
         { wallet: { $in: [...walletIds, walletObjectId] } }
       ],
       ...(req.query.isRecurring && { isRecurring: true }),
@@ -262,7 +262,7 @@ async function transactionStatsGet(req: Request, res: Response) {
 
 async function transactionGet(req: Request, res: Response) {
   try {
-    const allUniqueWalletIds = await getUniqueWalletIds({ userId: req.user?.id });
+    const allUniqueWalletIds = await getUniqueWalletIds({ user: req.user?.id });
 
     const query = Transaction.findOne({
       _id: req.params.id,
@@ -327,7 +327,7 @@ async function transactionUpdate(req: Request, res: Response) {
       })
     }
 
-    const allUniqueWalletIds = await getUniqueWalletIds({ userId: req.user?.id });
+    const allUniqueWalletIds = await getUniqueWalletIds({ user: req.user?.id });
 
     const transaction = await Transaction.findOneAndUpdate(
       {
@@ -368,7 +368,7 @@ async function transactionUpdate(req: Request, res: Response) {
 async function transactionDelete(req: Request, res: Response) {
   try {
 
-    const allUniqueWalletIds = await getUniqueWalletIds({ userId: req.user?.id });
+    const allUniqueWalletIds = await getUniqueWalletIds({ user: req.user?.id });
 
     const transaction = await Transaction.findOneAndDelete({
       _id: req.params.id,
@@ -405,18 +405,18 @@ export { transactionCreate, transactionChartGet, transactionDelete, transactionG
 
 
 type TGetUniqueWalletIdsArgs = {
-  userId: string;
+  user: string;
 }
-async function getUniqueWalletIds({ userId }: TGetUniqueWalletIdsArgs): Promise<string[]> {
-  const walletsResponse = await Wallet.find({ user: userId }).select('_id');
+async function getUniqueWalletIds({ user }: TGetUniqueWalletIdsArgs): Promise<string[]> {
+  const walletsResponse = await Wallet.find({ user: user }).select('_id');
   const walletIds = walletsResponse.map(wallet => wallet._id);
 
-  const accessors = await WalletAccessor.find({ user: userId })
+  const accessors = await WalletAccessor.find({ user: user })
   const accessorWalletIds = accessors.map(accessor => accessor.id);
   const accessibleWallets = await Wallet.find({
     $or: [
-      { user: userId }, // Kullanıcı wallet'ın sahibi mi?
-      { walletAccessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+      { user: user }, // Kullanıcı wallet'ın sahibi mi?
+      { accessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
     ]
   })
   const accessibleWalletIds = accessibleWallets.map(wallet => wallet.id)
