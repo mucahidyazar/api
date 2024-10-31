@@ -221,18 +221,12 @@ async function wishlistGet(req: Request, res: Response) {
                   '$$item',
                   {
                     id: { $toString: '$$item._id' },
+                    // Buradaki reservedBy dönüşümünü değiştiriyoruz
                     reservedBy: {
                       $cond: {
-                        if: '$$item.reservedBy',
+                        if: { $ne: ['$$item.reservedBy', null] },
                         then: {
-                          $let: {
-                            vars: {
-                              user: { $arrayElemAt: [{ $objectToArray: '$$item.reservedBy' }, 0] }
-                            },
-                            in: {
-                              id: { $toString: '$$item.reservedBy' }
-                            }
-                          }
+                          id: { $toString: '$$item.reservedBy' }
                         },
                         else: null
                       }
@@ -581,7 +575,6 @@ async function wishlistItemUpdate(req: Request, res: Response) {
       });
     }
 
-    // Format the response
     const updatedItem = updatedWishlist.items[0];
     const formattedItem = {
       id: updatedItem._id?.toString(),
