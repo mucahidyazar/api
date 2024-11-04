@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Calculation } from '../../model/home-hub/calculation';
+import { Calculation } from '../../model/lumara/calculation';
 
 async function calculationCreate(req: Request, res: Response) {
   try {

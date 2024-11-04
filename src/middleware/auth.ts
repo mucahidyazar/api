@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../model/home-hub/user';
+import { User } from '../model/lumara/user';
 
 export const middlewareAuth = async (req, res, next) => {
   const accessToken = req.header('x-access-token');

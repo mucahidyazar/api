@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { Wishlist } from '../../model/home-hub/wishlist';
-import { WishlistAccessor } from '../../model/home-hub/wishlist-accessor';
-import { User } from '../../model/home-hub/user';
+import { Wishlist } from '../../model/lumara/wishlist';
+import { WishlistAccessor } from '../../model/lumara/wishlist-accessor';
+import { User } from '../../model/lumara/user';
 import { queryHelper } from '../../helpers/query-helper';
 import mongoose from 'mongoose';
+import { PushNotificationService } from '../../services/push-notification';
 
 async function wishlistCreate(req: Request, res: Response) {
   try {
@@ -655,6 +656,20 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
       wishlist: req.params.id,
     });
     await accessor.save();
+
+    await PushNotificationService.sendNotification(accessor.id, {
+      title: 'New Wishlist Access',
+      body: `${req.user.firstName} shared a wishlist with you`,
+      data: {
+        type: 'WISHLIST_ACCESS',
+        wishlist: wishlist.toJSON(),
+        sender: req.user,
+      },
+      options: {
+        channelId: 'WISHLIST_ACCESS',
+        categoryId: 'WISHLIST_ACCESS',
+      }
+    });
 
     return res.response({
       status: 'success',

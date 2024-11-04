@@ -17,6 +17,7 @@ import {
   authRouter,
   calculationRouter,
   linkPreviewRouter,
+  pushTokenRouter,
   socketRouter,
   stockRouter,
   transactionBrandRouter,
@@ -68,6 +69,7 @@ app.use(middlewareResponse)
 app.use(authRouter)
 app.use(middlewareAuth, userRouter)
 app.use(middlewareAuth, calculationRouter)
+app.use(middlewareAuth, pushTokenRouter)
 app.use(middlewareAuth, transactionRouter)
 app.use(middlewareAuth, transactionBrandRouter)
 app.use(middlewareAuth, transactionCategoryRouter)

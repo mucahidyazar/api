@@ -7,7 +7,7 @@ import {
   transactionBrandGet,
   transactionBrandList,
   transactionBrandUpdate
-} from '../../../controller/home-hub/transaction-brand'
+} from '../../../controller/lumara/transaction-brand'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

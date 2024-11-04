@@ -1,8 +1,8 @@
-import { Transaction } from '../model/home-hub/transaction'
-import { TransactionBrand } from '../model/home-hub/transaction-brand'
-import { TransactionCategory } from '../model/home-hub/transaction-category'
-import { TransactionValue } from '../model/home-hub/transaction-value'
-import { User } from '../model/home-hub/user'
+import { Transaction } from '../model/lumara/transaction'
+import { TransactionBrand } from '../model/lumara/transaction-brand'
+import { TransactionCategory } from '../model/lumara/transaction-category'
+import { TransactionValue } from '../model/lumara/transaction-value'
+import { User } from '../model/lumara/user'
 
 import { brands } from '../constants/brands'
 import { categories } from '../constants/categories'

@@ -7,7 +7,7 @@ import {
   calculationGet,
   calculationList,
   calculationUpdate
-} from '../../../controller/home-hub/calculation'
+} from '../../../controller/lumara/calculation'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

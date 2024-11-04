@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { User } from '../../model/home-hub/user'
+import { User } from '../../model/lumara/user'
 
 // userMe
 // userCreate

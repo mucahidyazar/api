@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { ROUTES } from '../../../constants'
-import { walletTypeCreate, walletTypeDelete, walletTypeGet, walletTypeList, walletTypeUpdate } from '../../../controller/home-hub/wallet-type'
+import { walletTypeCreate, walletTypeDelete, walletTypeGet, walletTypeList, walletTypeUpdate } from '../../../controller/lumara/wallet-type'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

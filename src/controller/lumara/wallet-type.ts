@@ -1,16 +1,17 @@
 import { Request, Response } from 'express';
 
-import { WalletBalance } from '../../model/home-hub/wallet-balance';
+import { WalletType } from '../../model/lumara/wallet-type';
 
-async function walletBalanceCreate(req: Request, res: Response) {
+async function walletTypeCreate(req: Request, res: Response) {
   try {
-    const walletBalance = new WalletBalance(req.body);
-    await walletBalance.save();
+    const walletType = new WalletType(req.body);
+    await walletType.save();
+
     return res.response({
       status: 'success',
       code: 201,
-      message: 'WalletBalance created successfully',
-      data: walletBalance,
+      message: 'WalletType created successfully',
+      data: walletType,
     });
   } catch (error: any) {
     return res.response({
@@ -22,15 +23,15 @@ async function walletBalanceCreate(req: Request, res: Response) {
   }
 }
 
-async function walletBalanceList(req: Request, res: Response) {
+async function walletTypeList(req: Request, res: Response) {
   try {
-    const walletBalances = await WalletBalance.find(req.query);
+    const walletTypes = await WalletType.find(req.query);
 
     return res.response({
       status: 'success',
       code: 200,
-      message: 'WalletBalance list fetched successfully',
-      data: walletBalances,
+      message: 'WalletType list fetched successfully',
+      data: walletTypes,
     });
   } catch (error: any) {
     return res.response({
@@ -42,22 +43,22 @@ async function walletBalanceList(req: Request, res: Response) {
   }
 }
 
-async function walletBalanceGet(req: Request, res: Response) {
+async function walletTypeGet(req: Request, res: Response) {
   try {
-    const walletBalance = await WalletBalance.findById(req.params.id);
-    if (!walletBalance) {
+    const walletType = await WalletType.findById(req.params.id);
+    if (!walletType) {
       return res.response({
         status: 'error',
         code: 404,
-        message: 'WalletBalance not found',
+        message: 'WalletType not found',
       });
     }
 
     return res.response({
       status: 'success',
       code: 200,
-      message: 'WalletBalance fetched successfully',
-      data: walletBalance,
+      message: 'WalletType fetched successfully',
+      data: walletType,
     });
   } catch (error: any) {
     return res.response({
@@ -69,22 +70,22 @@ async function walletBalanceGet(req: Request, res: Response) {
   }
 }
 
-async function walletBalanceUpdate(req: Request, res: Response) {
+async function walletTypeUpdate(req: Request, res: Response) {
   try {
-    const walletBalance = await WalletBalance.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!walletBalance) {
+    const walletType = await WalletType.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!walletType) {
       return res.response({
         status: 'error',
         code: 404,
-        message: 'WalletBalance not found',
+        message: 'WalletType not found',
       });
     }
 
     return res.response({
       status: 'success',
       code: 200,
-      message: 'WalletBalance updated successfully',
-      data: walletBalance
+      message: 'WalletType updated successfully',
+      data: walletType,
     });
   } catch (error: any) {
     return res.response({
@@ -96,21 +97,22 @@ async function walletBalanceUpdate(req: Request, res: Response) {
   }
 }
 
-async function walletBalanceDelete(req: Request, res: Response) {
+async function walletTypeDelete(req: Request, res: Response) {
   try {
-    const response = await WalletBalance.findByIdAndDelete(req.params.id);
-    if (!response) {
+    const walletType = await WalletType.findByIdAndDelete(req.params.id);
+    if (!walletType) {
       return res.response({
         status: 'error',
         code: 404,
-        message: 'WalletBalance not found',
+        message: 'WalletType not found',
       });
     }
+
     return res.response({
       status: 'success',
       code: 200,
-      message: 'WalletBalance deleted successfully',
-      data: response,
+      message: 'WalletType deleted successfully',
+      data: walletType,
     });
   } catch (error: any) {
     return res.response({
@@ -122,4 +124,4 @@ async function walletBalanceDelete(req: Request, res: Response) {
   }
 }
 
-export { walletBalanceCreate, walletBalanceDelete, walletBalanceGet, walletBalanceList, walletBalanceUpdate };
+export { walletTypeCreate, walletTypeDelete, walletTypeGet, walletTypeList, walletTypeUpdate };

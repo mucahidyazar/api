@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { ROUTES } from '../../../constants'
-import { wishlistCreate, wishlistDelete, wishlistGet, wishlistList, wishlistUpdate, wishlistItemUpdate, wishlistAccessorDelete, wishlistAccessorCreate } from '../../../controller/home-hub/wishlist'
+import { wishlistCreate, wishlistDelete, wishlistGet, wishlistList, wishlistUpdate, wishlistItemUpdate, wishlistAccessorDelete, wishlistAccessorCreate } from '../../../controller/lumara/wishlist'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

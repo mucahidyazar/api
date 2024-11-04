@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
 
-import { TransactionCategory } from '../../model/home-hub/transaction-category';
+import { TransactionBrand } from '../../model/lumara/transaction-brand';
 
-async function transactionCategoryCreate(req: Request, res: Response) {
+async function transactionBrandCreate(req: Request, res: Response) {
   try {
-    const transactionCategory = new TransactionCategory({
+    const transactionBrand = new TransactionBrand({
       ...req.body,
       user: req.user?.id
     });
-    await transactionCategory.save();
+    await transactionBrand.save();
 
     return res.response({
       status: 'success',
       code: 201,
-      message: 'Transaction category created successfully',
-      data: transactionCategory
+      message: 'Transaction brand created successfully',
+      data: transactionBrand
     });
   } catch (error: any) {
     return res.response({
@@ -26,17 +26,47 @@ async function transactionCategoryCreate(req: Request, res: Response) {
   }
 }
 
-async function transactionCategoryList(req: Request, res: Response) {
+async function transactionBrandList(req: Request, res: Response) {
   try {
-    const transactionCategorys = await TransactionCategory.find({
+    const response = await TransactionBrand.find({
       $or: [{ user: req.user?.id }, { user: "6714c1614412e8a0efa8f5ff" }]
     });
 
     return res.response({
       status: 'success',
       code: 200,
-      message: 'Transaction category list fetched successfully',
-      data: transactionCategorys
+      message: 'Transaction brand list fetched successfully',
+      data: response
+    })
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    })
+  }
+}
+
+async function transactionBrandGet(req: Request, res: Response) {
+  try {
+    const transactionBrand = await TransactionBrand.findOne({
+      _id: req.params.id,
+      $or: [{ user: req.user?.id }]
+    });
+
+    if (!transactionBrand) {
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Transaction brand not found'
+      });
+    }
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Transaction brand fetched successfully',
+      data: transactionBrand
     })
   } catch (error: any) {
     return res.response({
@@ -48,39 +78,8 @@ async function transactionCategoryList(req: Request, res: Response) {
   }
 }
 
-async function transactionCategoryGet(req: Request, res: Response) {
-  try {
-    const transactionCategory = await TransactionCategory.findOne({
-      _id: req.params.id,
-      $or: [{ user: req.user?.id }]
-    });
 
-    if (!transactionCategory) {
-      return res.response({
-        status: 'error',
-        code: 404,
-        message: 'Transaction category not found'
-      });
-    }
-
-    return res.response({
-      status: 'success',
-      code: 200,
-      message: 'Transaction category fetched successfully',
-      data: transactionCategory
-    });
-  } catch (error: any) {
-    return res.response({
-      status: 'error',
-      code: 500,
-      message: error.message,
-      details: error,
-    });
-  }
-}
-
-
-async function transactionCategoryUpdate(req: Request, res: Response) {
+async function transactionBrandUpdate(req: Request, res: Response) {
   try {
     const allowedUpdates = [
       'name',
@@ -97,25 +96,25 @@ async function transactionCategoryUpdate(req: Request, res: Response) {
       })
     }
 
-    const transactionCategory = await TransactionCategory.findOneAndUpdate(
+    const transactionBrand = await TransactionBrand.findOneAndUpdate(
       { _id: req.params.id, user: req.user?.id },
       { $set: req.body },
       { new: true, runValidators: true }
     );
 
-    if (!transactionCategory) {
+    if (!transactionBrand) {
       return res.response({
         status: 'error',
         code: 404,
-        message: 'Transaction category not found'
+        message: 'Transaction brand not found'
       });
     }
 
     return res.response({
       status: 'success',
       code: 200,
-      message: 'Transaction category updated successfully',
-      data: transactionCategory
+      message: 'Transaction brand updated successfully',
+      data: transactionBrand
     });
   } catch (error: any) {
     return res.response({
@@ -127,25 +126,25 @@ async function transactionCategoryUpdate(req: Request, res: Response) {
   }
 }
 
-async function transactionCategoryDelete(req: Request, res: Response) {
+async function transactionBrandDelete(req: Request, res: Response) {
   try {
-    const transactionCategory = await TransactionCategory.findOneAndDelete({
+    const transactionBrand = await TransactionBrand.findOneAndDelete({
       _id: req.params.id,
       user: req.user?.id
     });
-    if (!transactionCategory) {
+    if (!transactionBrand) {
       return res.response({
         status: 'error',
         code: 404,
-        message: 'Transaction category not found'
+        message: 'Transaction brand not found'
       });
     }
 
     return res.response({
       status: 'success',
       code: 200,
-      message: 'Transaction category deleted successfully',
-      data: transactionCategory
+      message: 'Transaction brand deleted successfully',
+      data: transactionBrand
     });
   } catch (error: any) {
     return res.response({
@@ -157,4 +156,4 @@ async function transactionCategoryDelete(req: Request, res: Response) {
   }
 }
 
-export { transactionCategoryCreate, transactionCategoryDelete, transactionCategoryGet, transactionCategoryList, transactionCategoryUpdate };
+export { transactionBrandCreate, transactionBrandDelete, transactionBrandGet, transactionBrandList, transactionBrandUpdate };

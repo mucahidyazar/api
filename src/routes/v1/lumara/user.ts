@@ -8,7 +8,7 @@ import {
   userGet,
   userList,
   userUpdate
-} from '../../../controller/home-hub/user'
+} from '../../../controller/lumara/user'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

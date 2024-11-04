@@ -9,7 +9,7 @@ import {
   transactionList,
   transactionStatsGet,
   transactionUpdate
-} from '../../../controller/home-hub/transaction'
+} from '../../../controller/lumara/transaction'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

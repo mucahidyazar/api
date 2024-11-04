@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { signUpUser, signInUser, refreshUserToken } from '../../services/home-hub/auth';
+import { signUpUser, signInUser, refreshUserToken } from '../../services/lumara/auth';
 
 async function signUp(req: Request, res: Response) {
   try {

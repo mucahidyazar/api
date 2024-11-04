@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 
-import { Transaction } from '../../model/home-hub/transaction';
-import { TransactionBrand } from '../../model/home-hub/transaction-brand';
-import { TransactionCategory } from '../../model/home-hub/transaction-category';
-import { TransactionValue } from '../../model/home-hub/transaction-value';
+import { Transaction } from '../../model/lumara/transaction';
+import { TransactionBrand } from '../../model/lumara/transaction-brand';
+import { TransactionCategory } from '../../model/lumara/transaction-category';
+import { TransactionValue } from '../../model/lumara/transaction-value';
 import { queryHelper } from '../../helpers/query-helper';
-import { Wallet } from '../../model/home-hub/wallet';
-import { WalletAccessor } from '../../model/home-hub/wallet-accessor';
-import { WalletBalance } from '../../model/home-hub/wallet-balance';
+import { Wallet } from '../../model/lumara/wallet';
+import { WalletAccessor } from '../../model/lumara/wallet-accessor';
+import { WalletBalance } from '../../model/lumara/wallet-balance';
 import mongoose, { ObjectId } from 'mongoose';
 
 async function transactionCreate(req: Request, res: Response) {

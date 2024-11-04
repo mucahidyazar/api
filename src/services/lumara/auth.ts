@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../../model/home-hub/user';
+import { User } from '../../model/lumara/user';
 
 // Access token oluşturma
 const generateAccessToken = (user) => {

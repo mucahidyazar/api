@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 
-import { Transaction } from '../../model/home-hub/transaction';
-import { Wallet } from '../../model/home-hub/wallet';
-import { WalletAccessor } from '../../model/home-hub/wallet-accessor';
-import { WalletBalance } from '../../model/home-hub/wallet-balance';
-import { User } from '../../model/home-hub/user';
+import { Transaction } from '../../model/lumara/transaction';
+import { Wallet } from '../../model/lumara/wallet';
+import { WalletAccessor } from '../../model/lumara/wallet-accessor';
+import { WalletBalance } from '../../model/lumara/wallet-balance';
+import { User } from '../../model/lumara/user';
 import { queryHelper } from '../../helpers/query-helper';
 import mongoose from 'mongoose';
+import { PushNotificationService } from '../../services/push-notification';
 
 async function walletCreate(req: Request, res: Response) {
   try {
@@ -572,6 +573,19 @@ async function walletAccessorCreate(req: Request, res: Response) {
       wallet: req.params.id,
     });
     await accessor.save();
+
+    await PushNotificationService.sendNotification(user?.id, {
+      title: 'New Wallet Access',
+      body: `${req.user.firstName} shared a wallet with you`,
+      data: {
+        type: 'WISHLIST_ACCESS_INVITE',
+        wallet: wallet.toJSON(),
+        sender: req.user,
+      },
+      options: {
+        categoryId: 'WISHLIST_ACCESS',
+      }
+    });
 
     return res.response({
       status: 'success',

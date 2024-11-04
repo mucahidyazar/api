@@ -7,7 +7,7 @@ import {
   transactionCategoryGet,
   transactionCategoryList,
   transactionCategoryUpdate
-} from '../../../controller/home-hub/transaction-category'
+} from '../../../controller/lumara/transaction-category'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()

@@ -1,6 +1,6 @@
 import express from 'express';
 import { ROUTES } from '../../../constants';
-import { signIn, signUp, signOut, refreshToken } from '../../../controller/home-hub/auth';
+import { signIn, signUp, signOut, refreshToken } from '../../../controller/lumara/auth';
 import { tryCatch } from '../../../utils';
 
 const router = express.Router();
