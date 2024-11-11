@@ -16,8 +16,10 @@ import {
   userRouter,
   authRouter,
   calculationRouter,
+  notificationRouter,
   linkPreviewRouter,
   pushTokenRouter,
+  settingRouter,
   socketRouter,
   stockRouter,
   transactionBrandRouter,
@@ -67,9 +69,11 @@ app.post('/kill', async (_req, res) => {
 //! routes
 app.use(middlewareResponse)
 app.use(authRouter)
-app.use(middlewareAuth, userRouter)
+app.use(userRouter)
 app.use(middlewareAuth, calculationRouter)
+app.use(middlewareAuth, notificationRouter)
 app.use(middlewareAuth, pushTokenRouter)
+app.use(middlewareAuth, settingRouter)
 app.use(middlewareAuth, transactionRouter)
 app.use(middlewareAuth, transactionBrandRouter)
 app.use(middlewareAuth, transactionCategoryRouter)

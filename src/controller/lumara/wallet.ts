@@ -574,7 +574,8 @@ async function walletAccessorCreate(req: Request, res: Response) {
     });
     await accessor.save();
 
-    await PushNotificationService.sendNotification(user?.id, {
+    await PushNotificationService.sendNotification({
+      userId: user?.id,
       title: 'New Wallet Access',
       body: `${req.user.firstName} shared a wallet with you`,
       data: {

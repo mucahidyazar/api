@@ -1,6 +1,6 @@
 export const ROUTES = {
   v1: {
-    homeHub: {
+    lumara: {
       auth: {
         signIn: '/api/v1/lumara/auth/sign-in',
         signOut: '/api/v1/lumara/auth/sign-out',
@@ -14,8 +14,35 @@ export const ROUTES = {
         list: '/api/v1/lumara/calculation',
         update: '/api/v1/lumara/calculation/:id([0-9a-fA-F]{24})',
       },
+      notification: {
+        get: '/api/v1/lumara/notification/:id([0-9a-fA-F]{24})',
+        list: '/api/v1/lumara/notification',
+        markAsRead: '/api/v1/lumara/notification/:id([0-9a-fA-F]{24})/mark-as-read',
+        markAllAsRead: '/api/v1/lumara/notification/mark-all-as-read',
+        archive: '/api/v1/lumara/notification/:id([0-9a-fA-F]{24})/archive',
+        archiveAll: '/api/v1/lumara/notification/archive-all',
+        unreadCount: '/api/v1/lumara/notification/unread-count',
+        delete: '/api/v1/lumara/notification/:id([0-9a-fA-F]{24})',
+        deleteBulk: '/api/v1/lumara/notification/delete-bulk',
+      },
+      setting: {
+        get: '/api/v1/lumara/setting',
+        update: '/api/v1/lumara/setting',
+
+        backup: '/api/v1/lumara/setting/backup',
+        restore: '/api/v1/lumara/setting/restore',
+        reset: '/api/v1/lumara/setting/reset',
+      },
       user: {
-        me: '/api/v1/lumara/user/me',
+        me: {
+          get: '/api/v1/lumara/user/me',
+          delete: '/api/v1/lumara/user/me',
+          update: '/api/v1/lumara/user/me',
+          password: {
+            update: '/api/v1/lumara/user/me/password'
+          },
+        },
+
         create: '/api/v1/lumara/user',
         delete: '/api/v1/lumara/user/:id([0-9a-fA-F]{24})',
         get: '/api/v1/lumara/user/:id([0-9a-fA-F]{24})',

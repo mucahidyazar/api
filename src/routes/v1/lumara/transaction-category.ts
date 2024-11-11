@@ -12,10 +12,10 @@ import { tryCatch } from '../../../utils'
 
 const router = express.Router()
 
-router.post(ROUTES.v1.homeHub.transactionCategory.create, tryCatch(transactionCategoryCreate))
-router.delete(ROUTES.v1.homeHub.transactionCategory.delete, tryCatch(transactionCategoryDelete))
-router.get(ROUTES.v1.homeHub.transactionCategory.get, tryCatch(transactionCategoryGet))
-router.get(ROUTES.v1.homeHub.transactionCategory.list, tryCatch(transactionCategoryList))
-router.put(ROUTES.v1.homeHub.transactionCategory.update, tryCatch(transactionCategoryUpdate))
+router.post(ROUTES.v1.lumara.transactionCategory.create, tryCatch(transactionCategoryCreate))
+router.delete(ROUTES.v1.lumara.transactionCategory.delete, tryCatch(transactionCategoryDelete))
+router.get(ROUTES.v1.lumara.transactionCategory.get, tryCatch(transactionCategoryGet))
+router.get(ROUTES.v1.lumara.transactionCategory.list, tryCatch(transactionCategoryList))
+router.put(ROUTES.v1.lumara.transactionCategory.update, tryCatch(transactionCategoryUpdate))
 
 export { router as transactionCategoryRouter }

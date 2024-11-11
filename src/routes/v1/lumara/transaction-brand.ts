@@ -12,10 +12,10 @@ import { tryCatch } from '../../../utils'
 
 const router = express.Router()
 
-router.post(ROUTES.v1.homeHub.transactionBrand.create, tryCatch(transactionBrandCreate))
-router.delete(ROUTES.v1.homeHub.transactionBrand.delete, tryCatch(transactionBrandDelete))
-router.get(ROUTES.v1.homeHub.transactionBrand.get, tryCatch(transactionBrandGet))
-router.get(ROUTES.v1.homeHub.transactionBrand.list, tryCatch(transactionBrandList))
-router.put(ROUTES.v1.homeHub.transactionBrand.update, tryCatch(transactionBrandUpdate))
+router.post(ROUTES.v1.lumara.transactionBrand.create, tryCatch(transactionBrandCreate))
+router.delete(ROUTES.v1.lumara.transactionBrand.delete, tryCatch(transactionBrandDelete))
+router.get(ROUTES.v1.lumara.transactionBrand.get, tryCatch(transactionBrandGet))
+router.get(ROUTES.v1.lumara.transactionBrand.list, tryCatch(transactionBrandList))
+router.put(ROUTES.v1.lumara.transactionBrand.update, tryCatch(transactionBrandUpdate))
 
 export { router as transactionBrandRouter }

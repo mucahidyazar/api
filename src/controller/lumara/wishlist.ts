@@ -657,7 +657,8 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
     });
     await accessor.save();
 
-    await PushNotificationService.sendNotification(accessor.id, {
+    await PushNotificationService.sendNotification({
+      userId: user?.id,
       title: 'New Wishlist Access',
       body: `${req.user.firstName} shared a wishlist with you`,
       data: {

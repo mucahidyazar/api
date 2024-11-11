@@ -8,6 +8,6 @@ import { tryCatch } from '../../../utils'
 
 const router = express.Router()
 
-router.post(ROUTES.v1.homeHub.pushToken.create, tryCatch(pushTokenCreate))
+router.post(ROUTES.v1.lumara.pushToken.create, tryCatch(pushTokenCreate))
 
 export { router as pushTokenRouter }

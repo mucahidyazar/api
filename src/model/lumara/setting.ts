@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 
-const settingsSchema = new mongoose.Schema(
+import { MODEL_OPTIONS } from '../../constants/general'
+
+const settingSchema = new mongoose.Schema(
   {
     themeMode: {
       type: String,
@@ -12,29 +14,21 @@ const settingsSchema = new mongoose.Schema(
     },
     secondaryCurrency: {
       type: String,
-      default: 'EUR',
+      default: '',
     },
     language: {
       type: String,
       default: 'en',
     },
-    groups: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Group',
-      }
-    ],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+      unique: true,
     },
-  },
-  {
-    timestamps: true,
-  },
+  }, MODEL_OPTIONS
 )
 
-const Settings = mongoose.model('Settings', settingsSchema)
+const Setting = mongoose.model('Setting', settingSchema)
 
-export { Settings }
+export { Setting }

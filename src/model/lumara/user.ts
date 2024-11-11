@@ -2,15 +2,14 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import z from 'zod';
 
-import { predefinedBrands, predefinedCategories } from '../../data/predefineds';
-import { TransactionCategory } from './transaction-category';
-import { TransactionBrand } from './transaction-brand';
+import { Setting } from './setting';
 
 interface IUser extends mongoose.Document {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  passwordChangedAt?: Date;
   role: string;
   avatarUrl?: string;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -46,6 +45,9 @@ const userSchema = new mongoose.Schema<IUser>(
       maxlength: 100,
       required: true,
       select: false, // Password'ü varsayılan olarak sorgularda döndürme
+    },
+    passwordChangedAt: {
+      type: Date,
     },
     role: {
       type: String,
@@ -85,11 +87,13 @@ const userSchema = new mongoose.Schema<IUser>(
 
 // Parola hashleme
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
+  if (!this.isModified('password')) return next();
 
+  this.passwordChangedAt = new Date();
   try {
+    if (this.isNew) {
+      await Setting.create({ user: this._id });
+    }
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
