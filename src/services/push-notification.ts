@@ -8,6 +8,7 @@ type TSendNotificationArgs = {
   body: string;
   data?: any;
   options?: any;
+  notification?: any;
 }
 export class PushNotificationService {
   static async registerToken(userId: string, tokenData: {
@@ -16,20 +17,19 @@ export class PushNotificationService {
     deviceInfo?: any;
   }) {
     try {
-      const token = await PushToken.findOrCreateToken(userId, tokenData);
-
-      // Aynı kullanıcının eski tokenlarını deaktive et
+      // Kullanıcının diğer tüm tokenlarını deaktive et
       await PushToken.updateMany(
         {
           user: userId,
-          token: { $ne: tokenData.token },
-          deviceType: tokenData.deviceType
+          token: { $ne: tokenData.token }
         },
         {
           $set: { isActive: false }
         }
       );
 
+      // Yeni token'ı kaydet/güncelle
+      const token = await PushToken.findOrCreateToken(userId, tokenData);
       return token;
     } catch (error) {
       console.error('Error registering push token:', error);
@@ -38,7 +38,7 @@ export class PushNotificationService {
   }
 
 
-  static async sendNotification({ userId, title, body, data, options }: TSendNotificationArgs) {
+  static async sendNotification({ userId, title, body, data, notification, options }: TSendNotificationArgs) {
     try {
       // Push notification gönder
       const tokens = await PushToken.find({
@@ -56,12 +56,14 @@ export class PushNotificationService {
         ...options
       }));
 
+      console.log('notification', JSON.stringify(notifications, null, 2));
       // DB'de notification kaydı oluştur
       await Notification.create({
-        type: data?.type || 'SIMPLE',
+        type: data?.type || 'simple',
         title,
         body,
         user: userId,
+        ...notification,
         metadata: {
           ...data,
           options

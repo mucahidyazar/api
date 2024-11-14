@@ -583,6 +583,12 @@ async function walletAccessorCreate(req: Request, res: Response) {
         wallet: wallet.toJSON(),
         sender: req.user,
       },
+      notification: {
+        invite: {
+          type: 'WalletAccessor',
+          id: accessor.id,
+        }
+      },
       options: {
         categoryId: 'WISHLIST_ACCESS',
       }
@@ -624,4 +630,51 @@ async function walletAccessorDelete(req: Request, res: Response) {
   }
 }
 
-export { walletCreate, walletDelete, walletGet, walletList, walletUpdate, walletTransactionList, walletAccessorCreate, walletAccessorDelete };
+async function walletAccessorUpdate(req: Request, res: Response) {
+  try {
+    const allowedFields = ['status'];
+    const updates = Object.keys(req.body).filter(field => allowedFields.includes(field));
+    const isValidOperation = updates.every(update => allowedFields.includes(update));
+
+    if (!isValidOperation) {
+      return res.response({
+        status: 'error',
+        code: 400,
+        message: 'Invalid updates!',
+      });
+    }
+
+    const accessor = await WalletAccessor.findOne({
+      _id: req.params.accessorId,
+      wallet: req.params.id,
+    });
+
+    if (!accessor) {
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Accessor not found',
+      });
+    }
+
+    updates.forEach(update => accessor[update] = req.body[update]);
+    const updatedAccessor = await accessor.save();
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Accessor updated successfully',
+      data: updatedAccessor,
+    });
+  } catch (error) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: "An error occurred while fetching wallet transactions.",
+    });
+  }
+}
+
+
+
+export { walletCreate, walletDelete, walletGet, walletList, walletUpdate, walletTransactionList, walletAccessorCreate, walletAccessorDelete, walletAccessorUpdate };

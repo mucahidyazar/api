@@ -20,7 +20,8 @@ async function notificationList(req: Request, res: Response) {
     const query = Notification.find({
       user: req.user.id,
       ...(!req.query.showAll && { isArchived: false })
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 })
+      .populate('invite.resource')
 
     const { metadata } = queryHelper({
       queries: { ...req.query, totalItems },

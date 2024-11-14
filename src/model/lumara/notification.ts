@@ -13,8 +13,8 @@ export enum NotificationType {
 }
 
 export enum InviteType {
-  WISHLIST = 'wishlist',
-  WALLET = 'wallet'
+  WISHLIST = 'Wishlist',
+  WALLET = 'Wallet'
 }
 
 export enum ActionType {
@@ -77,20 +77,11 @@ const notificationSchema = new mongoose.Schema({
   invite: {
     type: {
       type: String,
-      enum: Object.values(InviteType)
+      enum: Object.values(['WishlistAccessor', 'WalletAccessor'])
     },
-    from: {
+    resource: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    resourceId: {
-      type: mongoose.Schema.Types.ObjectId,
-
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'accepted', 'rejected'],
-      default: 'pending'
+      refPath: 'invite.type'
     }
   },
 

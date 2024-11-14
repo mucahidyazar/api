@@ -5,6 +5,7 @@ import { Notification, NotificationType, InviteType, ActionType } from "../../mo
 const userId = '672db729e528e8154e8e660a';
 const inviterUserId = '673055bbe528e8154e8e66bb';
 const wishListId = '67305694e528e8154e8e6770';
+const wishListAccessorId = '6733c2bcd8ee3bfa22192aac';
 
 export async function feed() {
   try {
@@ -24,9 +25,8 @@ export async function feed() {
         body: 'John invited you to their wallet',
         user: userId,
         invite: {
-          type: InviteType.WISHLIST,
-          from: inviterUserId,
-          resourceId: wishListId
+          type: 'WishlistAccessor',
+          resource: wishListAccessorId
         }
       },
       // Action notification'ı

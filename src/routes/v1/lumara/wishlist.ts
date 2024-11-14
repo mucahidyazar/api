@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { ROUTES } from '../../../constants'
-import { wishlistCreate, wishlistDelete, wishlistGet, wishlistList, wishlistUpdate, wishlistItemUpdate, wishlistAccessorDelete, wishlistAccessorCreate } from '../../../controller/lumara/wishlist'
+import { wishlistCreate, wishlistDelete, wishlistGet, wishlistList, wishlistUpdate, wishlistItemUpdate, wishlistAccessorDelete, wishlistAccessorCreate, wishlistAccessorUpdate } from '../../../controller/lumara/wishlist'
 import { tryCatch } from '../../../utils'
 
 const router = express.Router()
@@ -14,5 +14,6 @@ router.put(ROUTES.v1.lumara.wishlist.update, tryCatch(wishlistUpdate))
 router.put(ROUTES.v1.lumara.wishlist.item.update, tryCatch(wishlistItemUpdate))
 router.delete(ROUTES.v1.lumara.wishlist.accessor.delete, tryCatch(wishlistAccessorDelete))
 router.post(ROUTES.v1.lumara.wishlist.accessor.create, tryCatch(wishlistAccessorCreate))
+router.put(ROUTES.v1.lumara.wishlist.accessor.update, tryCatch(wishlistAccessorUpdate))
 
 export { router as wishlistRouter }

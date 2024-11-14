@@ -82,6 +82,7 @@ export const ROUTES = {
         accessor: {
           create: '/api/v1/lumara/wallet/:id([0-9a-fA-F]{24})/accessor',
           delete: '/api/v1/lumara/wallet/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})',
+          update: '/api/v1/lumara/wallet/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})',
         },
         transaction: {
           list: '/api/v1/lumara/wallet/:id([0-9a-fA-F]{24})/transaction',
@@ -113,6 +114,7 @@ export const ROUTES = {
         },
         accessor: {
           create: '/api/v1/lumara/wishlist/:id([0-9a-fA-F]{24})/accessor',
+          update: '/api/v1/lumara/wishlist/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})',
           delete: '/api/v1/lumara/wishlist/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})',
         },
       },

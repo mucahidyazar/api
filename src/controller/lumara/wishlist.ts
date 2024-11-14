@@ -662,9 +662,15 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
       title: 'New Wishlist Access',
       body: `${req.user.firstName} shared a wishlist with you`,
       data: {
-        type: 'WISHLIST_ACCESS',
+        type: 'invite',
         wishlist: wishlist.toJSON(),
         sender: req.user,
+      },
+      notification: {
+        invite: {
+          type: 'WishlistAccessor',
+          resource: accessor.id,
+        }
       },
       options: {
         channelId: 'WISHLIST_ACCESS',
@@ -682,7 +688,7 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
     return res.response({
       status: 'error',
       code: 500,
-      message: "An error occurred while fetching wishlist transactions.",
+      message: "An error occurred while adding an accessor.",
     });
   }
 }
@@ -708,4 +714,51 @@ async function wishlistAccessorDelete(req: Request, res: Response) {
   }
 }
 
-export { wishlistCreate, wishlistList, wishlistGet, wishlistUpdate, wishlistDelete, wishlistItemUpdate, wishlistAccessorCreate, wishlistAccessorDelete };
+async function wishlistAccessorUpdate(req: Request, res: Response) {
+  try {
+    const allowedFields = ['status'];
+
+    const updates = Object.keys(req.body);
+    const isValidOperation = updates.every(update => allowedFields.includes(update));
+
+    if (!isValidOperation) {
+      return res.response({
+        status: 'error',
+        code: 400,
+        message: 'Invalid updates!',
+      });
+    }
+
+    const accessor = await WishlistAccessor.findOne({
+      _id: req.params.id,
+      wishlist: req.params.wishlistId,
+    });
+
+    if (!accessor) {
+      return res.response({
+        status: 'error',
+        code: 404,
+        message: 'Accessor not found',
+      });
+    }
+
+    updates.forEach(update => accessor[update] = req.body[update]);
+    const response = await accessor.save();
+
+    return res.response({
+      status: 'success',
+      code: 200,
+      message: 'Accessor updated successfully',
+      data: response
+    });
+  } catch (error: any) {
+    return res.response({
+      status: 'error',
+      code: 500,
+      message: error.message,
+      details: error,
+    });
+  }
+}
+
+export { wishlistCreate, wishlistList, wishlistGet, wishlistUpdate, wishlistDelete, wishlistItemUpdate, wishlistAccessorCreate, wishlistAccessorUpdate, wishlistAccessorDelete };

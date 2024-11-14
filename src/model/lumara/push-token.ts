@@ -34,7 +34,8 @@ const pushTokenSchema = new Schema({
   token: {
     type: String,
     required: true,
-    unique: true
+    trim: true,
+    index: true  // unique yerine sadece index kullan
   },
   deviceType: {
     type: String,
@@ -43,11 +44,13 @@ const pushTokenSchema = new Schema({
   },
   isActive: {
     type: Boolean,
-    default: true
+    default: true,
+    index: true  // performans için index ekle
   },
   lastUsed: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    index: true  // cleanup için index ekle
   },
   deviceInfo: {
     brand: String,
@@ -56,37 +59,68 @@ const pushTokenSchema = new Schema({
   }
 }, {
   timestamps: true,
-  index: { user: 1, token: 1 }
+  // Compound index ekle
+  indexes: [
+    { user: 1, token: 1 },
+    { user: 1, isActive: 1 },
+    { token: 1, isActive: 1 }
+  ]
 });
 
 // Static methods with proper typing
+// models/push-token.model.ts
 pushTokenSchema.statics.findOrCreateToken = async function (
   userId: string,
   tokenData: Partial<IPushToken>
 ): Promise<IPushToken> {
-  const existingToken = await this.findOne({
-    user: userId,
-    token: tokenData.token
-  });
+  try {
+    // Önce bu token'ı kullanan herhangi bir kayıt var mı kontrol et
+    const existingTokenAnyUser = await this.findOne({
+      token: tokenData.token
+    });
 
-  if (existingToken) {
-    return this.findByIdAndUpdate(
-      existingToken._id,
-      {
-        $set: {
-          lastUsed: new Date(),
+    if (existingTokenAnyUser) {
+      if (existingTokenAnyUser.user.toString() === userId) {
+        // Token aynı kullanıcıya ait, güncelle
+        return await this.findByIdAndUpdate(
+          existingTokenAnyUser._id,
+          {
+            $set: {
+              lastUsed: new Date(),
+              isActive: true,
+              deviceType: tokenData.deviceType,
+              deviceInfo: tokenData.deviceInfo
+            }
+          },
+          { new: true }
+        ).lean();
+      } else {
+        // Token başka bir kullanıcıya ait, eski kaydı deaktive et ve yeni kayıt oluştur
+        await this.findByIdAndUpdate(existingTokenAnyUser._id, {
+          $set: { isActive: false }
+        });
+
+        // Yeni token kaydı oluştur
+        return await this.create({
+          user: userId,
+          ...tokenData,
           isActive: true,
-          ...tokenData
-        }
-      },
-      { new: true }
-    ).lean();
-  }
+          lastUsed: new Date()
+        });
+      }
+    }
 
-  return this.create({
-    user: userId,
-    ...tokenData
-  });
+    // Token hiç yoksa yeni kayıt oluştur
+    return await this.create({
+      user: userId,
+      ...tokenData,
+      isActive: true,
+      lastUsed: new Date()
+    });
+  } catch (error) {
+    console.error('Error in findOrCreateToken:', error);
+    throw error;
+  }
 };
 
 // Export the model with proper typing
