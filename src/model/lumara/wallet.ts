@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '../../constants';
+import { MODEL_OPTIONS } from '@/constants';
 
 const walletSchema = new mongoose.Schema({
   title: {

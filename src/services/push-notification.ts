@@ -16,89 +16,72 @@ export class PushNotificationService {
     deviceType: 'ios' | 'android';
     deviceInfo?: any;
   }) {
-    try {
-      // Kullanıcının diğer tüm tokenlarını deaktive et
-      await PushToken.updateMany(
-        {
-          user: userId,
-          token: { $ne: tokenData.token }
-        },
-        {
-          $set: { isActive: false }
-        }
-      );
+    // Kullanıcının diğer tüm tokenlarını deaktive et
+    await PushToken.updateMany(
+      {
+        user: userId,
+        token: { $ne: tokenData.token }
+      },
+      {
+        $set: { isActive: false }
+      }
+    );
 
-      // Yeni token'ı kaydet/güncelle
-      const token = await PushToken.findOrCreateToken(userId, tokenData);
-      return token;
-    } catch (error) {
-      console.error('Error registering push token:', error);
-      throw error;
-    }
+    // Yeni token'ı kaydet/güncelle
+    const token = await PushToken.findOrCreateToken(userId, tokenData);
+    return token;
   }
 
 
   static async sendNotification({ userId, title, body, data, notification, options }: TSendNotificationArgs) {
-    try {
-      // Push notification gönder
-      const tokens = await PushToken.find({
-        user: userId,
-        isActive: true
-      });
+    // Push notification gönder
+    const tokens = await PushToken.find({
+      user: userId,
+      isActive: true
+    });
 
-      const notifications = tokens.map(token => ({
-        to: token.token,
-        title,
-        body,
-        data,
-        sound: 'default',
-        badge: 1,
-        ...options
-      }));
+    const notifications = tokens.map(token => ({
+      to: token.token,
+      title,
+      body,
+      data,
+      sound: 'default',
+      badge: 1,
+      ...options
+    }));
 
-      console.log('notification', JSON.stringify(notifications, null, 2));
-      // DB'de notification kaydı oluştur
-      await Notification.create({
-        type: data?.type || 'simple',
-        title,
-        body,
-        user: userId,
-        ...notification,
-        metadata: {
-          ...data,
-          options
-        }
-      });
+    console.log('notification', JSON.stringify(notifications, null, 2));
+    // DB'de notification kaydı oluştur
+    await Notification.create({
+      type: data?.type || 'simple',
+      title,
+      body,
+      user: userId,
+      ...notification,
+      metadata: {
+        ...data,
+        options
+      }
+    });
 
-      // Push bildirimleri gönder
-      return Promise.all(
-        notifications.map(async (notification) => {
-          try {
-            await fetch('https://exp.host/--/api/v2/push/send', {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(notification)
-            });
-          } catch (error) {
-            console.error('Error sending push notification:', error);
-          }
-        })
-      );
-    } catch (error) {
-      console.error('Error in sendNotification:', error);
-      throw error;
-    }
+    // Push bildirimleri gönder
+    return Promise.all(
+      notifications.map(async (notification) => {
+        await fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(notification)
+        });
+      })
+    );
   }
 
   static async removeInactiveTokens(daysInactive = 30) {
     const date = new Date();
     date.setDate(date.getDate() - daysInactive);
 
-    return PushToken.deleteMany({
-      lastUsed: { $lt: date }
-    });
   }
 }

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import z from 'zod';
 
-import { MODEL_OPTIONS } from '../../constants';
+import { MODEL_OPTIONS } from '@/constants';
+import { calculationLoanDataSchema } from '@/validation';
 
 export const calculationSchema = new mongoose.Schema({
   type: {
@@ -14,7 +15,7 @@ export const calculationSchema = new mongoose.Schema({
     required: true,
     validate: (value: any) => {
       if (value.type === 'loan') {
-        return validateLoanData(value);
+        return calculationLoanDataSchema.safeParse(value);
       }
       return false
     }
@@ -29,15 +30,3 @@ export const calculationSchema = new mongoose.Schema({
 
 
 export const Calculation = mongoose.model('Calculation', calculationSchema);
-
-function validateLoanData(data: any) {
-  const schema = z.object({
-    amount: z.number().positive(),
-    interestRate: z.number().positive(),
-    term: z.number().positive(),
-    yearlyInflation: data.yearlyInflation
-      ? z.number().positive()
-      : z.number().optional(),
-  });
-  return schema.safeParse(data).success;
-}

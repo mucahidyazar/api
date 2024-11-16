@@ -1,21 +1,21 @@
 import express from 'express'
 
-import { ROUTES } from '../../constants'
+import { ROUTES } from '@/constants'
 import {
   createShortUrl,
   openShortUrl,
   getShortUrls,
   getShortUrl,
   deleteShortUrl,
-} from '../../controller'
-import { tryCatch } from '../../utils'
+} from '@/controller'
+import { asyncHandler } from '@/middleware'
 
 const router = express.Router()
 
-router.post(ROUTES.v1.urlShortener.create, tryCatch(createShortUrl))
-router.get(ROUTES.v1.urlShortener.open, tryCatch(openShortUrl))
-router.get(ROUTES.v1.urlShortener.list, tryCatch(getShortUrls))
-router.get(ROUTES.v1.urlShortener.get, tryCatch(getShortUrl))
-router.delete(ROUTES.v1.urlShortener.delete, tryCatch(deleteShortUrl))
+router.post(ROUTES.v1.urlShortener.create, asyncHandler(createShortUrl))
+router.get(ROUTES.v1.urlShortener.open, asyncHandler(openShortUrl))
+router.get(ROUTES.v1.urlShortener.list, asyncHandler(getShortUrls))
+router.get(ROUTES.v1.urlShortener.get, asyncHandler(getShortUrl))
+router.delete(ROUTES.v1.urlShortener.delete, asyncHandler(deleteShortUrl))
 
 export { router as urlShortenerRouter }

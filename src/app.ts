@@ -9,9 +9,9 @@ import kill from 'kill-port'
 import { Server, Socket } from 'socket.io'
 
 
-import { errorHandler, logger } from './client'
+import { logger } from './client'
 import { CONFIG } from './config'
-import { middlewareAuth, middlewareResponse } from './middleware'
+import { middlewareError, middlewareAuth, middlewareResponse } from './middleware'
 import {
   userRouter,
   authRouter,
@@ -27,7 +27,6 @@ import {
   transactionRouter,
   urlShortenerRouter,
   walletRouter,
-  walletTypeRouter,
   wishlistRouter,
 } from './routes/v1'
 
@@ -78,12 +77,13 @@ app.use(middlewareAuth, transactionRouter)
 app.use(middlewareAuth, transactionBrandRouter)
 app.use(middlewareAuth, transactionCategoryRouter)
 app.use(middlewareAuth, walletRouter)
-app.use(middlewareAuth, walletTypeRouter)
 app.use(middlewareAuth, wishlistRouter)
 app.use(linkPreviewRouter)
 app.use(socketRouter)
 app.use(stockRouter)
 app.use(urlShortenerRouter)
+
+app.use(middlewareError)
 
 //! socket.io
 io.on('connection', (socket: Socket) => {
@@ -100,17 +100,17 @@ io.on('connection', (socket: Socket) => {
 httpServer.listen(CONFIG.port)
 
 // get the unhandled rejection and throw it to another fallback handler we already have.
-process.on('unhandledRejection', (error: Error, _promise: Promise<any>) => {
-  logger.error('unhandledRejection')
-  logger.error(error)
-  throw error
-})
+// process.on('unhandledRejection', (error: Error, _promise: Promise<any>) => {
+//   logger.error('unhandledRejection')
+//   logger.error(error)
+//   throw error
+// })
 
-process.on('uncaughtException', (error: Error) => {
-  logger.error('uncaughtException')
-  logger.error(error)
-  errorHandler.handleError(error)
-  if (!errorHandler.isTrustedError(error)) {
-    process.exit(1)
-  }
-})
+// process.on('uncaughtException', (error: Error) => {
+//   logger.error('uncaughtException')
+//   logger.error(error)
+//   errorHandler.handleError(error)
+//   if (!errorHandler.isTrustedError(error)) {
+//     process.exit(1)
+//   }
+// })

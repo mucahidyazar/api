@@ -3,9 +3,7 @@ export const ROUTES = {
     lumara: {
       auth: {
         signIn: '/api/v1/lumara/auth/sign-in',
-        signOut: '/api/v1/lumara/auth/sign-out',
         signUp: '/api/v1/lumara/auth/sign-up',
-        refreshToken: '/api/v1/lumara/auth/refresh-token',
       },
       calculation: {
         create: '/api/v1/lumara/calculation',

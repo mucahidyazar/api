@@ -1,31 +1,17 @@
+import { TResponseOptions } from '@/common';
 import { Request, Response, NextFunction } from 'express';
 
-export type TResponseOptionsSuccess = {
-  status: 'success';
-  message: string;
-  code?: number;
-  data: any;
-  metadata?: object;
-  links?: object;
-};
-
-export type TResponseOptionsError = {
-  status: 'error';
-  message: string;
-  code?: number;
-  details?: object;
-};
-
-export type TResponseOptions = TResponseOptionsSuccess | TResponseOptionsError;
-
 export function middlewareResponse(_req: Request, res: Response, next: NextFunction) {
-  res.response = ({ status, code = 200, ...options }: TResponseOptions) => {
-    res.status(code).json({
-      status: status,
+  res.response = function ({ status, code = status === 'success' ? 200 : 500, ...options }: TResponseOptions) {
+    const baseResponse = {
+      status,
       code,
+      timestamp: new Date().toISOString(),
       ...options
-    });
-  }
+    };
+    res.contentType('application/json');
+    return res.status(code).json(baseResponse);
+  };
 
   next();
 }

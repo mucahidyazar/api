@@ -21,6 +21,16 @@ export function getPaginationMetadata({ limit, page, totalItems }: TGetPaginatio
   }
 }
 
+type ListRequestQuery = {
+  page?: string;
+  limit?: string;
+  populateFields?: string;
+};
+
+type TQueryHelperArgs = {
+  queries: ListRequestQuery & { totalItems?: number };
+  query: Query<any, any>
+}
 export function queryHelper({ queries, query }: TQueryHelperArgs) {
   const populateFields = queries.populateFields
     ? queries.populateFields.split(',')
@@ -47,16 +57,4 @@ export function queryHelper({ queries, query }: TQueryHelperArgs) {
   return {
     metadata
   }
-}
-
-
-type ListRequestQuery = {
-  page?: string;
-  limit?: string;
-  populateFields?: string;
-};
-
-type TQueryHelperArgs = {
-  queries: ListRequestQuery & { totalItems?: number };
-  query: Query<any, any>
 }

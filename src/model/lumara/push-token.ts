@@ -1,3 +1,4 @@
+import { ApiError } from '@/services/api-error';
 import { Model, model, Schema, Types } from 'mongoose';
 
 // Interface for the document
@@ -73,54 +74,50 @@ pushTokenSchema.statics.findOrCreateToken = async function (
   userId: string,
   tokenData: Partial<IPushToken>
 ): Promise<IPushToken> {
-  try {
-    // Önce bu token'ı kullanan herhangi bir kayıt var mı kontrol et
-    const existingTokenAnyUser = await this.findOne({
-      token: tokenData.token
-    });
+  // Önce bu token'ı kullanan herhangi bir kayıt var mı kontrol et
+  const existingTokenAnyUser = await this.findOne({
+    token: tokenData.token
+  });
 
-    if (existingTokenAnyUser) {
-      if (existingTokenAnyUser.user.toString() === userId) {
-        // Token aynı kullanıcıya ait, güncelle
-        return await this.findByIdAndUpdate(
-          existingTokenAnyUser._id,
-          {
-            $set: {
-              lastUsed: new Date(),
-              isActive: true,
-              deviceType: tokenData.deviceType,
-              deviceInfo: tokenData.deviceInfo
-            }
-          },
-          { new: true }
-        ).lean();
-      } else {
-        // Token başka bir kullanıcıya ait, eski kaydı deaktive et ve yeni kayıt oluştur
-        await this.findByIdAndUpdate(existingTokenAnyUser._id, {
-          $set: { isActive: false }
-        });
+  if (existingTokenAnyUser) {
+    if (existingTokenAnyUser.user.toString() === userId) {
+      // Token aynı kullanıcıya ait, güncelle
+      return await this.findByIdAndUpdate(
+        existingTokenAnyUser._id,
+        {
+          $set: {
+            lastUsed: new Date(),
+            isActive: true,
+            deviceType: tokenData.deviceType,
+            deviceInfo: tokenData.deviceInfo
+          }
+        },
+        { new: true }
+      ).lean();
+    } else {
+      // Token başka bir kullanıcıya ait, eski kaydı deaktive et ve yeni kayıt oluştur
+      await this.findByIdAndUpdate(existingTokenAnyUser._id, {
+        $set: { isActive: false }
+      });
 
-        // Yeni token kaydı oluştur
-        return await this.create({
-          user: userId,
-          ...tokenData,
-          isActive: true,
-          lastUsed: new Date()
-        });
-      }
+      // Yeni token kaydı oluştur
+      return await this.create({
+        user: userId,
+        ...tokenData,
+        isActive: true,
+        lastUsed: new Date()
+      });
     }
-
-    // Token hiç yoksa yeni kayıt oluştur
-    return await this.create({
-      user: userId,
-      ...tokenData,
-      isActive: true,
-      lastUsed: new Date()
-    });
-  } catch (error) {
-    console.error('Error in findOrCreateToken:', error);
-    throw error;
   }
+
+  // Token hiç yoksa yeni kayıt oluştur
+  return await this.create({
+    user: userId,
+    ...tokenData,
+    isActive: true,
+    lastUsed: new Date()
+  });
+
 };
 
 // Export the model with proper typing

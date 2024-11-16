@@ -11,16 +11,7 @@ export const middlewareAuth = async (req, res, next) => {
     });
   }
 
-  try {
-    const decoded = jwt.verify(accessToken, 'your_access_token_secret');
-    req.user = await User.findById(decoded.id);
-    next();
-  } catch (err) {
-    return res.response({
-      status: 'error',
-      code: 401,
-      message: 'Invalid token',
-      details: err,
-    });
-  }
+  const decoded = jwt.verify(accessToken, 'your_access_token_secret');
+  req.user = await User.findById(decoded.id);
+  next();
 };

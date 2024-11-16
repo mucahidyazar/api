@@ -1,29 +1,29 @@
 import express from 'express'
 
-import { ROUTES } from '../../../constants'
+import { ROUTES } from '@/constants'
 import {
-  notificationGet,
+  // notificationGet,
   notificationList,
   notificationMarkAsRead,
   notificationMarkAllAsRead,
-  notificationArchive,
-  notificationArchiveAll,
-  notificationUnreadCount,
+  // notificationArchive,
+  // notificationArchiveAll,
+  // notificationUnreadCount,
   notificationDelete,
-  notificationDeleteBulk
-} from '../../../controller/lumara/notification'
-import { tryCatch } from '../../../utils'
+  // notificationDeleteBulk
+} from '@/controller/lumara/notification'
+import { asyncHandler } from '@/middleware'
 
 const router = express.Router()
 
-router.get(ROUTES.v1.lumara.notification.get, tryCatch(notificationGet))
-router.get(ROUTES.v1.lumara.notification.list, tryCatch(notificationList))
-router.put(ROUTES.v1.lumara.notification.markAsRead, tryCatch(notificationMarkAsRead))
-router.put(ROUTES.v1.lumara.notification.markAllAsRead, tryCatch(notificationMarkAllAsRead))
-router.put(ROUTES.v1.lumara.notification.archive, tryCatch(notificationArchive))
-router.put(ROUTES.v1.lumara.notification.archiveAll, tryCatch(notificationArchiveAll))
-router.get(ROUTES.v1.lumara.notification.unreadCount, tryCatch(notificationUnreadCount))
-router.delete(ROUTES.v1.lumara.notification.delete, tryCatch(notificationDelete))
-router.post(ROUTES.v1.lumara.notification.deleteBulk, tryCatch(notificationDeleteBulk))
+// router.get(ROUTES.v1.lumara.notification.get, asyncHandler(notificationGet))
+router.get(ROUTES.v1.lumara.notification.list, asyncHandler(notificationList))
+router.put(ROUTES.v1.lumara.notification.markAsRead, asyncHandler(notificationMarkAsRead))
+router.put(ROUTES.v1.lumara.notification.markAllAsRead, asyncHandler(notificationMarkAllAsRead))
+// router.put(ROUTES.v1.lumara.notification.archive, asyncHandler(notificationArchive))
+// router.put(ROUTES.v1.lumara.notification.archiveAll, asyncHandler(notificationArchiveAll))
+// router.get(ROUTES.v1.lumara.notification.unreadCount, asyncHandler(notificationUnreadCount))
+router.delete(ROUTES.v1.lumara.notification.delete, asyncHandler(notificationDelete))
+// router.post(ROUTES.v1.lumara.notification.deleteBulk, asyncHandler(notificationDeleteBulk))
 
 export { router as notificationRouter }

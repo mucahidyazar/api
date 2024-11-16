@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../../model/lumara/user';
+import { User } from '@/model/lumara/user';
 
 // Access token oluşturma
 const generateAccessToken = (user) => {
@@ -8,20 +8,12 @@ const generateAccessToken = (user) => {
   });
 };
 
-// Refresh token oluşturma
-const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user._id }, 'your_refresh_token_secret', {
-    expiresIn: '7d',
-  });
-};
-
 // Kullanıcı kaydı
 const signUpUser = async (email, password) => {
   const user = new User({ email, password });
-  const refreshToken = generateRefreshToken(user);
   await user.save();  // Kullanıcıyı kaydediyoruz ama refresh token'ı saklamıyoruz.
   const accessToken = generateAccessToken(user);
-  return { accessToken, refreshToken };
+  return { accessToken };
 };
 
 // Kullanıcı girişi
@@ -35,22 +27,7 @@ const signInUser = async (email, password) => {
     throw new Error('Invalid credentials');
   }
   const accessToken = generateAccessToken(user);
-  const refreshToken = generateRefreshToken(user);
-  return { accessToken, refreshToken };
+  return { accessToken };
 };
 
-// Refresh token ile yeni access token oluşturma
-const refreshUserToken = async (refreshToken) => {
-  try {
-    const decoded = jwt.verify(refreshToken, 'your_refresh_token_secret');
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return generateAccessToken(user);
-  } catch (error) {
-    throw new Error('Invalid refresh token');
-  }
-};
-
-export { signInUser, signUpUser, refreshUserToken };
+export { signInUser, signUpUser };

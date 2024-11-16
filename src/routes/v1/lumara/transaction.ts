@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { ROUTES } from '../../../constants'
+import { ROUTES } from '@/constants'
 import {
   transactionCreate,
   transactionChartGet,
@@ -9,17 +9,17 @@ import {
   transactionList,
   transactionStatsGet,
   transactionUpdate
-} from '../../../controller/lumara/transaction'
-import { tryCatch } from '../../../utils'
+} from '@/controller/lumara/transaction'
+import { asyncHandler } from '@/middleware'
 
 const router = express.Router()
 
-router.post(ROUTES.v1.lumara.transaction.create, tryCatch(transactionCreate))
-router.delete(ROUTES.v1.lumara.transaction.delete, tryCatch(transactionDelete))
-router.get(ROUTES.v1.lumara.transaction.get, tryCatch(transactionGet))
-router.get(ROUTES.v1.lumara.transaction.list, tryCatch(transactionList))
-router.put(ROUTES.v1.lumara.transaction.update, tryCatch(transactionUpdate))
-router.get(ROUTES.v1.lumara.transaction.chart, tryCatch(transactionChartGet))
-router.get(ROUTES.v1.lumara.transaction.stats, tryCatch(transactionStatsGet))
+router.post(ROUTES.v1.lumara.transaction.create, asyncHandler(transactionCreate))
+router.delete(ROUTES.v1.lumara.transaction.delete, asyncHandler(transactionDelete))
+router.get(ROUTES.v1.lumara.transaction.get, asyncHandler(transactionGet))
+router.get(ROUTES.v1.lumara.transaction.list, asyncHandler(transactionList))
+router.put(ROUTES.v1.lumara.transaction.update, asyncHandler(transactionUpdate))
+router.get(ROUTES.v1.lumara.transaction.chart, asyncHandler(transactionChartGet))
+router.get(ROUTES.v1.lumara.transaction.stats, asyncHandler(transactionStatsGet))
 
 export { router as transactionRouter }

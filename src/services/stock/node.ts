@@ -4,7 +4,7 @@ dotEnv.config({
   path: process.cwd() + '/.env',
 })
 
-import { logger, telegram } from '../../client'
+import { logger, telegram } from '@/client'
 
 import { checkAllStocksRetry } from './helpers'
 

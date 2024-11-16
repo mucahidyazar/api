@@ -1,7 +1,7 @@
 import express from 'express'
 
-import { ROUTES } from '../../constants'
-import { start } from '../../controller'
+import { ROUTES } from '@/constants'
+import { start } from '@/controller'
 
 const router = express.Router()
 
