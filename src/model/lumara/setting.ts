@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { MODEL_OPTIONS } from '@/constants'
+import { DEFAULTS, MODEL_OPTIONS } from '@/constants'
 
 const settingSchema = new mongoose.Schema(
   {
@@ -10,7 +10,7 @@ const settingSchema = new mongoose.Schema(
     },
     primaryCurrency: {
       type: String,
-      default: 'USD',
+      default: DEFAULTS.currency,
     },
     secondaryCurrency: {
       type: String,
@@ -25,6 +25,7 @@ const settingSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
       unique: true,
+      immutable: true,
     },
   }, MODEL_OPTIONS
 )

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { DEFAULTS, MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
 export const transactionBalanceSchema = new mongoose.Schema({
   amount: {
@@ -10,7 +10,7 @@ export const transactionBalanceSchema = new mongoose.Schema({
   },
   currency: {
     type: String,
-    default: 'USD',
+    default: DEFAULTS.currency,
     required: true
   },
   rate: {
@@ -29,11 +29,11 @@ const transactionSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    maxlength: 500,
+    maxlength: VALIDATION_RULES.input.max,
   },
   link: {
     type: String,
-    maxlength: 500,
+    maxlength: VALIDATION_RULES.input.max,
   },
   installments: {
     type: Number,
@@ -87,11 +87,6 @@ const transactionSchema = new mongoose.Schema({
     required: true,
   },
 
-  group: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
-    immutable: true,
-  },
   transactionValue: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TransactionValue',

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
 export enum NotificationType {
   SIMPLE = 'simple',
@@ -38,12 +38,14 @@ const notificationSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 100
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.mid
   },
   body: {
     type: String,
     required: true,
-    maxlength: 500
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.max
   },
   priority: {
     type: String,

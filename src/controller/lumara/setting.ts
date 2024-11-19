@@ -9,6 +9,7 @@ import { WalletAccessor } from '@/model/lumara/wallet-accessor';
 import { Wishlist } from '@/model/lumara/wishlist';
 import { WishlistAccessor } from '@/model/lumara/wishlist-accessor';
 import { ApiError } from '@/services/api-error';
+import { DEFAULTS } from '@/constants';
 
 async function settingGet(req: Request, res: Response) {
   const data = await Setting.findOne({
@@ -209,7 +210,7 @@ async function settingReset(req: Request, res: Response) {
     // Varsayılan ayarlar
     theme: 'light',
     language: 'en',
-    currency: 'USD',
+    currency: DEFAULTS.currency,
     // ... diğer varsayılan ayarlar
   });
 

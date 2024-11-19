@@ -10,6 +10,7 @@ import { WalletBalance } from '@/model/lumara/wallet-balance';
 import { User } from '@/model/lumara/user';
 import { PushNotificationService } from '@/services/push-notification';
 import { ApiError } from '@/services/api-error';
+import { WalletType } from '@/model/lumara/wallet-type';
 
 async function walletCreate(req: Request, res: Response) {
   const savedWalletBalances = await WalletBalance.insertMany(req.body.balances);
@@ -590,5 +591,16 @@ async function walletAccessorUpdate(req: Request, res: Response) {
 }
 
 
+async function walletTypeList(req: Request, res: Response) {
+  const walletTypes = await WalletType.find(req.query);
 
-export { walletCreate, walletDelete, walletGet, walletList, walletUpdate, walletTransactionList, walletAccessorCreate, walletAccessorDelete, walletAccessorUpdate };
+  return res.response({
+    status: 'success',
+    code: 200,
+    message: 'WalletType list fetched successfully',
+    data: walletTypes,
+  });
+
+}
+
+export { walletCreate, walletDelete, walletGet, walletList, walletUpdate, walletTransactionList, walletAccessorCreate, walletAccessorDelete, walletAccessorUpdate, walletTypeList };

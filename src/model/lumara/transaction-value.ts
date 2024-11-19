@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { DEFAULTS, MODEL_OPTIONS } from '@/constants';
 
 export const transactionValueSchema = new mongoose.Schema({
   amount: {
@@ -10,7 +10,7 @@ export const transactionValueSchema = new mongoose.Schema({
   },
   currency: {
     type: String,
-    default: 'USD',
+    default: DEFAULTS.currency,
     required: true
   }
 }, MODEL_OPTIONS);

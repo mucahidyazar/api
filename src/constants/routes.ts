@@ -84,21 +84,11 @@ export const ROUTES = {
         },
         transaction: {
           list: '/api/v1/lumara/wallet/:id([0-9a-fA-F]{24})/transaction',
+        },
+
+        type: {
+          list: '/api/v1/lumara/wallet-type',
         }
-      },
-      walletBalance: {
-        create: '/api/v1/lumara/wallet-balance',
-        delete: '/api/v1/lumara/wallet-balance/:id([0-9a-fA-F]{24})',
-        get: '/api/v1/lumara/wallet-balance/:id([0-9a-fA-F]{24})',
-        list: '/api/v1/lumara/wallet-balance',
-        update: '/api/v1/lumara/wallet-balance/update',
-      },
-      walletType: {
-        create: '/api/v1/lumara/wallet-type',
-        delete: '/api/v1/lumara/wallet-type/:id([0-9a-fA-F]{24})',
-        get: '/api/v1/lumara/wallet-type/:id([0-9a-fA-F]{24})',
-        list: '/api/v1/lumara/wallet-type',
-        update: '/api/v1/lumara/wallet-type/update',
       },
       wishlist: {
         create: '/api/v1/lumara/wishlist',

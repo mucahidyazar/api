@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import z from 'zod';
 
 import { MODEL_OPTIONS } from '@/constants';
 import { calculationLoanDataSchema } from '@/validation';
@@ -8,6 +7,7 @@ export const calculationSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['loan'],
+    immutable: true,
     required: true,
   },
   data: {

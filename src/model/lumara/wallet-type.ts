@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
 const walletTypeSchema = new mongoose.Schema({
   label: {
     type: String,
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.mid,
     required: true,
   },
   multipleBalance: {

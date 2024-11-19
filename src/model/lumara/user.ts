@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import z from 'zod';
 
 import { Setting } from './setting';
+import { passwordSchema } from '@/validation';
+import { DEFAULTS, VALIDATION_RULES } from '@/constants';
 
 interface IUser extends mongoose.Document {
   firstName: string;
@@ -21,12 +23,12 @@ const userSchema = new mongoose.Schema<IUser>(
   {
     firstName: {
       type: String,
-      maxlength: 50,
+      maxlength: VALIDATION_RULES.input.mid,
       default: '',
     },
     lastName: {
       type: String,
-      maxlength: 50,
+      maxlength: VALIDATION_RULES.input.mid,
       default: '',
     },
     email: {
@@ -41,10 +43,13 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     password: {
       type: String,
-      minlength: 6,
-      maxlength: 100,
+      minlength: VALIDATION_RULES.password.min,
+      maxlength: VALIDATION_RULES.password.max,
       required: true,
       select: false, // Password'ü varsayılan olarak sorgularda döndürme
+      validate(password: string) {
+        return passwordSchema.safeParse(password).success;
+      }
     },
     passwordChangedAt: {
       type: Date,
@@ -56,7 +61,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     avatarUrl: {
       type: String,
-      default: 'https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg',
+      default: DEFAULTS.avatarUrl,
       validate(avatar: string) {
         if (avatar === '') return true;
         return z.string().url().parse(avatar);

@@ -7,10 +7,12 @@ const accessorSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      immutable: true,
       required: true,
     },
     modelId: {
       type: mongoose.Schema.Types.ObjectId,
+      immutable: true,
       required: true,
     }
   },

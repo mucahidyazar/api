@@ -1,16 +1,20 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
 const WishlistItemSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    minLength: VALIDATION_RULES.input.min,
+    maxLength: VALIDATION_RULES.input.max
   },
   name: {
     type: String,
-    required: false
+    required: false,
+    minLength: VALIDATION_RULES.input.min,
+    maxLength: VALIDATION_RULES.input.max
   },
   price: {
     type: Number,
@@ -36,13 +40,13 @@ const WishlistSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 100,
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.mid,
   },
   description: {
     type: String,
     required: false,
-    maxlength: 500,
+    maxlength: VALIDATION_RULES.input.max,
   },
   isPublic: {
     type: Boolean,

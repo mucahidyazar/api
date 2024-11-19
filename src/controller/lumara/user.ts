@@ -22,34 +22,6 @@ export const relatedUserModels = [
   WishlistAccessor,
 ] as mongoose.Model<any>[];
 
-async function userCreate(req: Request, res: Response) {
-  const validCreationFields = [
-    'firstName',
-    'lastName',
-    'email',
-    'password',
-    'avatarUrl',
-  ]
-
-  const isValidOperation = Object.keys(req.body).every(key => validCreationFields.includes(key))
-  if (!isValidOperation) {
-    throw new ApiError(
-      'InvalidInput',
-      'Invalid fields',
-    )
-  }
-
-  const newUser = new User(req.body)
-  const data = await newUser.save()
-
-  return res.response({
-    status: 'success',
-    code: 201,
-    message: 'User created successfully',
-    data
-  })
-}
-
 async function userMeGet(req: Request & { user?: any }, res: Response) {
   if (!req.user) {
     throw new ApiError('Unauthorized');
@@ -180,7 +152,6 @@ async function userMePasswordUpdate(req: Request, res: Response) {
 }
 
 export {
-  userCreate,
   userMeDelete,
   userMeGet,
   userMePasswordUpdate,

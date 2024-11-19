@@ -1,23 +1,23 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
 const walletSchema = new mongoose.Schema({
   title: {
     type: String,
-    minlength: 2,
-    maxlength: 255,
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.mid,
     required: true,
   },
   description: {
     type: String,
-    maxlength: 500,
+    maxlength: VALIDATION_RULES.input.max,
     default: ''
   },
   design: {
     type: String,
-    minlength: 2,
-    maxlength: 500,
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.max,
     required: true,
     default: 'design-0',
   },

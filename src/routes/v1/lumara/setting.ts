@@ -8,12 +8,17 @@ import {
   settingRestore,
   settingReset
 } from '@/controller/lumara/setting'
-import { asyncHandler } from '@/middleware'
+import { asyncHandler, middlewareValidateBody } from '@/middleware'
+import { settingUpdateSchema } from '@/validation/setting'
 
 const router = express.Router()
 
 router.get(ROUTES.v1.lumara.setting.get, asyncHandler(settingGet))
-router.put(ROUTES.v1.lumara.setting.update, asyncHandler(settingUpdate))
+router.put(
+  ROUTES.v1.lumara.setting.update,
+  middlewareValidateBody(settingUpdateSchema),
+  asyncHandler(settingUpdate)
+)
 router.post(ROUTES.v1.lumara.setting.backup, asyncHandler(settingBackup))
 router.post(ROUTES.v1.lumara.setting.restore, asyncHandler(settingRestore))
 router.post(ROUTES.v1.lumara.setting.reset, asyncHandler(settingReset))

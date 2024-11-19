@@ -68,7 +68,7 @@ app.post('/kill', async (_req, res) => {
 //! routes
 app.use(middlewareResponse)
 app.use(authRouter)
-app.use(userRouter)
+app.use(middlewareAuth, userRouter)
 app.use(middlewareAuth, calculationRouter)
 app.use(middlewareAuth, notificationRouter)
 app.use(middlewareAuth, pushTokenRouter)
@@ -100,17 +100,11 @@ io.on('connection', (socket: Socket) => {
 httpServer.listen(CONFIG.port)
 
 // get the unhandled rejection and throw it to another fallback handler we already have.
-// process.on('unhandledRejection', (error: Error, _promise: Promise<any>) => {
-//   logger.error('unhandledRejection')
-//   logger.error(error)
-//   throw error
-// })
+process.on('unhandledRejection', (error: Error, _promise: Promise<any>) => {
+  console.error('unhandledRejection', error)
+  throw error
+})
 
-// process.on('uncaughtException', (error: Error) => {
-//   logger.error('uncaughtException')
-//   logger.error(error)
-//   errorHandler.handleError(error)
-//   if (!errorHandler.isTrustedError(error)) {
-//     process.exit(1)
-//   }
-// })
+process.on('uncaughtException', (error: Error) => {
+  console.error('uncaughtException', error)
+})

@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS } from '@/constants';
+import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
 export const transactionCategorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 50,
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.mid,
   },
   usageCount: {
     type: Number,
