@@ -24,15 +24,32 @@
     "dev:node:commit": "nodemon --exec ts-node --files --debug ./src/services/commit/node.ts",
     "dev:node:mhrs": "nodemon --exec ts-node --files --debug ./src/services/mhrs/node.ts",
     "dev:node:stock": "nodemon --exec ts-node --files --debug ./src/services/stock/node.ts",
-    "build": "tsc",
-    "start": "node ./dist/app.js",
+    "build": "tsc && tsc-alias",
+    "start": "node -r module-alias/register ./dist/app.js",
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "eslint --fix --ext .ts ./src",
     "prettier": "prettier --check \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "prepare": "husky install",
-    "postinstall": "npx puppeteer browsers install chrome",
+    "postinstall": "npx puppeteer browsers install chrome && npm run build",
     "test": "jest --coverage"
+  },
+  "_moduleAliases": {
+    "@": "dist",
+    "@/client": "dist/client",
+    "@/config": "dist/config",
+    "@/constants": "dist/constants",
+    "@/controller": "dist/controller",
+    "@/data": "dist/data",
+    "@/helper": "dist/helper",
+    "@/middleware": "dist/middleware",
+    "@/model": "dist/model",
+    "@/routes": "dist/routes",
+    "@/services": "dist/services",
+    "@/types": "dist/types",
+    "@/utils": "dist/utils",
+    "@/validation": "dist/validation",
+    "@/view": "dist/view"
   },
   "dependencies": {
     "@faker-js/faker": "8.4.1",
@@ -46,6 +63,7 @@
     "jsonfile": "6.1.0",
     "jsonwebtoken": "^9.0.2",
     "kill-port": "2.0.1",
+    "module-alias": "^2.2.3",
     "moment": "2.30.1",
     "mongoose": "8.5.1",
     "nanoid": "^3.0.0",
@@ -81,6 +99,7 @@
     "prettier": "3.3.3",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.2",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0"
   }
 }
