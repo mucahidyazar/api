@@ -9,6 +9,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@/client": ["./src/client/index.ts"],
