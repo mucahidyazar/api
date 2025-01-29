@@ -11,6 +11,7 @@ import { Setting } from '@/model/lumara/setting'
 import { Wishlist } from '@/model/lumara/wishlist'
 import { WishlistAccessor } from '@/model/lumara/wishlist-accessor'
 import { ApiError } from '@/services/api-error'
+import { StorageService } from '@/services/supabase'
 
 export const relatedUserModels = [
   Transaction,
@@ -65,17 +66,18 @@ async function userMeDelete(req: Request, res: Response) {
 }
 
 async function userMeUpdate(req: Request, res: Response) {
-  const allowedUpdates = [
+  console.log('updates', req.body)
+  const allowedUpdateKeys = [
     'firstName',
     'lastName',
     'email',
     'password',
-    'avatarUrl',
     'defaultWallet',
     'defaultWalletCurrency',
+    'avatar'
   ];
-  const updates = Object.keys(req.body);
-  const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+  const updateKeys = Object.keys(req.body);
+  const isValidOperation = updateKeys.every(update => allowedUpdateKeys.includes(update));
 
   if (!isValidOperation) {
     throw new ApiError('InvalidInput');
@@ -89,7 +91,31 @@ async function userMeUpdate(req: Request, res: Response) {
     throw new ApiError('ResourceNotFound', 'User not found');
   }
 
-  user.set(req.body)
+  const { avatar, ...updates } = req.body
+  let avatarUrl = '';
+
+  // Handle avatar upload if provided
+  if (avatar?.base64) {
+    // Convert base64 to buffer
+    const buffer = Buffer.from(avatar.base64, 'base64');
+
+    // Upload to Supabase
+    avatarUrl = await StorageService.uploadFile({
+      bucket: 'images-profile',
+      file: buffer,
+      contentType: avatar.type || 'image/jpeg',
+      userId: req.user?.id,
+      oldFileUrl: user.avatarUrl
+    });
+
+    // Add avatar URL to updates
+    updates.avatarUrl = avatarUrl;
+  }
+
+  user.set({
+    ...(avatarUrl ? { avatarUrl } : {}),
+    ...updates
+  })
   const response = await user.save()
 
   return res.response({

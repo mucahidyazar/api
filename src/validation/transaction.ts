@@ -45,19 +45,24 @@ const transactionSchema = z.object({
     .min(VALIDATION_RULES.input.min, ERROR_MESSAGE.stringMin('Link'))
     .max(VALIDATION_RULES.input.max, ERROR_MESSAGE.stringMax('Link', VALIDATION_RULES.input.max))
     .optional(),
-  installments: z.number().min(1).default(1),
-  isRecurring: z.boolean().default(false),
-  recurringType: z.enum(['daily', 'weekly', 'monthly', 'yearly']).optional(),
+  subscriptionRecurrence: z.number().min(1).default(1),
+  subscription: z.boolean().default(false),
+  subscriptionType: z.enum(['daily', 'weekly', 'monthly', 'yearly']).optional(),
   date: z.string().or(z.date()),
+  transactionAmount: z.number().positive({
+    message: 'Amount must be a positive number.'
+  }),
+  transactionCurrency: z
+    .string({ message: 'Please select a currency.' })
+    .min(1, { message: 'Please select a currency' }),
 
   primaryBalance: transactionBalanceSchema.optional(),
   secondaryBalance: transactionBalanceSchema.optional(),
 
   wallet: createObjectIdSchema('Wallet'),
   walletBalance: createObjectIdSchema('WalletBalance'),
-  transactionValue: createObjectIdSchema('TransactionValue'),
-  transactionCategory: createObjectIdSchema('TransactionCategory'),
-  transactionBrand: createObjectIdSchema('TransactionBrand')
+  transactionCategory: createObjectIdSchema('TransactionCategory').optional(),
+  transactionBrand: createObjectIdSchema('TransactionBrand').optional()
 })
 
 const transactionUpdateSchema = transactionSchema.partial()

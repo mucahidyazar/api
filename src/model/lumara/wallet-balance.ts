@@ -13,12 +13,18 @@ export const walletBalanceSchema = new mongoose.Schema({
     default: DEFAULTS.currency,
     required: true
   },
-  transactions: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Transaction',
-    }
-  ],
+  wallet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Wallet',
+    required: true,
+    immutable: true,
+  }
 }, MODEL_OPTIONS);
+
+walletBalanceSchema.virtual('transactions', {
+  ref: 'Transaction',
+  localField: '_id',
+  foreignField: 'walletBalance',
+});
 
 export const WalletBalance = mongoose.model('WalletBalance', walletBalanceSchema);

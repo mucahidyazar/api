@@ -2,41 +2,7 @@ import mongoose from 'mongoose';
 
 import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
 
-const WishlistItemSchema = new mongoose.Schema({
-  link: {
-    type: String,
-    required: true,
-    trim: true,
-    minLength: VALIDATION_RULES.input.min,
-    maxLength: VALIDATION_RULES.input.max
-  },
-  name: {
-    type: String,
-    required: false,
-    minLength: VALIDATION_RULES.input.min,
-    maxLength: VALIDATION_RULES.input.max
-  },
-  price: {
-    type: Number,
-    required: false,
-    min: 0
-  },
-  image: {
-    type: String,
-    required: false
-  },
-  reservedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: false
-  },
-  reservedAt: {
-    type: Date,
-    required: false
-  }
-}, MODEL_OPTIONS);
-
-const WishlistSchema = new mongoose.Schema({
+const wishlistSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -56,14 +22,30 @@ const WishlistSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  items: [WishlistItemSchema],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+    immutable: true,
   }
 }, MODEL_OPTIONS);
 
-const Wishlist = mongoose.model('Wishlist', WishlistSchema);
+wishlistSchema.virtual('items', {
+  ref: 'WishlistItem',
+  localField: '_id',
+  foreignField: 'wishlist',
+});
+
+wishlistSchema.virtual('accessors', {
+  ref: 'WishlistAccessor',
+  localField: '_id',
+  foreignField: 'wishlist',
+});
+
+// wishlistSchema.methods.isOwner = async function (userId) {
+//   return this.user.toString() === userId.toString();
+// }
+
+const Wishlist = mongoose.model('Wishlist', wishlistSchema);
 
 export { Wishlist };

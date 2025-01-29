@@ -5,7 +5,22 @@ import { createObjectIdSchema } from './general'
 const walletBalanceCreateSchema = z.object({
   amount: z.number().default(0),
   currency: z.string().min(1).max(5),  // like USD, EUR
+  action: z.enum(['initial', 'updated', 'deleted']).optional()
 })
+
+// Accessor işlemleri için
+export const walletAccessorCreateSchema = z.object({
+  user: z.object({
+    email: z.string({
+      required_error: ERROR_MESSAGE.required('Email'),
+      message: ERROR_MESSAGE.string('Email')
+    })
+      .email(ERROR_MESSAGE.invalid('Email'))
+  }),
+  action: z.enum(['initial', 'updated', 'deleted']).optional()
+})
+
+export const walletAccessorUpdateSchema = walletAccessorCreateSchema
 
 export const walletSchema = z.object({
   title: z
@@ -40,21 +55,15 @@ export const walletSchema = z.object({
     .max(
       VALIDATION_RULES.input.mid,
       ERROR_MESSAGE.stringMax('Platform name')
-    ),
+    )
+    .optional(),
 
   walletBalances: z.array(walletBalanceCreateSchema)
     .default([]),
 
   walletType: createObjectIdSchema('WalletType'),
+
+  accessors: z.array(walletAccessorCreateSchema).optional().default([])
 })
 
 export const walletUpdateSchema = walletSchema.partial()
-
-export const walletAccessorCreateSchema = z.object({
-  status: z.enum(['active']),
-  wallet: createObjectIdSchema('Wallet'),
-})
-
-export const walletAccessorUpdateSchema = walletAccessorCreateSchema.pick({
-  status: true,
-})

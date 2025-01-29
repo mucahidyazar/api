@@ -8,15 +8,30 @@ import { Wishlist } from '@/model/lumara/wishlist';
 import { WishlistAccessor } from '@/model/lumara/wishlist-accessor';
 import { User } from '@/model/lumara/user';
 import { ApiError } from '@/services/api-error';
+import { WishlistItem } from '@/model/lumara/wishlist-item';
 
 async function wishlistCreate(req: Request, res: Response) {
-  const { accessors = [], ...bodyData } = req.body
+  const { accessors = [], items = [], ...bodyData } = req.body
 
   const newWishlist = new Wishlist({
     ...bodyData,
     user: req.user?.id,
   });
   const data = await newWishlist.save();
+
+  if (items.length) {
+    const itemsData = items.map(item => {
+      return {
+        ...item,
+        wishlist: data.id,
+        user: req.user?.id,
+      }
+    });
+
+    if (itemsData.length) {
+      await WishlistItem.insertMany(itemsData);
+    }
+  };
 
   if (accessors.length) {
     const emails = accessors.map(accessor => accessor.user.email);
@@ -65,10 +80,12 @@ async function wishlistList(req: Request, res: Response) {
       path: 'user',
       select: 'name email'
     })
-    // populate user in the items
     .populate({
-      path: 'items.reservedBy',
-      select: 'firstName email'
+      path: 'items',
+      populate: {
+        path: 'reservedBy',
+        select: 'firstName email'
+      }
     });
 
   const { metadata } = queryHelper({
@@ -106,256 +123,192 @@ async function wishlistList(req: Request, res: Response) {
   });
 }
 
-// async function wishlistGet(req: Request, res: Response) {
-//     const query = Wishlist.findOne({ _id: req.params.id, user: req.user?.id });
-
-//     queryHelper({
-//       queries: req.query,
-//       query,
-//     });
-
-//     const wishlist = await query.exec();
-
-//     if (!wishlist) {
-//       return res.response({
-//         status: 'error',
-//         code: 404,
-//         message: 'Wishlist not found',
-//       });
-//     }
-
-//     const accessors = await WishlistAccessor.find({ wishlist: req.params.id }).populate('user');
-
-//     const data = {
-//       ...wishlist.toObject(),
-//       accessors,
-//     };
-
-//     return res.response({
-//       status: 'success',
-//       code: 200,
-//       message: 'Wishlist fetched successfully',
-//       data
-//     });
-// }
 async function wishlistGet(req: Request, res: Response) {
-  const [data] = await Wishlist.aggregate([
-    // Initial match
-    {
-      $match: {
-        _id: new mongoose.Types.ObjectId(req.params.id),
-        $or: [
-          { user: new mongoose.Types.ObjectId(req.user?.id) },
-          {
-            _id: {
-              $in: await WishlistAccessor.distinct('wishlist', {
-                user: new mongoose.Types.ObjectId(req.user?.id),
-                status: 'active'
-              })
-            }
-          }
-        ]
-      }
-    },
+  const wishlistId = req.params.id;
+  const userId = req.user?.id;
 
-    // User Lookup
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'userArray'
-      }
-    },
-    {
-      $unwind: {
-        path: '$userArray',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    // User objesini yapılandır
-    {
-      $addFields: {
-        user: {
-          id: { $toString: '$userArray._id' },
-          name: '$userArray.name',
-          email: '$userArray.email'
-        }
-      }
-    },
+  // Kullanıcının erişebileceği wishlist erişimcilerini alın
+  const accessibleWishlistIds = await WishlistAccessor.find({
+    user: userId,
+    status: 'active',
+  }).distinct('wishlist');
 
-    // Items içindeki reservedBy userları getir
-    {
-      $addFields: {
-        'items': {
-          $map: {
-            input: '$items',
-            as: 'item',
-            in: {
-              $mergeObjects: [
-                '$$item',
-                {
-                  id: { $toString: '$$item._id' },
-                  // Buradaki reservedBy dönüşümünü değiştiriyoruz
-                  reservedBy: {
-                    $cond: {
-                      if: { $ne: ['$$item.reservedBy', null] },
-                      then: {
-                        id: { $toString: '$$item.reservedBy' }
-                      },
-                      else: null
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      }
-    },
+  // Wishlist'ı bulun ve ilişkili alanları populate edin
+  const wishlist = await Wishlist.findOne({
+    _id: wishlistId,
+    $or: [{ user: userId }, { _id: { $in: accessibleWishlistIds } }],
+  })
+    .populate('user', 'name email') // User bilgilerini sadece name ve email ile getir
+    .populate({
+      path: 'items',
+      populate: [
+        { path: 'reservedBy', select: 'name email' },  // Item'ların reservedBy bilgisini ekle
+        { path: 'user', select: 'name email' }, // Item'ların user bilgisini ekle
+      ],
+    })
+    .populate({
+      path: 'accessors',
+      populate: { path: 'user', select: 'name email' }, // Accessor'ların user bilgilerini ekle
+    })
 
-    // Accessors Lookup
-    {
-      $lookup: {
-        from: 'wishlistaccessors',
-        let: { wishlistId: '$_id' },
-        pipeline: [
-          {
-            $match: {
-              $expr: { $eq: ['$wishlist', '$$wishlistId'] }
-            }
-          },
-          // Accessor'ların user bilgilerini getir
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'user',
-              foreignField: '_id',
-              as: 'userArray'
-            }
-          },
-          {
-            $unwind: {
-              path: '$userArray',
-              preserveNullAndEmptyArrays: true
-            }
-          },
-          // Her bir accessor için user objesini yapılandır
-          {
-            $addFields: {
-              id: { $toString: '$_id' },
-              user: {
-                id: { $toString: '$userArray._id' },
-                name: '$userArray.name',
-                email: '$userArray.email'
-              }
-            }
-          },
-          // Gereksiz fieldları kaldır
-          {
-            $project: {
-              _id: 0,
-              userArray: 0,
-              __v: 0,
-            }
-          }
-        ],
-        as: 'accessors'
-      }
-    },
-
-    // Genel Transform ve Cleanup
-    {
-      $addFields: {
-        id: { $toString: '$_id' },
-        isOwner: {
-          $eq: ['$userArray._id', new mongoose.Types.ObjectId(req.user?.id)]
-        }
-      }
-    },
-
-    // Final cleanup
-    {
-      $project: {
-        _id: 0,
-        __v: 0,
-        userArray: 0,
-        'items._id': 0,
-        'items.__v': 0
-      }
-    }
-  ]);
-
-  if (!data) {
+  if (!wishlist) {
     throw new ApiError(
       'ResourceNotFound',
-      'Wishlist not found or access denied',
-    )
+      'Wishlist not found or access denied'
+    );
   }
 
-  // Items içindeki reservedBy userları populate et
-  if (data.items?.length) {
-    const userIds = data.items
-      .filter(item => item.reservedBy)
-      .map(item => new mongoose.Types.ObjectId(item.reservedBy.id));
+  // Accessors düzenleniyor
+  // wishlist.accessors = wishlist.accessors.map((accessor: any) => ({
+  //   id: accessor._id.toString(),
+  //   status: accessor.status,
+  //   user: accessor.user
+  //     ? {
+  //       id: accessor.user._id.toString(),
+  //       name: accessor.user.name,
+  //       email: accessor.user.email,
+  //     }
+  //     : null,
+  // }));
 
-    if (userIds.length) {
-      const users = await mongoose.model('User').find(
-        { _id: { $in: userIds } },
-        { name: 1, email: 1 }
-      );
-
-      const userMap = new Map(users.map(user => [user._id.toString(), user]));
-
-      data.items = data.items.map(item => {
-        if (item.reservedBy) {
-          const user = userMap.get(item.reservedBy.id);
-          if (user) {
-            item.reservedBy = {
-              id: user._id.toString(),
-              name: user.name,
-              email: user.email
-            };
-          }
-        }
-        return item;
-      });
-    }
-  }
+  // // Items düzenleniyor
+  // wishlist.items = wishlist.items.map((item: any) => ({
+  //   id: item._id.toString(),
+  //   name: item.name,
+  //   price: item.price,
+  //   link: item.link,
+  //   status: item.status,
+  //   reservedBy: item.reservedBy
+  //     ? {
+  //       id: item.reservedBy._id.toString(),
+  //       name: item.reservedBy.name,
+  //       email: item.reservedBy.email,
+  //     }
+  //     : null,
+  // }));
 
   return res.response({
     status: 'success',
     code: 200,
     message: 'Wishlist fetched successfully',
-    data,
+    data: wishlist,
   });
 }
 
 async function wishlistUpdate(req: Request, res: Response) {
+  const { items = [], accessors = [], ...bodyData } = req.body;
+
+  // Wishlist güncellemesi
   const wishlist = await Wishlist.findOneAndUpdate(
     { _id: req.params.id, user: req.user?.id },
-    req.body,
+    bodyData,
     { new: true }
   );
 
   if (!wishlist) {
-    throw new ApiError(
-      'ResourceNotFound',
-      'Wishlist not found',
-    )
+    throw new ApiError('ResourceNotFound', 'Wishlist not found');
   }
+
+  // Items güncelleme işlemleri
+  if (items.length) {
+    for (const item of items) {
+      if (item.action === 'initial') {
+        // Yeni item ekle
+        await WishlistItem.create({
+          ...item,
+          wishlist: wishlist._id,
+          user: req.user?.id,
+        });
+      } else if (item.action === 'updated') {
+        // Mevcut item güncelle
+        await WishlistItem.findOneAndUpdate(
+          { _id: item.id, wishlist: wishlist.id },
+          item,
+          { new: true, runValidators: true }
+        );
+      } else if (item.action === 'deleted') {
+        // Item sil
+        await WishlistItem.findOneAndDelete({
+          _id: item.id,
+          wishlist: wishlist.id,
+        });
+      }
+    }
+  }
+
+
+  // Accessors güncelleme işlemleri
+  if (accessors.length) {
+    // Önce mevcut tüm accessorları sil
+    await WishlistAccessor.deleteMany({ wishlist: wishlist._id });
+
+    for (const accessor of accessors) {
+      if (accessor.action === 'initial') {
+        const user = await User.findOne({ email: accessor.user.email });
+
+        if (!user) break;
+
+        // Yeni item ekle
+        await WishlistAccessor.create({
+          status: 'pending',
+          wishlist: wishlist._id,
+          user: user?.id,
+        });
+      } else if (accessor.action === 'updated') {
+        // maybe later we can have
+      } else if (accessor.action === 'deleted') {
+        // Item bul
+        const wishlistAccessor = await WishlistAccessor.findOne({
+          _id: accessor.id,
+          wishlist: wishlist.id,
+        });
+
+        const isUserSelf = wishlistAccessor?.user === req.user.id;
+        const isUserWishlistOwner = wishlist.user === req.user.id;
+
+        if (isUserSelf || isUserWishlistOwner) {
+          await wishlistAccessor?.deleteOne()
+          await wishlistAccessor?.save();
+        }
+      }
+    }
+  }
+
+  // Güncellenmiş wishlist'i döndür
+  const updatedWishlist = await Wishlist.findById(wishlist._id)
+    .populate({
+      path: 'items',
+    })
+    .populate({
+      path: 'accessors',
+      populate: {
+        path: 'user',
+        select: 'name email',
+      },
+    });
 
   return res.response({
     status: 'success',
     code: 200,
     message: 'Wishlist updated successfully',
-    data: wishlist
+    data: updatedWishlist,
   });
 }
 
 // Delete a wishlist by ID
 async function wishlistDelete(req: Request, res: Response) {
-  const data = await Wishlist.findOneAndDelete({ _id: req.params.id, user: req.user?.id });
+  //! get wishlist accessors
+  const accessors = await WishlistAccessor.find({ user: req.user?.id })
+  const accessorWishlistIds = accessors.map(accessor => accessor.id);
+
+  //! delete wishlist
+  const data = await Wishlist.findOne({
+    _id: req.params.id,
+    $or: [
+      { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
+      { accessors: { $in: accessorWishlistIds } } // Kullanıcı accessors'da mı?
+    ]
+  })
 
   if (!data) {
     throw new ApiError(
@@ -363,6 +316,15 @@ async function wishlistDelete(req: Request, res: Response) {
       'Wishlist not found',
     )
   }
+
+  //! delete wishlsit accessors
+  await WishlistAccessor.find({ wishlist: req.params.id }).deleteMany();
+
+  //! delete wishlist items
+  await WishlistItem.find({ wishlist: req.params.id }).deleteMany();
+
+  //! delete wallet
+  await data.deleteOne();
 
   return res.response({
     status: 'success',
@@ -510,31 +472,31 @@ async function wishlistItemUpdate(req: Request, res: Response) {
     }
   );
 
-  if (!updatedWishlist || !updatedWishlist.items?.[0]) {
-    throw new ApiError(
-      'ResourceNotFound',
-      'Updated item not found',
-    )
-  }
+  // if (!updatedWishlist || !updatedWishlist.items?.[0]) {
+  //   throw new ApiError(
+  //     'ResourceNotFound',
+  //     'Updated item not found',
+  //   )
+  // }
 
-  const updatedItem = updatedWishlist.items[0];
-  const formattedItem = {
-    id: updatedItem._id?.toString(),
-    name: updatedItem.name,
-    link: updatedItem.link,
-    price: updatedItem.price,
-    image: updatedItem.image,
-    reservedBy: updatedItem.reservedBy ? {
-      id: updatedItem.reservedBy.toString()
-    } : null,
-    reservedAt: updatedItem.reservedAt || null
-  };
+  // const updatedItem = updatedWishlist.items[0];
+  // const formattedItem = {
+  //   id: updatedItem._id?.toString(),
+  //   name: updatedItem.name,
+  //   link: updatedItem.link,
+  //   price: updatedItem.price,
+  //   image: updatedItem.image,
+  //   reservedBy: updatedItem.reservedBy ? {
+  //     id: updatedItem.reservedBy.toString()
+  //   } : null,
+  //   reservedAt: updatedItem.reservedAt || null
+  // };
 
   return res.response({
     status: 'success',
     code: 200,
     message: 'Item updated successfully',
-    data: formattedItem
+    data: null
   });
 }
 

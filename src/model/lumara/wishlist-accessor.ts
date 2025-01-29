@@ -11,10 +11,14 @@ export const wishlistAccessorSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
+    immutable: true,
   },
   wishlist: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Wishlist',
+    required: true,
+    immutable: true,
   }
 }, MODEL_OPTIONS);
 

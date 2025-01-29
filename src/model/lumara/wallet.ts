@@ -32,18 +32,23 @@ const walletSchema = new mongoose.Schema({
     required: true,
     immutable: true,
   },
-  walletBalances: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'WalletBalance',
-    }
-  ],
   walletType: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'WalletType',
     required: true,
-    immutable: true,
   }
 }, MODEL_OPTIONS);
+
+walletSchema.virtual('walletBalances', {
+  ref: 'WalletBalance',
+  localField: '_id',
+  foreignField: 'wallet',
+});
+
+walletSchema.virtual('accessors', {
+  ref: 'WalletAccessor',
+  localField: '_id',
+  foreignField: 'wallet',
+});
 
 export const Wallet = mongoose.model('Wallet', walletSchema);

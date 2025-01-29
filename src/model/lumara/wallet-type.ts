@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants';
+import { MODEL_OPTIONS, VALIDATION_RULES } from '../../constants';
 
 const walletTypeSchema = new mongoose.Schema({
   label: {

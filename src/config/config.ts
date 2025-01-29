@@ -18,4 +18,10 @@ export const CONFIG = {
 
   //! DATABASE
   MONGO_URI: process.env.MONGO_URI || DEFAULT_MONGO_URI,
+
+  //! supabase
+  supabase: {
+    url: process.env.SUPABASE_URL || '',
+    serviceKey: process.env.SUPABASE_SERVICE_KEY || '',
+  }
 }

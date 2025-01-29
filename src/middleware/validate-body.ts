@@ -7,6 +7,7 @@ export const middlewareValidateBody = (schema: AnyZodObject) =>
       req.body = await schema.parseAsync(req.body)
       next()
     } catch (error) {
+      console.log('req.body', req.body)
       next(error) // Hatayı error handler'a gönder
     }
   };

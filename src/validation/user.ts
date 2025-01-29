@@ -53,7 +53,7 @@ const userSchema = z.object({
     .max(
       VALIDATION_RULES.input.mid,
       ERROR_MESSAGE.stringMax('First name', VALIDATION_RULES.input.mid)
-    ),
+    ).optional(),
   lastName: z
     .string({
       message: ERROR_MESSAGE.string('Last name'),
@@ -66,7 +66,7 @@ const userSchema = z.object({
     .max(
       VALIDATION_RULES.input.mid,
       ERROR_MESSAGE.stringMax('Last name', VALIDATION_RULES.input.mid)
-    ),
+    ).optional(),
   email: z
     .string({
       message: ERROR_MESSAGE.string('Email'),
@@ -76,14 +76,7 @@ const userSchema = z.object({
       message: ERROR_MESSAGE.invalid('Email'),
     }),
   password: passwordSchema,
-  avatarUrl: z
-    .string({
-      message: ERROR_MESSAGE.string('Avatar URL')
-    })
-    .url({
-      message: ERROR_MESSAGE.invalid('Avatar URL')
-    })
-    .optional()
+  avatar: z.any(),
 });
 
 const userUpdateSchema = userSchema.partial();

@@ -50,7 +50,6 @@ export class PushNotificationService {
       ...options
     }));
 
-    console.log('notification', JSON.stringify(notifications, null, 2));
     // DB'de notification kaydı oluştur
     await Notification.create({
       type: data?.type || 'simple',

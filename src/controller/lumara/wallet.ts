@@ -13,24 +13,22 @@ import { ApiError } from '@/services/api-error';
 import { WalletType } from '@/model/lumara/wallet-type';
 
 async function walletCreate(req: Request, res: Response) {
-  const savedWalletBalances = await WalletBalance.insertMany(req.body.balances);
-  const walletBalanceIds = savedWalletBalances.map(balance => balance.id);
-
   const { accessors = [], ...bodyData } = req.body
 
   const newWallet = new Wallet({
     ...bodyData,
-    walletBalances: walletBalanceIds,
     user: req.user?.id,
   });
   const data = await newWallet.save();
+
+  await WalletBalance.insertMany(req.body.walletBalances.map(b => ({ ...b, wallet: data.id })));
 
   if (accessors.length) {
     const emails = accessors.map(accessor => accessor.user.email);
     const users = await User.find({ email: { $in: emails } });
 
     const accessorsToCreate = users.map(user => ({
-      wishlist: data.id,
+      wallet: data.id,
       user: user.id,
     }));
 
@@ -69,7 +67,10 @@ async function walletList(req: Request, res: Response) {
     ]
   })
     .populate('walletType')
-    .populate('walletBalances')
+    .populate({
+      path: 'walletBalances', // Virtual alan adı
+      options: { sort: { createdAt: -1 } } // Gerekirse ek seçenekler
+    })
     .populate({
       path: 'user',
       select: 'name email'
@@ -110,305 +111,163 @@ async function walletList(req: Request, res: Response) {
   });
 }
 
-// async function walletGet(req: Request, res: Response) {
-//     // Aktif accessor'ları bul
-//     const accessors = await WalletAccessor.find({ 
-//       user: req.user?.id,
-//       status: 'active'
-//     });
-//     const accessorWalletIds = accessors.map(accessor => accessor.wallet);
-
-//     // Wallet'ı bul ve ilişkili verileri getir
-//     const wallet = await Wallet.findOne({
-//       _id: req.params.id,
-//       $or: [
-//         { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
-//         { _id: { $in: accessorWalletIds } } // Kullanıcı accessor'u mu?
-//       ]
-//     })
-//     .populate('walletType')
-//     .populate('walletBalances')
-//     .populate({
-//       path: 'user',
-//       select: 'name email' // Sadece gerekli user bilgilerini getir
-//     });
-
-//     if (!wallet) {
-//       return res.response({
-//         status: 'error',
-//         code: 404,
-//         message: 'Wallet not found or access denied',
-//       });
-//     }
-
-//     // Wallet'ın tüm accessor'larını bul
-//     const walletAccessors = await WalletAccessor.find({
-//       wallet: wallet._id,
-//       status: 'active'
-//     })
-//     .populate({
-//       path: 'user',
-//       select: 'name email'
-//     });
-
-//     // Response için wallet objesini hazırla
-//     const walletResponse = {
-//       ...wallet.toObject(),
-//       isOwner: wallet.user._id.toString() === req.user?.id,
-//       accessors: walletAccessors
-//     };
-
-//     // Query helper'ı uygula (gerekirse)
-//     queryHelper({
-//       queries: { ...req.query },
-//       query: wallet
-//     });
-
-//     return res.response({
-//       status: 'success',
-//       code: 200,
-//       message: 'Wallet fetched successfully',
-//       data: walletResponse,
-//     });
-//  }
-// Performans odaklı alternatif versiyon
 async function walletGet(req: Request, res: Response) {
-  const [data] = await Wallet.aggregate([
-    // Initial match
-    {
-      $match: {
-        _id: new mongoose.Types.ObjectId(req.params.id),
-        $or: [
-          { user: new mongoose.Types.ObjectId(req.user?.id) },
-          {
-            _id: {
-              $in: await WalletAccessor.distinct('wallet', {
-                user: new mongoose.Types.ObjectId(req.user?.id),
-                status: 'active'
-              })
-            }
-          }
-        ]
-      }
-    },
+  const walletId = req.params.id;
+  const userId = req.user?.id;
 
-    // User Lookup
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'userArray'
-      }
-    },
-    {
-      $unwind: {
-        path: '$userArray',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    // User objesini yapılandır
-    {
-      $addFields: {
-        user: {
-          id: { $toString: '$userArray._id' },
-          name: '$userArray.name',
-          email: '$userArray.email'
-        }
-      }
-    },
+  // Kullanıcının erişebileceği wallet erişimcilerini alın
+  const accessibleWalletIds = await WalletAccessor.find({
+    user: userId,
+    status: 'active',
+  }).distinct('wallet');
 
-    // WalletType Lookup
-    {
-      $lookup: {
-        from: 'wallettypes',
-        localField: 'walletType',
-        foreignField: '_id',
-        as: 'walletType'
-      }
-    },
-    {
-      $unwind: {
-        path: '$walletType',
-        preserveNullAndEmptyArrays: true
-      }
-    },
+  // Wallet'ı bulun ve ilişkili alanları populate edin
+  const wallet = await Wallet.findOne({
+    _id: walletId,
+    $or: [{ user: userId }, { _id: { $in: accessibleWalletIds } }],
+  })
+    .populate('user', 'name email') // User bilgilerini sadece name ve email ile getir
+    .populate('walletBalances')
+    .populate('walletType')
+    .populate({
+      path: 'accessors',
+      populate: { path: 'user', select: 'name email' }, // Accessor'ların user bilgilerini ekle
+    })
 
-    // WalletBalances Lookup
-    {
-      $lookup: {
-        from: 'walletbalances',
-        localField: 'walletBalances',
-        foreignField: '_id',
-        as: 'walletBalances'
-      }
-    },
-
-    // Accessors Lookup
-    {
-      $lookup: {
-        from: 'walletaccessors',
-        let: { walletId: '$_id' },
-        pipeline: [
-          {
-            $match: {
-              $expr: { $eq: ['$wallet', '$$walletId'] }
-            }
-          },
-          // Accessor'ların user bilgilerini getir
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'user',
-              foreignField: '_id',
-              as: 'userArray'
-            }
-          },
-          {
-            $unwind: {
-              path: '$userArray',
-              preserveNullAndEmptyArrays: true
-            }
-          },
-          // Her bir accessor için user objesini yapılandır
-          {
-            $addFields: {
-              id: { $toString: '$_id' },
-              user: {
-                id: { $toString: '$userArray._id' },
-                name: '$userArray.name',
-                email: '$userArray.email'
-              }
-            }
-          },
-          // Gereksiz fieldları kaldır
-          {
-            $project: {
-              _id: 0,
-              userArray: 0,
-              __v: 0
-            }
-          }
-        ],
-        as: 'accessors'
-      }
-    },
-
-    // Genel Transform ve Cleanup
-    {
-      $addFields: {
-        id: { $toString: '$_id' },
-        'walletType.id': { $toString: '$walletType._id' },
-        isOwner: {
-          $eq: ['$userArray._id', new mongoose.Types.ObjectId(req.user?.id)]
-        },
-        'walletBalances': {
-          $map: {
-            input: '$walletBalances',
-            as: 'balance',
-            in: {
-              id: { $toString: '$$balance._id' },
-              amount: '$$balance.amount',
-              currency: '$$balance.currency',
-              createdAt: '$$balance.createdAt',
-              updatedAt: '$$balance.updatedAt'
-            }
-          }
-        }
-      }
-    },
-
-    // Final cleanup
-    {
-      $project: {
-        _id: 0,
-        __v: 0,
-        userArray: 0,
-        'walletType._id': 0,
-        'walletType.__v': 0,
-        'walletBalances._id': 0,
-        'walletBalances.__v': 0
-      }
-    }
-  ]);
-
-  if (!data) {
+  if (!wallet) {
     throw new ApiError(
       'ResourceNotFound',
-      'Wallet not found or access denied',
-    )
+      'Wallet not found or access denied'
+    );
   }
 
   return res.response({
     status: 'success',
     code: 200,
     message: 'Wallet fetched successfully',
-    data,
+    data: wallet,
   });
 }
 
 async function walletUpdate(req: Request, res: Response) {
-  const { walletBalances = [], ...restBody } = req.body
+  const { walletBalances = [], accessors = [], ...bodyData } = req.body
 
-  const accessors = await WalletAccessor.find({ user: req.user?.id })
-  const accessorWalletIds = accessors.map(accessor => accessor.id);
+  //! get accessor ids from db
+  const dbAccessors = await WalletAccessor.find({ user: req.user?.id })
+  const dbAccessorsIds = dbAccessors.map(dbAccessor => dbAccessor.id);
 
-  if (walletBalances.length) {
-    const wallet = await Wallet.findOne({
+  //! update wallet
+  const wallet = await Wallet.findOneAndUpdate(
+    {
       _id: req.params.id,
       $or: [
         { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
-        { accessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
+        { accessors: { $in: dbAccessorsIds } } // Kullanıcı accessors'da mı?
       ]
-    });
+    },
+    bodyData,
+    { new: true }
+  );
 
-    if (!wallet) {
-      throw new ApiError(
-        'ResourceNotFound',
-        'Wallet not found',
-      );
+  if (!wallet) {
+    throw new ApiError('ResourceNotFound', 'Walllet not found');
+  }
+
+  if (walletBalances.length) {
+    for (const item of walletBalances) {
+      if (item.action === 'initial') {
+        // Yeni item ekle
+        await WalletBalance.create({
+          ...item,
+          wallet: wallet.id,
+          user: req.user?.id,
+        });
+      } else if (item.action === 'updated') {
+        // Mevcut item güncelle
+        await WalletBalance.findOneAndUpdate(
+          { _id: item.id, wallet: wallet.id },
+          item,
+          { new: true, runValidators: true }
+        );
+      } else if (item.action === 'deleted') {
+        // Item sil
+        await WalletBalance.findOneAndDelete({
+          _id: item.id,
+          wallet: wallet.id,
+        });
+      }
     }
-
-    const walletBalanceIds = wallet.walletBalances.map(balance => balance._id);
-    await WalletBalance.deleteMany({ _id: { $in: walletBalanceIds } });
-    const savedWalletBalances = await WalletBalance.insertMany(walletBalances);
-    restBody.walletBalances = savedWalletBalances.map(balance => balance.id);
   }
 
-  const data = await Wallet.findOneAndUpdate({
-    _id: req.params.id,
-    $or: [
-      { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
-      { accessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
-    ]
-  }, restBody, { new: true });
+  // Gelen accessors listesini ekle
+  if (accessors.length) {
+    await WalletAccessor.deleteMany({ wallet: wallet.id });
 
-  if (!data) {
-    throw new ApiError(
-      'ResourceNotFound',
-      'Wallet not found',
-    );
+    for (const accessor of accessors) {
+      if (accessor.action === 'initial') {
+        const user = await User.findOne({ email: accessor.user.email });
+
+        if (!user) break;
+
+        // Yeni item ekle
+        await WalletAccessor.create({
+          status: 'pending',
+          wallet: wallet._id,
+          user: user?.id,
+        });
+
+      } else if (accessor.action === 'updated') {
+        // maybe later we can have
+      } else if (accessor.action === 'deleted') {
+        // Item bul
+        const walletAccessor = await WalletAccessor.findOne({
+          _id: accessor.id,
+          wallet: wallet.id,
+        });
+
+        const isUserSelf = walletAccessor?.user === req.user.id;
+        const isUserWalletOwner = wallet.user === req.user.id;
+
+        if (isUserSelf || isUserWalletOwner) {
+          await walletAccessor?.deleteOne()
+          await walletAccessor?.save();
+        }
+      }
+    }
   }
+
+  // Güncellenmiş wallet'i döndür
+  const updatedWallet = await Wallet.findById(wallet._id)
+    .populate('user', 'name email') // User bilgilerini sadece name ve email ile getir
+    .populate('walletBalances')
+    .populate('walletType')
+    .populate({
+      path: 'accessors',
+      populate: { path: 'user', select: 'name email' }, // Accessor'ların user bilgilerini ekle
+    })
 
   return res.response({
     status: 'success',
     code: 200,
     message: 'Wallet updated successfully',
-    data
+    data: updatedWallet,
   });
+
 }
 
 async function walletDelete(req: Request, res: Response) {
+  //! get wallet accessors
   const accessors = await WalletAccessor.find({ user: req.user?.id })
   const accessorWalletIds = accessors.map(accessor => accessor.id);
 
-  const data = await Wallet.findOneAndDelete({
+  //! get wallet
+  const data = await Wallet.findOne({
     _id: req.params.id,
     $or: [
       { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
       { accessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
     ]
-  });
+  })
 
   if (!data) {
     throw new ApiError(
@@ -416,6 +275,15 @@ async function walletDelete(req: Request, res: Response) {
       'Wallet not found',
     );
   }
+
+  //! delete wallet balances
+  await WalletBalance.find({ wallet: req.params.id }).deleteMany();
+
+  //! delete wallet accessors
+  await WalletAccessor.find({ wallet: req.params.id }).deleteMany();
+
+  //! delete wallet
+  await data.deleteOne();
 
   return res.response({
     status: 'success',
@@ -435,14 +303,16 @@ async function walletTransactionList(req: Request, res: Response) {
       { user: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
       { accessors: { $in: accessorWalletIds } } // Kullanıcı accessors'da mı?
     ]
-  }).populate('walletBalances');
+  })
+
   if (!wallet) {
     throw new ApiError(
       'ResourceNotFound',
       'Wallet not found',
     );
   }
-  const walletBalanceIds = wallet.walletBalances.map(balance => balance._id);
+  const walletBalances = await WalletBalance.find({ wallet: wallet.id });
+  const walletBalanceIds = walletBalances.map(balance => balance._id);
 
   const totalItems = await Transaction.countDocuments({
     $or: [

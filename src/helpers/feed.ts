@@ -1,7 +1,6 @@
 import { Transaction } from '../model/lumara/transaction'
 import { TransactionBrand } from '../model/lumara/transaction-brand'
 import { TransactionCategory } from '../model/lumara/transaction-category'
-import { TransactionValue } from '../model/lumara/transaction-value'
 import { User } from '../model/lumara/user'
 
 import { brands } from '../constants/brands'
@@ -51,14 +50,6 @@ async function feed() {
   const allTransactionCategories = await TransactionCategory.insertMany(categoriesData)
   console.info('Categories are fed')
 
-
-  const transactionsValuesMap = allTransactionCategories.map(t => ({
-    amount: getRandomNumber({ min: 10, max: 50 }),
-    currency: "USD"
-  }))
-
-  const transactionsValues = await TransactionValue.insertMany(transactionsValuesMap);
-
   const transactions = allTransactionCategories.map((t, index) => ({
     type: "expense",
     date: generateRandomDate({ minYear: 2015, maxYear: 2023 }),
@@ -66,12 +57,13 @@ async function feed() {
     wallet: ME_WALLET_ID,
     walletBalance: ME_WALLET_BALANCE_ID,
     transactionCategory: allTransactionCategories[index].id,
-    transactionValue: transactionsValues[index].id,
+    transactionAmount: getRandomNumber({ min: 10, max: 50 }),
+    transactionCurrency: "USD",
   }))
 
   await Transaction.insertMany(transactions)
 
-  const recurringTransactionsMap = [
+  const subscriptionTransactionsMap = [
     "daily",
     "daily",
     "daily",
@@ -92,12 +84,13 @@ async function feed() {
     wallet: ME_WALLET_ID,
     walletBalance: ME_WALLET_BALANCE_ID,
     transactionCategory: allTransactionCategories[i].id,
-    transactionValue: transactionsValues[i].id,
-    recurringType: r,
-    isRecurring: true,
+    transactionAmount: getRandomNumber({ min: 10, max: 50 }),
+    transactionCurrency: "USD",
+    subscriptionType: r,
+    subscription: true,
   }))
 
-  await Transaction.insertMany(recurringTransactionsMap)
+  await Transaction.insertMany(subscriptionTransactionsMap)
 }
 
 feed()

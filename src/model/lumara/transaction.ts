@@ -35,28 +35,6 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     maxlength: VALIDATION_RULES.input.max,
   },
-  installments: {
-    type: Number,
-    default: 1,
-    min: 1,
-  },
-  isRecurring: {
-    type: Boolean,
-    default: false,
-  },
-  recurringType: {
-    type: String,
-    enum: ['daily', 'weekly', 'monthly', 'yearly'],
-    required: function () {
-      return (this as { isRecurring: boolean }).isRecurring;
-    },
-    validate: {
-      validator: function (value: string) {
-        return !(this as { isRecurring: boolean }).isRecurring || value.length > 0;
-      },
-      message: 'Recurring type is required when the transaction is recurring.'
-    }
-  },
   date: {
     type: Date,
     required: true
@@ -87,10 +65,32 @@ const transactionSchema = new mongoose.Schema({
     required: true,
   },
 
-  transactionValue: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'TransactionValue',
+  // subscriptionRecurrence: {
+  //   type: Number,
+  //   default: 1,
+  //   min: 1,
+  // },
+  // subscriptionType: {
+  //   type: String,
+  //   enum: ['daily', 'weekly', 'monthly', 'yearly'],
+  //   required: function () {
+  //     return (this as { subscription: boolean }).subscription;
+  //   },
+  //   validate: {
+  //     validator: function (value: string) {
+  //       return !(this as { subscription: boolean }).subscription || value.length > 0;
+  //     },
+  //     message: 'Subscription type is required when the transaction is subscription.'
+  //   }
+  // },
+
+  transactionAmount: {
+    type: Number,
     required: true,
+  },
+  transactionCurrency: {
+    type: String,
+    default: DEFAULTS.currency,
   },
   transactionCategory: {
     type: mongoose.Schema.Types.ObjectId,

@@ -6,12 +6,15 @@ import { createObjectIdSchema } from './general'
 
 // Önce wishlist item için bir sub-schema oluşturalım
 const wishlistItemSchema = z.object({
+  id: z.string().optional(),
+
   name: z.string({
     required_error: ERROR_MESSAGE.required('Name'),
     message: ERROR_MESSAGE.string('Name')
   })
     .min(VALIDATION_RULES.input.min, ERROR_MESSAGE.stringMin('Name'))
-    .max(VALIDATION_RULES.input.mid, ERROR_MESSAGE.stringMax('Name')),
+    .max(VALIDATION_RULES.input.mid, ERROR_MESSAGE.stringMax('Name'))
+    .optional(),
 
   link: z.string({
     message: ERROR_MESSAGE.string('Link')
@@ -33,8 +36,27 @@ const wishlistItemSchema = z.object({
     .optional(),
 
   reservedBy: createObjectIdSchema('User').optional().nullable(),
-  reservedAt: z.date().optional().nullable()
+  reservedAt: z.date().optional().nullable(),
+
+  action: z.enum(['initial', 'updated', 'deleted']).optional()
 })
+
+// Accessor işlemleri için
+export const wishlistAccessorCreateSchema = z.object({
+  user: z.object({
+    email: z.string({
+      required_error: ERROR_MESSAGE.required('Email'),
+      message: ERROR_MESSAGE.string('Email')
+    })
+      .email(ERROR_MESSAGE.invalid('Email'))
+  }),
+  action: z.enum(['initial', 'updated', 'deleted']).optional()
+})
+
+export const wishlistAccessorUpdateSchema = z.object({
+  status: z.enum(['active', 'pending']),
+  action: z.enum(['initial', 'updated', 'deleted']).optional()
+}).strict()
 
 // Create schema
 export const wishlistCreateSchema = z.object({
@@ -54,7 +76,8 @@ export const wishlistCreateSchema = z.object({
   isPublic: z.boolean().default(false),
   isReservable: z.boolean().default(false),
 
-  items: z.array(wishlistItemSchema)
+  accessors: z.array(wishlistAccessorCreateSchema).optional().default([]),
+  items: z.array(wishlistItemSchema).optional()
     .default([]),
 }).strict()
 
@@ -68,18 +91,5 @@ export const wishlistItemUpdateSchema = z.object({
   price: wishlistItemSchema.shape.price.optional(),
   image: wishlistItemSchema.shape.image.optional(),
   reservedBy: wishlistItemSchema.shape.reservedBy.optional(),
-  reservedAt: wishlistItemSchema.shape.reservedAt.optional()
-}).strict()
-
-// Accessor işlemleri için
-export const wishlistAccessorCreateSchema = z.object({
-  email: z.string({
-    required_error: ERROR_MESSAGE.required('Email'),
-    message: ERROR_MESSAGE.string('Email')
-  })
-    .email(ERROR_MESSAGE.invalid('Email'))
-}).strict()
-
-export const wishlistAccessorUpdateSchema = z.object({
-  status: z.enum(['active', 'pending'])
+  reservedAt: wishlistItemSchema.shape.reservedAt.optional(),
 }).strict()

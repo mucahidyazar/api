@@ -40,8 +40,8 @@ app.use(
     origin: 'http://localhost:3000',
   }),
 )
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true, limit: '1mb' }))
+app.use(express.json({ limit: '1mb' }))
 
 const httpServer = createServer(app)
 
