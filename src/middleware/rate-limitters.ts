@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit'
 
 // Rate limiter middleware
 export const signUpMiddleware = rateLimit({
@@ -7,6 +7,6 @@ export const signUpMiddleware = rateLimit({
   message: {
     status: 'error',
     code: 429,
-    message: 'Too many accounts created. Please try again later.'
-  }
-});
+    message: 'Too many accounts created. Please try again later.',
+  },
+})

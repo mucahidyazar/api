@@ -1,12 +1,16 @@
-import { Query } from "mongoose";
+import { Query } from 'mongoose'
 
 type TGetPaginationMetadataArgs = {
-  limit: number;
-  page: number;
-  totalItems: number;
+  limit: number
+  page: number
+  totalItems: number
 }
-export function getPaginationMetadata({ limit, page, totalItems }: TGetPaginationMetadataArgs) {
-  const totalPages = Math.ceil(totalItems / limit);
+export function getPaginationMetadata({
+  limit,
+  page,
+  totalItems,
+}: TGetPaginationMetadataArgs) {
+  const totalPages = Math.ceil(totalItems / limit)
 
   return {
     page,
@@ -22,28 +26,28 @@ export function getPaginationMetadata({ limit, page, totalItems }: TGetPaginatio
 }
 
 type ListRequestQuery = {
-  page?: string;
-  limit?: string;
-  populateFields?: string;
-};
+  page?: string
+  limit?: string
+  populateFields?: string
+}
 
 type TQueryHelperArgs = {
-  queries: ListRequestQuery & { totalItems?: number };
+  queries: ListRequestQuery & { totalItems?: number }
   query: Query<any, any>
 }
 export function queryHelper({ queries, query }: TQueryHelperArgs) {
   const populateFields = queries.populateFields
     ? queries.populateFields.split(',')
-    : [];
+    : []
   populateFields.forEach(field => {
-    query.populate(field);
-  });
+    query.populate(field)
+  })
 
-  let metadata;
+  let metadata
   if (queries.totalItems) {
-    const page = parseInt(queries.page || '1');
-    const limit = parseInt(queries.limit || '50');
-    const skip = (page - 1) * limit;
+    const page = parseInt(queries.page || '1')
+    const limit = parseInt(queries.limit || '50')
+    const skip = (page - 1) * limit
 
     query.skip(skip).limit(limit)
 
@@ -55,6 +59,6 @@ export function queryHelper({ queries, query }: TQueryHelperArgs) {
   }
 
   return {
-    metadata
+    metadata,
   }
 }

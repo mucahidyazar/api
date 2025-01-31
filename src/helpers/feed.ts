@@ -1,7 +1,7 @@
-import { Transaction } from '../model/lumara/transaction'
-import { TransactionBrand } from '../model/lumara/transaction-brand'
-import { TransactionCategory } from '../model/lumara/transaction-category'
-import { User } from '../model/lumara/user'
+import { Transaction } from '../model/transaction'
+import { TransactionBrand } from '../model/transaction-brand'
+import { TransactionCategory } from '../model/transaction-category'
+import { User } from '../model/user'
 
 import { brands } from '../constants/brands'
 import { categories } from '../constants/categories'
@@ -42,50 +42,51 @@ async function feed() {
     usageCount: 0,
     user: adminUser.id,
     icon: c.icon,
-    color: getRandomPastelColor()
+    color: getRandomPastelColor(),
   }))
 
   await TransactionBrand.insertMany(brandsData)
   console.info('Brands are fed')
-  const allTransactionCategories = await TransactionCategory.insertMany(categoriesData)
+  const allTransactionCategories =
+    await TransactionCategory.insertMany(categoriesData)
   console.info('Categories are fed')
 
   const transactions = allTransactionCategories.map((t, index) => ({
-    type: "expense",
+    type: 'expense',
     date: generateRandomDate({ minYear: 2015, maxYear: 2023 }),
     user: ME_ID,
     wallet: ME_WALLET_ID,
     walletBalance: ME_WALLET_BALANCE_ID,
     transactionCategory: allTransactionCategories[index].id,
     transactionAmount: getRandomNumber({ min: 10, max: 50 }),
-    transactionCurrency: "USD",
+    transactionCurrency: 'USD',
   }))
 
   await Transaction.insertMany(transactions)
 
   const subscriptionTransactionsMap = [
-    "daily",
-    "daily",
-    "daily",
-    "weekly",
-    "weekly",
-    "monthly",
-    "monthly",
-    "monthly",
-    "monthly",
-    "yearly",
-    "yearly",
-    "yearly",
-    "yearly"
+    'daily',
+    'daily',
+    'daily',
+    'weekly',
+    'weekly',
+    'monthly',
+    'monthly',
+    'monthly',
+    'monthly',
+    'yearly',
+    'yearly',
+    'yearly',
+    'yearly',
   ].map((r, i) => ({
-    type: "expense",
+    type: 'expense',
     date: generateRandomDate({ minYear: 2015, maxYear: 2023 }),
     user: ME_ID,
     wallet: ME_WALLET_ID,
     walletBalance: ME_WALLET_BALANCE_ID,
     transactionCategory: allTransactionCategories[i].id,
     transactionAmount: getRandomNumber({ min: 10, max: 50 }),
-    transactionCurrency: "USD",
+    transactionCurrency: 'USD',
     subscriptionType: r,
     subscription: true,
   }))

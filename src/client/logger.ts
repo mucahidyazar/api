@@ -1,7 +1,5 @@
 import winston from 'winston'
 
-// import { CONFIG } from '../config'
-
 const customLevels = {
   levels: {
     trace: 5,

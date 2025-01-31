@@ -1,8 +1,7 @@
 import mongoose from 'mongoose'
 
-import { logger } from '../client'
-
-import { CONFIG } from './config'
+import { logger } from '@/client'
+import { CONFIG } from '@/config'
 
 const connectDB = async () => {
   try {
@@ -13,12 +12,12 @@ const connectDB = async () => {
     await mongoose.set('toJSON', {
       virtuals: true,
       transform: (_, converted) => {
-        converted.id = converted._id;
-        delete converted._id;
-        delete converted.__v;
-        return converted;
-      }
-    });
+        converted.id = converted._id
+        delete converted._id
+        delete converted.__v
+        return converted
+      },
+    })
     logger.info('MongoDB strictQuery & toJSON set')
   } catch (error: any) {
     logger.error(`Error: ${error.message}`)

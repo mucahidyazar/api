@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
+import { createObjectIdSchema } from '@/validation/general'
 import { DEFAULTS, ERROR_MESSAGE, VALIDATION_RULES } from '@/constants'
-import { createObjectIdSchema } from './general'
 
 const transactionBrandSchema = z.object({
   name: z
@@ -27,11 +27,10 @@ const transactionCategorySchema = z.object({
 
 const transactionCategoryUpdateSchema = transactionCategorySchema.partial()
 
-
 const transactionBalanceSchema = z.object({
   amount: z.number().default(0),
   currency: z.string().default(DEFAULTS.currency),
-  rate: z.number().min(0).default(1)
+  rate: z.number().min(0).default(1),
 })
 
 const transactionSchema = z.object({
@@ -39,18 +38,25 @@ const transactionSchema = z.object({
   description: z
     .string({ message: ERROR_MESSAGE.string('Description') })
     .min(VALIDATION_RULES.input.min, ERROR_MESSAGE.stringMin('Description'))
-    .max(VALIDATION_RULES.input.max, ERROR_MESSAGE.stringMax('Description', VALIDATION_RULES.input.max))
+    .max(
+      VALIDATION_RULES.input.max,
+      ERROR_MESSAGE.stringMax('Description', VALIDATION_RULES.input.max),
+    )
     .optional(),
-  link: z.string({ message: ERROR_MESSAGE.string('Link') })
+  link: z
+    .string({ message: ERROR_MESSAGE.string('Link') })
     .min(VALIDATION_RULES.input.min, ERROR_MESSAGE.stringMin('Link'))
-    .max(VALIDATION_RULES.input.max, ERROR_MESSAGE.stringMax('Link', VALIDATION_RULES.input.max))
+    .max(
+      VALIDATION_RULES.input.max,
+      ERROR_MESSAGE.stringMax('Link', VALIDATION_RULES.input.max),
+    )
     .optional(),
   subscriptionRecurrence: z.number().min(1).default(1),
   subscription: z.boolean().default(false),
   subscriptionType: z.enum(['daily', 'weekly', 'monthly', 'yearly']).optional(),
   date: z.string().or(z.date()),
   transactionAmount: z.number().positive({
-    message: 'Amount must be a positive number.'
+    message: 'Amount must be a positive number.',
   }),
   transactionCurrency: z
     .string({ message: 'Please select a currency.' })
@@ -62,7 +68,7 @@ const transactionSchema = z.object({
   wallet: createObjectIdSchema('Wallet'),
   walletBalance: createObjectIdSchema('WalletBalance'),
   transactionCategory: createObjectIdSchema('TransactionCategory').optional(),
-  transactionBrand: createObjectIdSchema('TransactionBrand').optional()
+  transactionBrand: createObjectIdSchema('TransactionBrand').optional(),
 })
 
 const transactionUpdateSchema = transactionSchema.partial()
@@ -73,5 +79,5 @@ export {
   transactionCategorySchema,
   transactionCategoryUpdateSchema,
   transactionSchema,
-  transactionUpdateSchema
+  transactionUpdateSchema,
 }

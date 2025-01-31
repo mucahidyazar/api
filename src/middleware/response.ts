@@ -1,17 +1,19 @@
-import { TResponseOptions } from '@/common';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'
 
-export function middlewareResponse(_req: Request, res: Response, next: NextFunction) {
-  res.response = function ({ status, code = status === 'success' ? 200 : 500, ...options }: TResponseOptions) {
-    const baseResponse = {
-      status,
-      code,
-      timestamp: new Date().toISOString(),
-      ...options
-    };
-    res.contentType('application/json');
-    return res.status(code).json(baseResponse);
-  };
+import { ExtendedApiResponse } from '@/utils'
 
-  next();
+export function middlewareResponse(
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
+  res.response = function (response: ExtendedApiResponse): void {
+    res.contentType('application/json')
+    const { statusCode, ...apiResponse } =
+      response as unknown as ExtendedApiResponse
+
+    res.status(statusCode).json(apiResponse)
+  }
+
+  next()
 }

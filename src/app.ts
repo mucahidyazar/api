@@ -1,5 +1,5 @@
-import './client/env'
-import './config/db'
+import '@/client/env'
+import '@/config/db'
 
 import { createServer } from 'http'
 
@@ -8,27 +8,26 @@ import express from 'express'
 import kill from 'kill-port'
 import { Server, Socket } from 'socket.io'
 
-
-import { logger } from './client'
-import { CONFIG } from './config'
-import { middlewareError, middlewareAuth, middlewareResponse } from './middleware'
+import { logger } from '@/client'
+import { CONFIG } from '@/config'
 import {
-  userRouter,
+  middlewareError,
+  middlewareAuth,
+  middlewareResponse,
+} from '@/middleware'
+import {
   authRouter,
+  userRouter,
+  walletRouter,
+  settingRouter,
+  wishlistRouter,
+  pushTokenRouter,
+  transactionRouter,
   calculationRouter,
   notificationRouter,
-  linkPreviewRouter,
-  pushTokenRouter,
-  settingRouter,
-  socketRouter,
-  stockRouter,
   transactionBrandRouter,
   transactionCategoryRouter,
-  transactionRouter,
-  urlShortenerRouter,
-  walletRouter,
-  wishlistRouter,
-} from './routes/v1'
+} from '@/routes/v1'
 
 logger.debug(`app.ts -> env: ${process.env.NODE_ENV}`)
 
@@ -78,10 +77,6 @@ app.use(middlewareAuth, transactionBrandRouter)
 app.use(middlewareAuth, transactionCategoryRouter)
 app.use(middlewareAuth, walletRouter)
 app.use(middlewareAuth, wishlistRouter)
-app.use(linkPreviewRouter)
-app.use(socketRouter)
-app.use(stockRouter)
-app.use(urlShortenerRouter)
 
 app.use(middlewareError)
 
@@ -95,7 +90,6 @@ io.on('connection', (socket: Socket) => {
     logger.info(`Kullanıcı ${user} kendi kanalına katıldı.`)
   })
 })
-
 
 httpServer.listen(CONFIG.port)
 

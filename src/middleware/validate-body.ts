@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
-import { AnyZodObject, ZodError } from 'zod';
+import { AnyZodObject } from 'zod'
+import { Request, Response, NextFunction } from 'express'
 
-export const middlewareValidateBody = (schema: AnyZodObject) =>
+export const middlewareValidateBody =
+  (schema: AnyZodObject) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       req.body = await schema.parseAsync(req.body)
@@ -10,4 +11,4 @@ export const middlewareValidateBody = (schema: AnyZodObject) =>
       console.log('req.body', req.body)
       next(error) // Hatayı error handler'a gönder
     }
-  };
+  }
