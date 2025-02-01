@@ -85,27 +85,26 @@ export type TBrand = {
 
 export type TBrandName = 'amazon' | 'mediamarkt'
 
-export type TResponseStatus = 'success' | 'error';
-
 interface TBaseResponse {
-  status: TResponseStatus;
-  code: number;
-  message: string;
+  status: TResponseStatus
+  code: number
+  message: string
 }
 
 interface TSuccessResponse extends TBaseResponse {
-  status: 'success';
-  data: unknown;
-  metadata?: Record<string, unknown>;
-  links?: Record<string, string>;
+  status: 'success'
+  data: unknown
+  metadata?: Record<string, unknown>
+  links?: Record<string, string>
 }
 
 interface TErrorResponse extends TBaseResponse {
-  status: 'error';
-  details?: unknown;
-  errorCode?: number; // API error code için
+  status: 'error'
+  details?: unknown
+  errorCode?: number // API error code için
 }
 
-type TResponseOptions = TSuccessResponse | TErrorResponse;
+type TResponseOptions = TSuccessResponse | TErrorResponse
 
 export { TResponseOptions }
+export type TResponseStatus = 'success' | 'error';

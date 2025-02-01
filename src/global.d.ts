@@ -1,7 +1,4 @@
-// res.success = (data, metadata = {}, links = {}) => {
-// res.error = (message, code = 400, details = {}) => {
-
-import { TResponseOptions } from "./common"
+import { ExtendedApiResponse } from '@/utils'
 
 declare global {
   namespace Express {
@@ -9,8 +6,9 @@ declare global {
       user?: IUser
       io?: SocketIO.Server
     }
+
     interface Response {
-      response: (options: TResponseOptions) => void
+      response: (response: ExtendedApiResponse) => void
     }
   }
 }

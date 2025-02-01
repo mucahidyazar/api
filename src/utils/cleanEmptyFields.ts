@@ -12,7 +12,7 @@ type Options = {
 
 function cleanEmptyFields<T extends Record<string, any>>(
   value: T,
-  options: Partial<Options> = {}
+  options: Partial<Options> = {},
 ): Partial<T> {
   const defaultOptions: Options = {
     emptyArray: true,
@@ -22,23 +22,26 @@ function cleanEmptyFields<T extends Record<string, any>>(
     isUndefined: true,
     isNaN: true,
     isZero: false,
-    isFalse: false
+    isFalse: false,
   }
 
   const mergedOptions: Options = { ...defaultOptions, ...options }
 
   function isEmptyValue(val: any): boolean {
-    return (
-      (mergedOptions.emptyArray && Array.isArray(val) && val.length === 0) ||
+    return ((mergedOptions.emptyArray &&
+      Array.isArray(val) &&
+      val.length === 0) ||
       (mergedOptions.emptyString && val === '') ||
-      (mergedOptions.emptyObject && typeof val === 'object' && val !== null && Object.keys(val).length === 0) ||
+      (mergedOptions.emptyObject &&
+        typeof val === 'object' &&
+        val !== null &&
+        Object.keys(val).length === 0) ||
       (mergedOptions.isNull && val === null) ||
       (mergedOptions.isUndefined && val === undefined) ||
       (mergedOptions.isNaN && Number.isNaN(val)) ||
       (mergedOptions.isZero && val === 0) ||
       (mergedOptions.isFalse && val === false) ||
-      (mergedOptions.customEmpty && mergedOptions.customEmpty(val))
-    ) as any
+      (mergedOptions.customEmpty && mergedOptions.customEmpty(val))) as any
   }
 
   function cleanRecursively(obj: any, seen = new WeakMap()): any {

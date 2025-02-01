@@ -1,9 +1,12 @@
 import '@/config/db'
+import {
+  Notification,
+  NotificationType,
+  ActionType,
+} from '@/model/notification'
 
-import { Notification, NotificationType, ActionType } from "@/model/lumara/notification";
-
-const userId = '672db729e528e8154e8e660a';
-const wishListAccessorId = '6733c2bcd8ee3bfa22192aac';
+const userId = '672db729e528e8154e8e660a'
+const wishListAccessorId = '6733c2bcd8ee3bfa22192aac'
 
 export async function feed() {
   await Notification.insertMany([
@@ -12,7 +15,7 @@ export async function feed() {
       type: NotificationType.SIMPLE,
       title: 'Welcome!',
       body: 'Welcome to our app',
-      user: userId
+      user: userId,
     },
     // Davet notification'ı
     {
@@ -22,8 +25,8 @@ export async function feed() {
       user: userId,
       invite: {
         type: 'WishlistAccessor',
-        resource: wishListAccessorId
-      }
+        resource: wishListAccessorId,
+      },
     },
     // Action notification'ı
     {
@@ -33,8 +36,8 @@ export async function feed() {
       user: userId,
       action: {
         type: ActionType.REDIRECT,
-        url: '/settings/profile'
-      }
+        url: '/settings/profile',
+      },
     },
     // Reklam notification'ı
     {
@@ -45,14 +48,14 @@ export async function feed() {
       image: {
         url: 'https://picsum.photos/800/400',
         alt: 'Premium features',
-        dimensions: { width: 800, height: 400 }
+        dimensions: { width: 800, height: 400 },
       },
       action: {
         type: ActionType.REDIRECT,
-        url: '/premium'
-      }
-    }
-  ]);
+        url: '/premium',
+      },
+    },
+  ])
 }
 
-feed();
+feed()

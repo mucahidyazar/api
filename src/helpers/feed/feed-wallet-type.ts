@@ -1,6 +1,5 @@
-import '../../config/db'
-
-import { WalletType } from '../../model/lumara/wallet-type'
+import '@/config/db'
+import { WalletType } from '@/model/wallet-type'
 
 async function feed() {
   await WalletType.insertMany([

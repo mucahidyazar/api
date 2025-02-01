@@ -1,4 +1,3 @@
-
 export const pastelColors = {
   '#F57D30': '#F57D30',
   '#F68A43': '#F68A43',
@@ -18,6 +17,6 @@ export const pastelColors = {
 }
 
 export function getRandomPastelColor() {
-  const keys = Object.keys(pastelColors) as (keyof typeof pastelColors)[];
-  return pastelColors[keys[(keys.length * Math.random()) << 0]];
+  const keys = Object.keys(pastelColors) as (keyof typeof pastelColors)[]
+  return pastelColors[keys[(keys.length * Math.random()) << 0]]
 }

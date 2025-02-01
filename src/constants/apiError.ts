@@ -95,7 +95,6 @@ export const API_ERROR = {
     message: 'Database error',
     key: 'DatabaseError',
   },
-} as const;
+} as const
 
-export type TApiError = keyof typeof API_ERROR;
-
+export type TApiError = keyof typeof API_ERROR

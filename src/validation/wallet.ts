@@ -1,23 +1,25 @@
 import { z } from 'zod'
+
+import { createObjectIdSchema } from '@/validation/general'
 import { ERROR_MESSAGE, VALIDATION_RULES } from '@/constants'
-import { createObjectIdSchema } from './general'
 
 const walletBalanceCreateSchema = z.object({
   amount: z.number().default(0),
-  currency: z.string().min(1).max(5),  // like USD, EUR
-  action: z.enum(['initial', 'updated', 'deleted']).optional()
+  currency: z.string().min(1).max(5), // like USD, EUR
+  action: z.enum(['initial', 'updated', 'deleted']).optional(),
 })
 
 // Accessor işlemleri için
 export const walletAccessorCreateSchema = z.object({
   user: z.object({
-    email: z.string({
-      required_error: ERROR_MESSAGE.required('Email'),
-      message: ERROR_MESSAGE.string('Email')
-    })
-      .email(ERROR_MESSAGE.invalid('Email'))
+    email: z
+      .string({
+        required_error: ERROR_MESSAGE.required('Email'),
+        message: ERROR_MESSAGE.string('Email'),
+      })
+      .email(ERROR_MESSAGE.invalid('Email')),
   }),
-  action: z.enum(['initial', 'updated', 'deleted']).optional()
+  action: z.enum(['initial', 'updated', 'deleted']).optional(),
 })
 
 export const walletAccessorUpdateSchema = walletAccessorCreateSchema
@@ -37,11 +39,12 @@ export const walletSchema = z.object({
     })
     .max(
       VALIDATION_RULES.input.max,
-      ERROR_MESSAGE.stringMax('Description', VALIDATION_RULES.input.max)
+      ERROR_MESSAGE.stringMax('Description', VALIDATION_RULES.input.max),
     )
     .optional(),
 
-  design: z.string()
+  design: z
+    .string()
     .min(VALIDATION_RULES.input.min)
     .max(VALIDATION_RULES.input.max)
     .default('design-0'),
@@ -52,18 +55,14 @@ export const walletSchema = z.object({
       required_error: ERROR_MESSAGE.required('Platform name'),
     })
     .min(VALIDATION_RULES.input.min, ERROR_MESSAGE.stringMin('Platform name'))
-    .max(
-      VALIDATION_RULES.input.mid,
-      ERROR_MESSAGE.stringMax('Platform name')
-    )
+    .max(VALIDATION_RULES.input.mid, ERROR_MESSAGE.stringMax('Platform name'))
     .optional(),
 
-  walletBalances: z.array(walletBalanceCreateSchema)
-    .default([]),
+  walletBalances: z.array(walletBalanceCreateSchema).default([]),
 
   walletType: createObjectIdSchema('WalletType'),
 
-  accessors: z.array(walletAccessorCreateSchema).optional().default([])
+  accessors: z.array(walletAccessorCreateSchema).optional().default([]),
 })
 
 export const walletUpdateSchema = walletSchema.partial()
