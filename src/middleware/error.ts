@@ -14,8 +14,8 @@ import mongoose from 'mongoose'
 import { ZodError } from 'zod'
 
 import { logger } from '@/client'
-import { API_ERROR, ERROR_CODE } from '@/constants'
-import { ApiResponse, ExtendedApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
+import { TApiError, ApiResponse, ExtendedApiResponse } from '@/utils'
 
 export const middlewareError: ErrorRequestHandler = (
   err: Error,
@@ -36,7 +36,8 @@ export const middlewareError: ErrorRequestHandler = (
     return res.response({
       statusCode: 400,
       apiResponse: ApiResponse.failure({
-        code: API_ERROR.InvalidInput.code,
+        type: 'InvalidParameters',
+        code: ERROR_CODE.InvalidParameters,
         message: 'Validation failed',
         detail: err.errors.map(
           (error): ErrorDetail => ({
@@ -54,7 +55,8 @@ export const middlewareError: ErrorRequestHandler = (
     return res.response({
       statusCode: 400,
       apiResponse: ApiResponse.failure({
-        code: API_ERROR.InvalidInput.code,
+        type: 'InvalidParameters',
+        code: ERROR_CODE.InvalidParameters,
         message: 'Validation failed',
         detail: Object.entries(err.errors).map(
           ([field, error]): ErrorDetail => ({
@@ -73,7 +75,8 @@ export const middlewareError: ErrorRequestHandler = (
     return res.response({
       statusCode: 400,
       apiResponse: ApiResponse.failure({
-        code: API_ERROR.InvalidFormat.code,
+        type: 'InvalidParameters',
+        code: ERROR_CODE.InvalidParameters,
         message: `Invalid ${err.path}`,
         detail: err.message,
       }),
@@ -87,7 +90,8 @@ export const middlewareError: ErrorRequestHandler = (
     return res.response({
       statusCode: 409,
       apiResponse: ApiResponse.failure({
-        code: API_ERROR.ResourceAlreadyExists.code,
+        type: 'DuplicateEntry',
+        code: ERROR_CODE.DuplicateEntry,
         message: `${field} already exists`,
         detail: err.message,
       }),
@@ -95,7 +99,8 @@ export const middlewareError: ErrorRequestHandler = (
   }
 
   // Default error response
-  const defaultError = {
+  const defaultError: TApiError = {
+    type: 'UnknownError',
     code: ERROR_CODE.UnknownError,
     message: err.message,
     detail: err.stack && isDevelopment ? err.stack : undefined,

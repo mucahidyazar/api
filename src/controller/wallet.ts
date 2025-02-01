@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { Transaction } from '@/model/transaction'
 import { User } from '@/model/user'
@@ -10,6 +10,7 @@ import { WalletBalance } from '@/model/wallet-balance'
 import { WalletType } from '@/model/wallet-type'
 import { PushNotificationService } from '@/services/push-notification'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 async function walletCreate(req: Request, res: Response) {
   const { accessors = [], ...bodyData } = req.body
@@ -126,7 +127,10 @@ async function walletGet(req: Request, res: Response) {
     })
 
   if (!wallet) {
-    throw new CustomError('Wallet not found or access denied', 404)
+    throw new ApiError(
+      'Wallet not found or access denied',
+      ERROR_CODE.EntityNotFound,
+    )
   }
 
   return res.response({
@@ -156,7 +160,10 @@ async function walletUpdate(req: Request, res: Response) {
   )
 
   if (!wallet) {
-    throw new CustomError('Wallet not found or access denied', 404)
+    throw new ApiError(
+      'Wallet not found or access denied',
+      ERROR_CODE.EntityNotFound,
+    )
   }
 
   // Gelen accessors listesini ekle
@@ -226,7 +233,10 @@ async function walletDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Wallet not found or access denied', 404)
+    throw new ApiError(
+      'Wallet not found or access denied',
+      ERROR_CODE.EntityNotFound,
+    )
   }
 
   //! delete wallet balances
@@ -257,7 +267,10 @@ async function walletTransactionList(req: Request, res: Response) {
   })
 
   if (!wallet) {
-    throw new CustomError('Wallet not found or access denied', 404)
+    throw new ApiError(
+      'Wallet not found or access denied',
+      ERROR_CODE.EntityNotFound,
+    )
   }
   const walletBalances = await WalletBalance.find({ wallet: wallet.id })
   const walletBalanceIds = walletBalances.map(balance => balance._id)
@@ -294,13 +307,13 @@ async function walletAccessorCreate(req: Request, res: Response) {
     user: req.user?.id,
   })
   if (!wallet) {
-    throw new CustomError('Wallet not found', 404)
+    throw new ApiError('Wallet not found', ERROR_CODE.EntityNotFound)
   }
 
   const isAdmin = req.user.role === 'admin'
   const isWalletOwner = wallet.user.toString() === req.user.id
   if (!isAdmin && !isWalletOwner) {
-    throw new CustomError('Unauthorized', 403)
+    throw new ApiError('Unauthorized', ERROR_CODE.Unauthorized)
   }
 
   const user = await User.findOne({ email: req.body.email })
@@ -309,7 +322,7 @@ async function walletAccessorCreate(req: Request, res: Response) {
     wallet: req.params.id,
   })
   if (accessorCheck) {
-    throw new CustomError('Accessor already exists', 400)
+    throw new ApiError('Accessor already exists', ERROR_CODE.DuplicateEntry)
   }
 
   const newAccessor = new WalletAccessor({
@@ -352,7 +365,7 @@ async function walletAccessorDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Accessor not found', 404)
+    throw new ApiError('Accessor not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -371,7 +384,7 @@ async function walletAccessorUpdate(req: Request, res: Response) {
   )
 
   if (!isValidOperation) {
-    throw new CustomError('Invalid updates', 400)
+    throw new ApiError('Invalid updates', ERROR_CODE.InvalidParameters)
   }
 
   const accessor = await WalletAccessor.findOne({
@@ -380,7 +393,7 @@ async function walletAccessorUpdate(req: Request, res: Response) {
   })
 
   if (!accessor) {
-    throw new CustomError('Accessor not found', 404)
+    throw new ApiError('Accessor not found', ERROR_CODE.EntityNotFound)
   }
 
   updates.forEach(update => (accessor[update] = req.body[update]))

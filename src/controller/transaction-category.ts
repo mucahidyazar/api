@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { TransactionCategory } from '@/model/transaction-category'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 async function transactionCategoryCreate(req: Request, res: Response) {
   const newTransactionCategory = new TransactionCategory({
@@ -35,7 +36,10 @@ async function transactionCategoryGet(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Transaction category not found', 404)
+    throw new ApiError(
+      'Transaction category not found',
+      ERROR_CODE.EntityNotFound,
+    )
   }
 
   return res.response({
@@ -52,7 +56,7 @@ async function transactionCategoryUpdate(req: Request, res: Response) {
   )
 
   if (!isValidOperation) {
-    throw new CustomError('Invalid updates', 400)
+    throw new ApiError('Invalid updates', ERROR_CODE.InvalidParameters)
   }
 
   const data = await TransactionCategory.findOneAndUpdate(
@@ -62,7 +66,10 @@ async function transactionCategoryUpdate(req: Request, res: Response) {
   )
 
   if (!data) {
-    throw new CustomError('Transaction category not found', 404)
+    throw new ApiError(
+      'Transaction category not found',
+      ERROR_CODE.EntityNotFound,
+    )
   }
 
   return res.response({
@@ -78,7 +85,10 @@ async function transactionCategoryDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Transaction category not found', 404)
+    throw new ApiError(
+      'Transaction category not found',
+      ERROR_CODE.EntityNotFound,
+    )
   }
 
   return res.response({

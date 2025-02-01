@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { TransactionBrand } from '@/model/transaction-brand'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 async function transactionBrandCreate(req: Request, res: Response) {
   const newTransactionBrand = new TransactionBrand({
@@ -36,7 +37,7 @@ async function transactionBrandGet(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Transaction brand not found', 404)
+    throw new ApiError('Transaction brand not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -53,7 +54,7 @@ async function transactionBrandUpdate(req: Request, res: Response) {
   )
 
   if (!isValidOperation) {
-    throw new CustomError('Invalid updates', 400)
+    throw new ApiError('Invalid updates', ERROR_CODE.InvalidParameters)
   }
 
   const data = await TransactionBrand.findOneAndUpdate(
@@ -63,7 +64,7 @@ async function transactionBrandUpdate(req: Request, res: Response) {
   )
 
   if (!data) {
-    throw new CustomError('Transaction brand not found', 404)
+    throw new ApiError('Transaction brand not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -79,7 +80,7 @@ async function transactionBrandDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Transaction brand not found', 404)
+    throw new ApiError('Transaction brand not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({

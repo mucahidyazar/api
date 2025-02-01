@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { Setting } from '@/model/setting'
 import { Transaction } from '@/model/transaction'
 import { User } from '@/model/user'
@@ -12,6 +12,7 @@ import { WalletBalance } from '@/model/wallet-balance'
 import { Wishlist } from '@/model/wishlist'
 import { WishlistAccessor } from '@/model/wishlist-accessor'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 export const relatedUserModels = [
   Transaction,
@@ -25,7 +26,7 @@ export const relatedUserModels = [
 
 async function userMeGet(req: Request & { user?: any }, res: Response) {
   if (!req.user) {
-    throw new CustomError('Unauthorized', 401)
+    throw new ApiError('Unauthorized', ERROR_CODE.Unauthorized)
   }
 
   return res.response({
@@ -41,12 +42,12 @@ async function userMeDelete(req: Request, res: Response) {
 
   const user = await User.findById(userId).select('+password')
   if (!user) {
-    throw new CustomError('User not found', 404)
+    throw new ApiError('User not found', ERROR_CODE.EntityNotFound)
   }
 
   const isPasswordValid = await user.comparePassword(password)
   if (!isPasswordValid) {
-    throw new CustomError('Password is incorrect', 400)
+    throw new ApiError('Password is incorrect', ERROR_CODE.BadRequest)
   }
 
   // Tüm kullanıcı verilerini sil
@@ -83,13 +84,13 @@ async function userMeUpdate(req: Request, res: Response) {
   )
 
   if (!isValidOperation) {
-    throw new CustomError('Invalid updates', 400)
+    throw new ApiError('Invalid updates', ERROR_CODE.InvalidParameters)
   }
 
   const user = await User.findOne({ _id: req.user.id })
 
   if (!user) {
-    throw new CustomError('User not found', 404)
+    throw new ApiError('User not found', ERROR_CODE.EntityNotFound)
   }
 
   const { ...updates } = req.body
@@ -117,23 +118,23 @@ async function userMePasswordUpdate(req: Request, res: Response) {
   const user = await User.findById(req.user.id).select('+password')
 
   if (!user) {
-    throw new CustomError('User not found', 404)
+    throw new ApiError('User not found', ERROR_CODE.EntityNotFound)
   }
 
   // Eski şifreyi kontrol et
   const isPasswordValid = await bcrypt.compare(oldPassword, user.password)
 
   if (!isPasswordValid) {
-    throw new CustomError('Old password is incorrect', 400)
+    throw new ApiError('Old password is incorrect', ERROR_CODE.BadRequest)
   }
 
   // Yeni şifre eskisiyle aynı olmamalı
   const isSamePassword = await bcrypt.compare(newPassword, user.password)
 
   if (isSamePassword) {
-    throw new CustomError(
+    throw new ApiError(
       'New password cannot be the same as the old password',
-      400,
+      ERROR_CODE.BadRequest,
     )
   }
 
