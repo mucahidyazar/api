@@ -5,7 +5,7 @@ import { createServer } from 'http'
 
 import cors from 'cors'
 import express from 'express'
-import kill from 'kill-port'
+// import kill from 'kill-port'
 import { Server, Socket } from 'socket.io'
 
 import { logger } from '@/client'
@@ -55,14 +55,14 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ message: 'ok' })
 })
 
-app.post('/kill', async (_req, res) => {
-  try {
-    res.status(200).json({ message: 'ok' })
-    await kill(CONFIG.port)
-  } catch (error) {
-    res.status(500).json({ message: 'error' })
-  }
-})
+// app.post('/kill', async (_req, res) => {
+//   try {
+//     res.status(200).json({ message: 'ok' })
+//     await kill(CONFIG.port)
+//   } catch (error) {
+//     res.status(500).json({ message: 'error' })
+//   }
+// })
 
 //! routes
 app.use(middlewareResponse)

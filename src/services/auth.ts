@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 
 import { User } from '@/model/user'
+import { ApiError } from '@/errors/api-error'
+import { ERROR_CODE } from '@/constants'
 
 // Access token oluşturma
 const generateAccessToken = user => {
@@ -25,11 +27,11 @@ const signUpUser = async (email, password) => {
 const signInUser = async (email, password) => {
   const user = await User.findOne({ email }).select('+password') // Password'ü sorguya dahil ediyoruz
   if (!user) {
-    throw new Error('User not found')
+    throw new ApiError('Invalid credentials', ERROR_CODE.BusinessRuleViolation)
   }
   const isMatch = await user.comparePassword(password)
   if (!isMatch) {
-    throw new Error('Invalid credentials')
+    throw new ApiError('Invalid credentials', ERROR_CODE.BusinessRuleViolation)
   }
   const accessToken = generateAccessToken(user)
   return { accessToken }

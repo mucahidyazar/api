@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 
 import { Calculation } from '@/model/calculation'
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 async function calculationCreate(req: Request, res: Response) {
   const newCalculation = new Calculation({
@@ -35,7 +36,7 @@ async function calculationList(req: Request, res: Response) {
 async function calculationGet(req: Request, res: Response) {
   const data = await Calculation.findById(req.params.id)
   if (!data) {
-    throw new CustomError('Calculation not found', 404)
+    throw new ApiError('Calculation not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -49,7 +50,7 @@ async function calculationUpdate(req: Request, res: Response) {
     new: true,
   })
   if (!data) {
-    throw new CustomError('Calculation not found', 404)
+    throw new ApiError('Calculation not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -61,7 +62,7 @@ async function calculationUpdate(req: Request, res: Response) {
 async function calculationDelete(req: Request, res: Response) {
   const data = await Calculation.findByIdAndDelete(req.params.id)
   if (!data) {
-    throw new CustomError('Calculation not found', 404)
+    throw new ApiError('Calculation not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({

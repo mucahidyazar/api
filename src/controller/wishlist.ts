@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { User } from '@/model/user'
 import { Wishlist } from '@/model/wishlist'
@@ -9,6 +9,7 @@ import { WishlistAccessor } from '@/model/wishlist-accessor'
 import { WishlistItem } from '@/model/wishlist-item'
 import { PushNotificationService } from '@/services/push-notification'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 async function wishlistCreate(req: Request, res: Response) {
   const { accessors = [], items = [], ...bodyData } = req.body
@@ -144,7 +145,7 @@ async function wishlistGet(req: Request, res: Response) {
     })
 
   if (!wishlist) {
-    throw new CustomError('Wishlist not found', 404)
+    throw new ApiError('Wishlist not found', ERROR_CODE.EntityNotFound)
   }
 
   // Accessors düzenleniyor
@@ -193,7 +194,7 @@ async function wishlistUpdate(req: Request, res: Response) {
   )
 
   if (!wishlist) {
-    throw new CustomError('Wishlist not found', 404)
+    throw new ApiError('Wishlist not found', ERROR_CODE.EntityNotFound)
   }
 
   // Items güncelleme işlemleri
@@ -295,7 +296,7 @@ async function wishlistDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Wishlist not found', 404)
+    throw new ApiError('Wishlist not found', ERROR_CODE.EntityNotFound)
   }
 
   //! delete wishlsit accessors
@@ -319,7 +320,7 @@ async function wishlistItemUpdate(req: Request, res: Response) {
   const updates = { ...req.body }
 
   // Handle empty reservedBy
-  if(Object.prototype.hasOwnProperty.call(updates, 'reservedBy')) {
+  if (Object.prototype.hasOwnProperty.call(updates, 'reservedBy')) {
     if (!updates.reservedBy || updates.reservedBy === '') {
       updates.reservedBy = null // Set to null for $unset operation
       updates.reservedAt = null // Also reset reservedAt
@@ -371,11 +372,11 @@ async function wishlistItemUpdate(req: Request, res: Response) {
   ])
 
   if (!accessCheck) {
-    throw new CustomError('Wishlist not found', 404)
+    throw new ApiError('Wishlist not found', ERROR_CODE.EntityNotFound)
   }
 
   if (!accessCheck.hasAccess) {
-    throw new CustomError('Unauthorized', 403)
+    throw new ApiError('Unauthorized', ERROR_CODE.Unauthorized)
   }
 
   // Validate update data
@@ -392,7 +393,10 @@ async function wishlistItemUpdate(req: Request, res: Response) {
   )
 
   if (invalidFields.length > 0) {
-    throw new CustomError(`Invalid fields: ${invalidFields.join(', ')}`, 400)
+    throw new ApiError(
+      `Invalid fields: ${invalidFields.join(', ')}`,
+      ERROR_CODE.InvalidParameters,
+    )
   }
 
   // Prepare update operations
@@ -427,11 +431,11 @@ async function wishlistItemUpdate(req: Request, res: Response) {
   )
 
   if (!updateResult.matchedCount) {
-    throw new CustomError('Item not found', 404)
+    throw new ApiError('Item not found', ERROR_CODE.EntityNotFound)
   }
 
   if (!updateResult.modifiedCount) {
-    throw new CustomError('No changes applied', 400)
+    throw new ApiError('No changes applied', ERROR_CODE.NoChanges)
   }
 
   // Güncellenmiş item'ı ayrı bir sorgu ile al
@@ -476,13 +480,13 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
     user: req.user?.id,
   })
   if (!wishlist) {
-    throw new CustomError('Wishlist not found', 404)
+    throw new ApiError('Wishlist not found', ERROR_CODE.EntityNotFound)
   }
 
   const isAdmin = req.user.role === 'admin'
   const isWishlistOwner = wishlist.user.toString() === req.user.id
   if (!isAdmin && !isWishlistOwner) {
-    throw new CustomError('Unauthorized', 403)
+    throw new ApiError('Unauthorized', ERROR_CODE.Unauthorized)
   }
 
   const user = await User.findOne({ email: req.body.email })
@@ -491,7 +495,7 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
     wishlist: req.params.id,
   })
   if (accessorCheck) {
-    throw new CustomError('Accessor already exists', 400)
+    throw new ApiError('Accessor already exists', ERROR_CODE.DuplicateEntry)
   }
 
   const newAccessor = new WishlistAccessor({
@@ -533,7 +537,7 @@ async function wishlistAccessorDelete(req: Request, res: Response) {
   const data = await WishlistAccessor.findOneAndDelete({ _id: accessorId })
 
   if (!data) {
-    throw new CustomError('Accessor not found', 404)
+    throw new ApiError('Accessor not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -551,7 +555,7 @@ async function wishlistAccessorUpdate(req: Request, res: Response) {
   )
 
   if (!isValidOperation) {
-    throw new CustomError('Invalid updates', 400)
+    throw new ApiError('Invalid updates', ERROR_CODE.InvalidParameters)
   }
 
   const accessor = await WishlistAccessor.findOne({
@@ -560,7 +564,7 @@ async function wishlistAccessorUpdate(req: Request, res: Response) {
   })
 
   if (!accessor) {
-    throw new CustomError('Accessor not found', 404)
+    throw new ApiError('Accessor not found', ERROR_CODE.EntityNotFound)
   }
 
   updates.forEach(update => (accessor[update] = req.body[update]))

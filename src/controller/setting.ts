@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
-import { DEFAULTS } from '@/constants'
-import { CustomError } from '@/errors/custom-error'
+import { DEFAULTS, ERROR_CODE } from '@/constants'
+import { ApiError } from '@/errors/api-error'
 import { Calculation } from '@/model/calculation'
 import { Setting } from '@/model/setting'
 import { Transaction } from '@/model/transaction'
@@ -18,7 +18,7 @@ async function settingGet(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Setting not found', 404)
+    throw new ApiError('Setting not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -33,7 +33,7 @@ async function settingUpdate(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Setting not found', 404)
+    throw new ApiError('Setting not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -104,7 +104,7 @@ async function settingRestore(req: Request, res: Response) {
 
   // Backup verisini doğrula
   if (!backupData || typeof backupData !== 'object') {
-    throw new CustomError('Invalid backup data', 400)
+    throw new ApiError('Invalid backup data', ERROR_CODE.InvalidParameters)
   }
 
   // Mevcut kullanıcının verilerini temizle

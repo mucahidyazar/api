@@ -1,4 +1,4 @@
-export const ERROR_CODE = Object.freeze({
+export const ERROR_CODE = {
   None: 0,
 
   // Validation Errors (1000-1999) StatusCode 400
@@ -12,6 +12,8 @@ export const ERROR_CODE = Object.freeze({
   BusinessRuleViolation: 1008,
   EmailExists: 1009,
   InvalidPassword: 1010,
+  NoChanges: 1011,
+  BadRequest: 1012,
 
   // Authentication Errors (2000-2999) StatusCode 401
   Unauthorized: 2000,
@@ -48,4 +50,4 @@ export const ERROR_CODE = Object.freeze({
   MaintenanceMode: 6004,
 
   UnknownError: 9999,
-})
+} as const

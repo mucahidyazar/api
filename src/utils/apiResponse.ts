@@ -1,5 +1,8 @@
-type ApiError = {
-  code?: number
+import { ERROR_CODE } from '@/constants'
+
+type TApiError = {
+  type: keyof typeof ERROR_CODE
+  code?: (typeof ERROR_CODE)[keyof typeof ERROR_CODE]
   message: string
   detail: unknown
 }
@@ -8,7 +11,7 @@ class ApiResponse {
   public success: boolean = false
   public data?: unknown = null
   public metadata?: TMetadata | null = null
-  public error?: ApiError | null = null
+  public error?: TApiError | null = null
 
   constructor(init?: Partial<ApiResponse>) {
     Object.assign(this, init)
@@ -22,7 +25,7 @@ class ApiResponse {
     })
   }
 
-  public static failure(error: ApiError): ApiResponse {
+  public static failure(error: TApiError): ApiResponse {
     return new ApiResponse({ error })
   }
 }
@@ -42,4 +45,4 @@ type TMetadata = {
   hasNextPage: boolean
 }
 
-export { ApiResponse, ExtendedApiResponse }
+export { TApiError, ApiResponse, ExtendedApiResponse }

@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 
 import { ERROR_CODE } from '@/constants'
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { Transaction } from '@/model/transaction'
 import { TransactionBrand } from '@/model/transaction-brand'
@@ -21,13 +21,16 @@ async function transactionCreate(req: Request, res: Response) {
   })
 
   if (!walletBalance) {
-    throw new CustomError('No enough wallet balance', 400)
+    throw new ApiError('No enough wallet balance', ERROR_CODE.ValidationError)
   }
 
   const transactionAmount = req.body.transactionAmount
 
   if (!isIncome && walletBalance.amount < transactionAmount) {
-    throw new CustomError('Transaction amount exceeds wallet balance', 400)
+    throw new ApiError(
+      'Transaction amount exceeds wallet balance',
+      ERROR_CODE.ValidationError,
+    )
   }
 
   await TransactionBrand.findOneAndUpdate(
@@ -225,6 +228,7 @@ async function subscriptionList(req: Request, res: Response) {
     return res.response({
       statusCode: 500,
       apiResponse: ApiResponse.failure({
+        type: 'UnknownError',
         code: ERROR_CODE.UnknownError,
         message: 'Error fetching subscription list',
         detail: error,
@@ -361,7 +365,7 @@ async function transactionGet(req: Request, res: Response) {
   const data = await query.exec()
 
   if (!data) {
-    throw new CustomError('Transaction not found', 404)
+    throw new ApiError('Transaction not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -398,6 +402,7 @@ async function transactionUpdate(req: Request, res: Response) {
     return res.response({
       statusCode: 400,
       apiResponse: ApiResponse.failure({
+        type: 'InvalidParameters',
         code: ERROR_CODE.InvalidParameters,
         message: 'Invalid updates',
         detail: {
@@ -413,14 +418,17 @@ async function transactionUpdate(req: Request, res: Response) {
   })
 
   if (!walletBalance) {
-    throw new CustomError('No enough wallet balance', 400)
+    throw new ApiError('No enough wallet balance', ERROR_CODE.ValidationError)
   }
 
   const isUpdateIncome = req.body.type === 'income'
   const transactionAmount = req.body.transactionAmount
 
   if (!isUpdateIncome && walletBalance.amount < transactionAmount) {
-    throw new CustomError('Transaction amount exceeds wallet balance', 400)
+    throw new ApiError(
+      'Transaction amount exceeds wallet balance',
+      ERROR_CODE.ValidationError,
+    )
   }
 
   const allUniqueWalletIds = await getUniqueWalletIds({ user: req.user?.id })
@@ -431,7 +439,7 @@ async function transactionUpdate(req: Request, res: Response) {
   })
 
   if (!transactionData) {
-    throw new CustomError('Transaction not found', 404)
+    throw new ApiError('Transaction not found', ERROR_CODE.EntityNotFound)
   }
 
   const isTransactionIncome = transactionData?.type === 'income'
@@ -482,7 +490,7 @@ async function transactionDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Transaction not found', 404)
+    throw new ApiError('Transaction not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({

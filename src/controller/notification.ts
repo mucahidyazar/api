@@ -1,10 +1,11 @@
 // controllers/notification.controller.ts
 import { Request, Response } from 'express'
 
-import { CustomError } from '@/errors/custom-error'
+import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { Notification } from '@/model/notification'
 import { ApiResponse } from '@/utils'
+import { ERROR_CODE } from '@/constants'
 
 async function notificationList(req: Request, res: Response) {
   const unreadCount = await Notification.countDocuments({
@@ -59,7 +60,7 @@ async function notificationGet(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Notification not found', 404)
+    throw new ApiError('Notification not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -76,7 +77,7 @@ async function notificationMarkAsRead(req: Request, res: Response) {
   )
 
   if (!data) {
-    throw new CustomError('Notification not found', 404)
+    throw new ApiError('Notification not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -105,7 +106,7 @@ async function notificationArchive(req: Request, res: Response) {
   )
 
   if (!data) {
-    throw new CustomError('Notification not found', 404)
+    throw new ApiError('Notification not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({
@@ -146,7 +147,7 @@ async function notificationDelete(req: Request, res: Response) {
   })
 
   if (!data) {
-    throw new CustomError('Notification not found', 404)
+    throw new ApiError('Notification not found', ERROR_CODE.EntityNotFound)
   }
 
   return res.response({

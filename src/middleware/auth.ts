@@ -10,6 +10,8 @@ export const middlewareAuth = async (req, res, next) => {
     return res.response({
       statusCode: 401,
       apiResponse: ApiResponse.failure({
+        type: 'Unauthorized',
+        code: ERROR_CODE.Unauthorized,
         message: 'No token provided',
         detail: null,
       }),
@@ -27,6 +29,7 @@ export const middlewareAuth = async (req, res, next) => {
     res.response({
       statusCode: 401,
       apiResponse: ApiResponse.failure({
+        type: 'Unauthorized',
         code: ERROR_CODE.Unauthorized,
         message: 'Unauthorized',
         detail: error,
