@@ -1,5 +1,6 @@
 {
   "name": "api",
+  "type": "module",
   "license": "MIT",
   "version": "1.0.0",
   "description": "API repository containing various projects including an appointment, stock control, link preview and URL shortener services.",
@@ -26,8 +27,8 @@
     "dev:node:stock": "nodemon --exec ts-node --files --debug ./src/services/stock/node.ts",
     "build": "tsc && tsc-alias",
     "start": "node -r module-alias/register ./dist/app.js",
-    "lint": "eslint --ext .ts ./src",
-    "lint:fix": "eslint --fix --ext .ts ./src",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "prettier": "prettier --check \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "prepare": "husky install",
@@ -64,7 +65,6 @@
     "mongoose": "8.9.5",
     "socket.io": "4.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
     "winston": "3.17.0",
     "zod": "^3.24.1"
   },
@@ -72,7 +72,6 @@
     "@types/cors": "2.8.17",
     "@types/express": "5.0.0",
     "@types/jest": "^29.5.14",
-    "@types/jsonwebtoken": "^9.0.8",
     "@types/kill-port": "2.0.3",
     "@types/node": "22.12.0",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
@@ -93,6 +92,7 @@
     "swagger-jsdoc": "^6.2.8",
     "ts-jest": "^29.2.5",
     "tsc-alias": "^1.8.10",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3"
   }
 }
