@@ -7,25 +7,25 @@ type TApiError = {
   detail: unknown
 }
 
-class ApiResponse {
+class ApiResponse<T = unknown> {
   public success: boolean = false
-  public data?: unknown = null
+  public data?: T | unknown = null
   public metadata?: TMetadata | null = null
   public error?: TApiError | null = null
 
-  constructor(init?: Partial<ApiResponse>) {
+  constructor(init?: Partial<ApiResponse<T>>) {
     Object.assign(this, init)
   }
 
-  public static success(data: unknown, metadata?: TMetadata): ApiResponse {
-    return new ApiResponse({
+  public static success<T>(data: T, metadata?: TMetadata): ApiResponse<T> {
+    return new ApiResponse<T>({
       success: true,
       data,
       ...(metadata ? metadata : {}),
     })
   }
 
-  public static failure(error: TApiError): ApiResponse {
+  public static failure(error: TApiError): ApiResponse<never> {
     return new ApiResponse({ error })
   }
 }

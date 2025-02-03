@@ -13,6 +13,7 @@ router.post(
   middlewareValidateBody(calculationCreateSchema),
   asyncWrapper(calculationCreate),
 )
+
 router.get(ROUTES.v1.calculation.list, asyncWrapper(calculationList))
 
 export { router as calculationRouter }

@@ -28,9 +28,13 @@ router.post(
   middlewareValidateBody(walletSchema),
   asyncWrapper(walletCreate),
 )
+
 router.delete(ROUTES.v1.wallet.delete, asyncWrapper(walletDelete))
+
 router.get(ROUTES.v1.wallet.get, asyncWrapper(walletGet))
+
 router.get(ROUTES.v1.wallet.list, asyncWrapper(walletList))
+
 router.put(
   ROUTES.v1.wallet.update,
   middlewareValidateBody(walletUpdateSchema),
@@ -46,16 +50,19 @@ router.delete(
   ROUTES.v1.wallet.accessor.delete,
   asyncWrapper(walletAccessorDelete),
 )
+
 router.post(
   ROUTES.v1.wallet.accessor.create,
   middlewareValidateBody(walletAccessorCreateSchema),
   asyncWrapper(walletAccessorCreate),
 )
+
 router.put(
   ROUTES.v1.wallet.accessor.update,
   middlewareValidateBody(walletAccessorUpdateSchema),
   asyncWrapper(walletAccessorUpdate),
 )
+
 router.get(ROUTES.v1.wallet.type.list, asyncWrapper(walletTypeList))
 
 export { router as walletRouter }
