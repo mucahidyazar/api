@@ -5,6 +5,13 @@ import { ApiError } from '@/errors/api-error'
 import { ApiResponse } from '@/utils'
 import { ERROR_CODE } from '@/constants'
 
+/**
+ * @route POST api/v1/calculations
+ * @description Create a new calculation
+ * @access Private
+ * @param {TCalculationDto} req.body
+ * @returns {ApiResponse<TCalculationDto>} 201 - Success response with created calculation
+ */
 async function calculationCreate(req: Request, res: Response) {
   const newCalculation = new Calculation({
     ...req.body,

@@ -21,12 +21,16 @@ router.post(
   asyncWrapper(transactionBrandCreate),
   middlewareValidateBody(transactionBrandSchema),
 )
+
 router.delete(
   ROUTES.v1.transactionBrand.delete,
   asyncWrapper(transactionBrandDelete),
 )
+
 router.get(ROUTES.v1.transactionBrand.get, asyncWrapper(transactionBrandGet))
+
 router.get(ROUTES.v1.transactionBrand.list, asyncWrapper(transactionBrandList))
+
 router.put(
   ROUTES.v1.transactionBrand.update,
   asyncWrapper(transactionBrandUpdate),

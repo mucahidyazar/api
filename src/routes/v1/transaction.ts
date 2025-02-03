@@ -23,15 +23,21 @@ router.post(
   middlewareValidateBody(transactionSchema),
   asyncWrapper(transactionCreate),
 )
+
 router.delete(ROUTES.v1.transaction.delete, asyncWrapper(transactionDelete))
+
 router.get(ROUTES.v1.transaction.get, asyncWrapper(transactionGet))
+
 router.get(ROUTES.v1.transaction.list, asyncWrapper(transactionList))
+
 router.put(
   ROUTES.v1.transaction.update,
   middlewareValidateBody(transactionUpdateSchema),
   asyncWrapper(transactionUpdate),
 )
+
 router.get(ROUTES.v1.transaction.chart, asyncWrapper(transactionChartGet))
+
 router.get(ROUTES.v1.transaction.stats, asyncWrapper(transactionStatsGet))
 
 export { router as transactionRouter }

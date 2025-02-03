@@ -28,9 +28,13 @@ router.post(
   middlewareValidateBody(wishlistCreateSchema),
   asyncWrapper(wishlistCreate),
 )
+
 router.delete(ROUTES.v1.wishlist.delete, asyncWrapper(wishlistDelete))
+
 router.get(ROUTES.v1.wishlist.get, asyncWrapper(wishlistGet))
+
 router.get(ROUTES.v1.wishlist.list, asyncWrapper(wishlistList))
+
 router.put(
   ROUTES.v1.wishlist.update,
   middlewareValidateBody(wishlistUpdateSchema),
@@ -42,15 +46,18 @@ router.put(
   middlewareValidateBody(wishlistItemUpdateSchema),
   asyncWrapper(wishlistItemUpdate),
 )
+
 router.delete(
   ROUTES.v1.wishlist.accessor.delete,
   asyncWrapper(wishlistAccessorDelete),
 )
+
 router.post(
   ROUTES.v1.wishlist.accessor.create,
   middlewareValidateBody(wishlistAccessorCreateSchema),
   asyncWrapper(wishlistAccessorCreate),
 )
+
 router.put(
   ROUTES.v1.wishlist.accessor.update,
   middlewareValidateBody(wishlistAccessorUpdateSchema),

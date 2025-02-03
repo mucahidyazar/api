@@ -14,8 +14,11 @@ import { passwordUpdateSchema } from '@/validation'
 const router = express.Router()
 
 router.get(ROUTES.v1.user.me.get, asyncWrapper(userMeGet))
+
 router.post(ROUTES.v1.user.me.delete, asyncWrapper(userMeDelete))
+
 router.put(ROUTES.v1.user.me.update, asyncWrapper(userMeUpdate))
+
 router.put(
   ROUTES.v1.user.me.password.update,
   middlewareValidateBody(passwordUpdateSchema),

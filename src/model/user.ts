@@ -19,7 +19,7 @@ interface IUser extends mongoose.Document {
   defaultWalletCurrency?: string
 }
 
-const userSchema = new mongoose.Schema<IUser>(
+const userSchema: mongoose.Schema<IUser> = new mongoose.Schema<IUser>(
   {
     firstName: {
       type: String,
