@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
+import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { TransactionBrand } from '@/model/transaction-brand'
 import { ApiResponse } from '@/utils'
-import { ERROR_CODE } from '@/constants'
 
 async function transactionBrandCreate(req: Request, res: Response) {
   const newTransactionBrand = new TransactionBrand({

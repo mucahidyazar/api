@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
-import { Calculation } from '@/model/calculation'
-import { ApiError } from '@/errors/api-error'
-import { ApiResponse } from '@/utils'
 import { ERROR_CODE } from '@/constants'
+import { ApiError } from '@/errors/api-error'
+import { Calculation } from '@/model/calculation'
+import { ApiResponse } from '@/utils'
 
 /**
  * @route POST api/v1/calculations
@@ -27,6 +27,7 @@ async function calculationCreate(req: Request, res: Response) {
 }
 
 async function calculationList(req: Request, res: Response) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { populateFields: _populateFields, ...queries } = req.query
 
   const data = await Calculation.find({

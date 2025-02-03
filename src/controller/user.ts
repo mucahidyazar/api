@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 
+import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { Setting } from '@/model/setting'
 import { Transaction } from '@/model/transaction'
@@ -12,7 +13,6 @@ import { WalletBalance } from '@/model/wallet-balance'
 import { Wishlist } from '@/model/wishlist'
 import { WishlistAccessor } from '@/model/wishlist-accessor'
 import { ApiResponse } from '@/utils'
-import { ERROR_CODE } from '@/constants'
 
 export const relatedUserModels = [
   Transaction,
@@ -65,9 +65,6 @@ async function userMeDelete(req: Request, res: Response) {
 }
 
 async function userMeUpdate(req: Request, res: Response) {
-  if (process.env.NODE_ENV === 'development') {
-    console.debug('updates', req.body)
-  }
 
   const allowedUpdateKeys = [
     'firstName',

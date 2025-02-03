@@ -1,11 +1,11 @@
 // controllers/notification.controller.ts
 import { Request, Response } from 'express'
 
+import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { Notification } from '@/model/notification'
 import { ApiResponse } from '@/utils'
-import { ERROR_CODE } from '@/constants'
 
 async function notificationList(req: Request, res: Response) {
   const unreadCount = await Notification.countDocuments({

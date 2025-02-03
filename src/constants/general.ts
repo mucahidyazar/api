@@ -70,4 +70,4 @@ const ERROR_MESSAGE = {
   invalid: (fieldName = 'Field') => `Invalid ${fieldName}`,
 }
 
-export { DEFAULTS, MODEL_OPTIONS, VALIDATION_RULES, ERROR_MESSAGE }
+export { DEFAULTS, ERROR_MESSAGE, MODEL_OPTIONS, VALIDATION_RULES }

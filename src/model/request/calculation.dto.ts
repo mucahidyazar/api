@@ -1,5 +1,6 @@
-import { z } from 'zod'
 import mongoose from 'mongoose'
+import { z } from 'zod'
+
 import { calculationLoanDataSchema } from '@/validation'
 
 type TCalculationDto = z.infer<typeof calculationDto>

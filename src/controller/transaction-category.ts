@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
+import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { TransactionCategory } from '@/model/transaction-category'
 import { ApiResponse } from '@/utils'
-import { ERROR_CODE } from '@/constants'
 
 async function transactionCategoryCreate(req: Request, res: Response) {
   const newTransactionCategory = new TransactionCategory({

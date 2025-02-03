@@ -1,10 +1,10 @@
-import z from 'zod'
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
+import z from 'zod'
 
+import { DEFAULTS, VALIDATION_RULES } from '@/constants'
 import { Setting } from '@/model/setting'
 import { passwordSchema } from '@/validation'
-import { DEFAULTS, VALIDATION_RULES } from '@/constants'
 
 interface IUser extends mongoose.Document {
   firstName: string

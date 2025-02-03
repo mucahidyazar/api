@@ -21,4 +21,4 @@ function toCamelCase(kebabName: string): string {
     .join(' ') // Join words with spaces
 }
 
-export { toKebabCase, toCamelCase }
+export { toCamelCase, toKebabCase }

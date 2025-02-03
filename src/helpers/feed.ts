@@ -1,10 +1,10 @@
+/* eslint-disable no-console */
+import { brands } from '../constants/brands'
+import { categories } from '../constants/categories'
 import { Transaction } from '../model/transaction'
 import { TransactionBrand } from '../model/transaction-brand'
 import { TransactionCategory } from '../model/transaction-category'
 import { User } from '../model/user'
-
-import { brands } from '../constants/brands'
-import { categories } from '../constants/categories'
 import { toCamelCase } from '../utils/string'
 
 import '../config/db'
@@ -57,6 +57,7 @@ async function feed() {
     user: ME_ID,
     wallet: ME_WALLET_ID,
     walletBalance: ME_WALLET_BALANCE_ID,
+    // eslint-disable-next-line security/detect-object-injection
     transactionCategory: allTransactionCategories[index].id,
     transactionAmount: getRandomNumber({ min: 10, max: 50 }),
     transactionCurrency: 'USD',
@@ -84,6 +85,7 @@ async function feed() {
     user: ME_ID,
     wallet: ME_WALLET_ID,
     walletBalance: ME_WALLET_BALANCE_ID,
+    // eslint-disable-next-line security/detect-object-injection
     transactionCategory: allTransactionCategories[i].id,
     transactionAmount: getRandomNumber({ min: 10, max: 50 }),
     transactionCurrency: 'USD',

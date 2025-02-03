@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-import { createObjectIdSchema } from '@/validation/general'
 import { ERROR_MESSAGE, VALIDATION_RULES } from '@/constants'
+import { createObjectIdSchema } from '@/validation/general'
 
 // Önce wishlist item için bir sub-schema oluşturalım
 const wishlistItemSchema = z.object({
@@ -90,9 +90,6 @@ export const wishlistCreateSchema = z
   })
   .strict()
 
-// Update schema
-export const wishlistUpdateSchema = wishlistCreateSchema.partial()
-
 // Item update schema (ayrı bir endpoint için)
 export const wishlistItemUpdateSchema = z
   .object({
@@ -104,3 +101,6 @@ export const wishlistItemUpdateSchema = z
     reservedAt: wishlistItemSchema.shape.reservedAt.optional(),
   })
   .strict()
+
+// Update schema
+export const wishlistUpdateSchema = wishlistCreateSchema.partial()

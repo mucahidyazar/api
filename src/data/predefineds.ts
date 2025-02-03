@@ -1,20 +1,3 @@
-export const predefinedCategories = [
-  { name: 'Subscription' },
-  { name: 'Groceries' },
-  { name: 'Eating Out' },
-  { name: 'Transport' },
-  { name: 'Shopping' },
-  { name: 'Entertainment' },
-  { name: 'Health' },
-  { name: 'Bills' },
-  { name: 'Education' },
-  { name: 'Travel' },
-  { name: 'Gifts' },
-  { name: 'Investment' },
-  { name: 'Salary' },
-  { name: 'Other' },
-]
-
 export const predefinedBrands = [
   { name: 'Amazon' },
   { name: 'Netflix' },
@@ -67,5 +50,22 @@ export const predefinedBrands = [
   { name: 'Salary' },
   { name: 'Bonus' },
   { name: 'Allowance' },
+  { name: 'Other' },
+]
+
+export const predefinedCategories = [
+  { name: 'Subscription' },
+  { name: 'Groceries' },
+  { name: 'Eating Out' },
+  { name: 'Transport' },
+  { name: 'Shopping' },
+  { name: 'Entertainment' },
+  { name: 'Health' },
+  { name: 'Bills' },
+  { name: 'Education' },
+  { name: 'Travel' },
+  { name: 'Gifts' },
+  { name: 'Investment' },
+  { name: 'Salary' },
   { name: 'Other' },
 ]

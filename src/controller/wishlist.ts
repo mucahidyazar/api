@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 
+import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { User } from '@/model/user'
@@ -9,7 +10,6 @@ import { WishlistAccessor } from '@/model/wishlist-accessor'
 import { WishlistItem } from '@/model/wishlist-item'
 import { PushNotificationService } from '@/services/push-notification'
 import { ApiResponse } from '@/utils'
-import { ERROR_CODE } from '@/constants'
 
 async function wishlistCreate(req: Request, res: Response) {
   const { accessors = [], items = [], ...bodyData } = req.body
@@ -404,9 +404,11 @@ async function wishlistItemUpdate(req: Request, res: Response) {
   const unsetOperations: any = {}
 
   Object.keys(updates).forEach(key => {
+    // eslint-disable-next-line security/detect-object-injection
     if (updates[key] === null) {
       unsetOperations[`items.$.${key}`] = ''
     } else {
+      // eslint-disable-next-line security/detect-object-injection
       updateOperations[`items.$.${key}`] = updates[key]
     }
   })
@@ -567,6 +569,7 @@ async function wishlistAccessorUpdate(req: Request, res: Response) {
     throw new ApiError('Accessor not found', ERROR_CODE.EntityNotFound)
   }
 
+  // eslint-disable-next-line security/detect-object-injection
   updates.forEach(update => (accessor[update] = req.body[update]))
   const response = await accessor.save()
 

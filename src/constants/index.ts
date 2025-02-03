@@ -1,6 +1,6 @@
 export * from './brand'
 export * from './city'
 export * from './district'
+export * from './errorCode'
 export * from './general'
 export * from './routes'
-export * from './errorCode'

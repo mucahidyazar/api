@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 
 import { ERROR_CODE } from '@/constants'
+import { ERROR_CODE } from '@/constants'
+import { ApiError } from '@/errors/api-error'
 import { TSignInDto, TSignUpDto } from '@/model/request/auth.dto'
 import { User } from '@/model/user'
-import { ApiError } from '@/errors/api-error'
-import { ERROR_CODE } from '@/constants'
 
 /**
  * Generates a JWT access token for a user

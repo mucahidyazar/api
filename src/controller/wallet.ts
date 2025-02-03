@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { Transaction } from '@/model/transaction'
@@ -10,7 +11,6 @@ import { WalletBalance } from '@/model/wallet-balance'
 import { WalletType } from '@/model/wallet-type'
 import { PushNotificationService } from '@/services/push-notification'
 import { ApiResponse } from '@/utils'
-import { ERROR_CODE } from '@/constants'
 
 async function walletCreate(req: Request, res: Response) {
   const { accessors = [], ...bodyData } = req.body
@@ -396,6 +396,7 @@ async function walletAccessorUpdate(req: Request, res: Response) {
     throw new ApiError('Accessor not found', ERROR_CODE.EntityNotFound)
   }
 
+  // eslint-disable-next-line security/detect-object-injection
   updates.forEach(update => (accessor[update] = req.body[update]))
   const data = await accessor.save()
 

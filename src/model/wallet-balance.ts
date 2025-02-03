@@ -2,6 +2,17 @@ import mongoose from 'mongoose'
 
 import { DEFAULTS, MODEL_OPTIONS } from '@/constants'
 
+export const WalletBalance = mongoose.model(
+  'WalletBalance',
+  walletBalanceSchema,
+)
+
+walletBalanceSchema.virtual('transactions', {
+  ref: 'Transaction',
+  localField: '_id',
+  foreignField: 'walletBalance',
+})
+
 export const walletBalanceSchema = new mongoose.Schema(
   {
     amount: {
@@ -22,15 +33,4 @@ export const walletBalanceSchema = new mongoose.Schema(
     },
   },
   MODEL_OPTIONS,
-)
-
-walletBalanceSchema.virtual('transactions', {
-  ref: 'Transaction',
-  localField: '_id',
-  foreignField: 'walletBalance',
-})
-
-export const WalletBalance = mongoose.model(
-  'WalletBalance',
-  walletBalanceSchema,
 )

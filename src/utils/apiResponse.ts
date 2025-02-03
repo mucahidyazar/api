@@ -45,4 +45,4 @@ type TMetadata = {
   hasNextPage: boolean
 }
 
-export { TApiError, ApiResponse, ExtendedApiResponse }
+export { ApiResponse, ExtendedApiResponse, TApiError }

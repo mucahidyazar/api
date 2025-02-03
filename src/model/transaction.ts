@@ -2,26 +2,7 @@ import mongoose from 'mongoose'
 
 import { DEFAULTS, MODEL_OPTIONS, VALIDATION_RULES } from '@/constants'
 
-export const transactionBalanceSchema = new mongoose.Schema(
-  {
-    amount: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    currency: {
-      type: String,
-      default: DEFAULTS.currency,
-      required: true,
-    },
-    rate: {
-      type: Number,
-      default: 1,
-      required: true,
-    },
-  },
-  MODEL_OPTIONS,
-)
+export const Transaction = mongoose.model('Transaction', transactionSchema)
 
 const transactionSchema = new mongoose.Schema(
   {
@@ -107,4 +88,23 @@ const transactionSchema = new mongoose.Schema(
   MODEL_OPTIONS,
 )
 
-export const Transaction = mongoose.model('Transaction', transactionSchema)
+export const transactionBalanceSchema = new mongoose.Schema(
+  {
+    amount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    currency: {
+      type: String,
+      default: DEFAULTS.currency,
+      required: true,
+    },
+    rate: {
+      type: Number,
+      default: 1,
+      required: true,
+    },
+  },
+  MODEL_OPTIONS,
+)

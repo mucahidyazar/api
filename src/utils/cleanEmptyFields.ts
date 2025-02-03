@@ -62,6 +62,7 @@ function cleanEmptyFields<T extends Record<string, any>>(
       for (const [key, val] of Object.entries(obj)) {
         const cleanedVal = cleanRecursively(val, seen)
         if (!isEmptyValue(cleanedVal)) {
+          // eslint-disable-next-line security/detect-object-injection
           cleanedObj[key] = cleanedVal
         }
       }
