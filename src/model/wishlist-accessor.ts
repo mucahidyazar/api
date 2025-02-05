@@ -2,12 +2,7 @@ import mongoose from 'mongoose'
 
 import { MODEL_OPTIONS } from '@/constants'
 
-export const WishlistAccessor = mongoose.model(
-  'WishlistAccessor',
-  wishlistAccessorSchema,
-)
-
-export const wishlistAccessorSchema = new mongoose.Schema(
+const wishlistAccessorSchema = new mongoose.Schema(
   {
     status: {
       type: String,
@@ -29,3 +24,10 @@ export const wishlistAccessorSchema = new mongoose.Schema(
   },
   MODEL_OPTIONS,
 )
+
+const WishlistAccessor = mongoose.model(
+  'WishlistAccessor',
+  wishlistAccessorSchema,
+)
+
+export { WishlistAccessor, wishlistAccessorSchema }

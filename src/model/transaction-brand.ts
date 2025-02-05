@@ -2,12 +2,7 @@ import mongoose from 'mongoose'
 
 import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants'
 
-export const TransactionBrand = mongoose.model(
-  'TransactionBrand',
-  transactionBrandSchema,
-)
-
-export const transactionBrandSchema = new mongoose.Schema(
+const transactionBrandSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -34,3 +29,10 @@ export const transactionBrandSchema = new mongoose.Schema(
   },
   MODEL_OPTIONS,
 )
+
+const TransactionBrand = mongoose.model(
+  'TransactionBrand',
+  transactionBrandSchema,
+)
+
+export { TransactionBrand, transactionBrandSchema }

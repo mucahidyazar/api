@@ -2,25 +2,34 @@ import mongoose from 'mongoose'
 
 import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants'
 
-export enum ActionType {
+enum ActionType {
   REDIRECT = 'redirect',
   EXTERNAL = 'external',
   FUNCTION = 'function',
 }
 
-export enum InviteType {
+enum InviteType {
   WISHLIST = 'Wishlist',
   WALLET = 'Wallet',
 }
 
-export const Notification = mongoose.model('Notification', notificationSchema)
-
-export enum NotificationPriority {
+enum NotificationPriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   URGENT = 'urgent',
 }
+
+enum NotificationType {
+  SIMPLE = 'simple',
+  INVITE = 'invite',
+  ACTION = 'action',
+  ADVERTISEMENT = 'advertisement',
+  SYSTEM = 'system',
+  UPDATE = 'update',
+  ALERT = 'alert',
+}
+
 const notificationSchema = new mongoose.Schema(
   {
     type: {
@@ -118,6 +127,8 @@ const notificationSchema = new mongoose.Schema(
   MODEL_OPTIONS,
 )
 
+const Notification = mongoose.model('Notification', notificationSchema)
+
 // Indexes
 notificationSchema.index({ user: 1, createdAt: -1 })
 notificationSchema.index({ user: 1, isRead: 1 })
@@ -163,12 +174,11 @@ notificationSchema.statics.getUserUnreadCount = async function (
   })
 }
 
-export enum NotificationType {
-  SIMPLE = 'simple',
-  INVITE = 'invite',
-  ACTION = 'action',
-  ADVERTISEMENT = 'advertisement',
-  SYSTEM = 'system',
-  UPDATE = 'update',
-  ALERT = 'alert',
+export {
+  ActionType,
+  InviteType,
+  Notification,
+  NotificationPriority,
+  NotificationType,
+  notificationSchema,
 }

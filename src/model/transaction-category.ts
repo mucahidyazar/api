@@ -2,12 +2,7 @@ import mongoose from 'mongoose'
 
 import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants'
 
-export const TransactionCategory = mongoose.model(
-  'TransactionCategory',
-  transactionCategorySchema,
-)
-
-export const transactionCategorySchema = new mongoose.Schema(
+const transactionCategorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -34,3 +29,10 @@ export const transactionCategorySchema = new mongoose.Schema(
   },
   MODEL_OPTIONS,
 )
+
+const TransactionCategory = mongoose.model(
+  'TransactionCategory',
+  transactionCategorySchema,
+)
+
+export { TransactionCategory, transactionCategorySchema }

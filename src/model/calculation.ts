@@ -3,9 +3,7 @@ import mongoose from 'mongoose'
 import { MODEL_OPTIONS } from '@/constants'
 import { calculationLoanDataSchema } from '@/validation'
 
-export const Calculation = mongoose.model('Calculation', calculationSchema)
-
-export const calculationSchema = new mongoose.Schema(
+const calculationSchema = new mongoose.Schema(
   {
     type: {
       type: String,
@@ -32,3 +30,7 @@ export const calculationSchema = new mongoose.Schema(
   },
   MODEL_OPTIONS,
 )
+
+const Calculation = mongoose.model('Calculation', calculationSchema)
+
+export { Calculation, calculationSchema }

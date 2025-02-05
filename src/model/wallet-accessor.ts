@@ -2,12 +2,7 @@ import mongoose from 'mongoose'
 
 import { MODEL_OPTIONS } from '@/constants'
 
-export const WalletAccessor = mongoose.model(
-  'WalletAccessor',
-  walletAccessorchema,
-)
-
-export const walletAccessorchema = new mongoose.Schema(
+const walletAccessorSchema = new mongoose.Schema(
   {
     status: {
       type: String,
@@ -29,3 +24,7 @@ export const walletAccessorchema = new mongoose.Schema(
   },
   MODEL_OPTIONS,
 )
+
+const WalletAccessor = mongoose.model('WalletAccessor', walletAccessorSchema)
+
+export { WalletAccessor, walletAccessorSchema }
