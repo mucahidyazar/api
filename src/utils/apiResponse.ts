@@ -1,3 +1,6 @@
+import 'zod-openapi/extend'
+import { z } from 'zod'
+
 import { ERROR_CODE } from '@/constants'
 
 type TApiError = {
@@ -46,3 +49,46 @@ type TMetadata = {
 }
 
 export { ApiResponse, ExtendedApiResponse, TApiError }
+
+// we need to create same structure with zod objects
+
+const apiErrorSchema = z.object({
+  type: z.string().openapi({
+    description: 'The type of the error',
+    example: 'validation_error',
+  }),
+  code: z.string().openapi({
+    description: 'The code of the error',
+    example: 'validation_error',
+  }),
+  message: z.string().openapi({
+    description: 'The message of the error',
+    example: 'Validation error',
+  }),
+  detail: z.any().openapi({
+    description: 'The detail of the error',
+    example: {},
+  }),
+})
+
+const apiResponseSchema = <T, M>(
+  isSuccess: boolean,
+  dataSchema?: z.ZodSchema<T>,
+  metadataSchema?: z.ZodSchema<M>,
+) =>
+  z
+    .object({
+      success: z.boolean().openapi({
+        description: 'The success of the response',
+        example: isSuccess,
+      }),
+      data: dataSchema || z.undefined(),
+      metadata: metadataSchema || z.undefined(),
+      error: isSuccess ? z.undefined() : apiErrorSchema,
+    })
+    .strict()
+    .openapi({
+      description: 'The response of the API',
+    })
+
+export { apiResponseSchema }

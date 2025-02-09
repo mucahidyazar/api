@@ -10,6 +10,7 @@ import {
 } from '@/middleware'
 import { signInDto, signUpDto } from '@/model/request/auth.dto'
 import { signInResponseDto, signUpResponseDto } from '@/model/response/auth.dto'
+import { apiResponseSchema } from '@/utils/apiResponse'
 
 const router = express.Router()
 
@@ -18,17 +19,13 @@ const signInPathObject: ZodOpenApiPathsObject = {
     post: {
       operationId: 'signIn',
       description: 'Authenticate existing user and return JWT token',
-      tags: ['auth'],
+      tags: ['Auth'],
       summary: 'Sign in',
       requestBody: {
         required: true,
         content: {
           'application/json': {
             schema: signInDto,
-            example: {
-              email: 'user@example.com',
-              password: 'password123',
-            },
           },
         },
       },
@@ -37,14 +34,7 @@ const signInPathObject: ZodOpenApiPathsObject = {
           description: 'Successfully authenticated',
           content: {
             'application/json': {
-              schema: signInResponseDto,
-              example: {
-                token: 'eyJhbGciOiJIUzI1NiIs...',
-                user: {
-                  id: '123',
-                  email: 'user@example.com',
-                },
-              },
+              schema: apiResponseSchema(true, signInResponseDto),
             },
           },
         },
@@ -52,15 +42,7 @@ const signInPathObject: ZodOpenApiPathsObject = {
           description: 'Invalid request body',
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string' },
-                },
-              },
-              example: {
-                message: 'Invalid email or password format',
-              },
+              schema: apiResponseSchema(false),
             },
           },
         },
@@ -68,15 +50,7 @@ const signInPathObject: ZodOpenApiPathsObject = {
           description: 'Authentication failed',
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string' },
-                },
-              },
-              example: {
-                message: 'Invalid credentials',
-              },
+              schema: apiResponseSchema(false),
             },
           },
         },
@@ -84,12 +58,7 @@ const signInPathObject: ZodOpenApiPathsObject = {
           description: 'Too many requests',
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string' },
-                },
-              },
+              schema: apiResponseSchema(false),
             },
           },
         },
@@ -108,17 +77,13 @@ const signUpPathObject: ZodOpenApiPathsObject = {
     post: {
       operationId: 'signUp',
       description: 'Create a new user',
-      tags: ['auth'],
+      tags: ['Auth'],
       summary: 'Sign up',
       requestBody: {
         required: true,
         content: {
           'application/json': {
             schema: signUpDto,
-            example: {
-              email: 'user@example.com',
-              password: 'password123',
-            },
           },
         },
       },
@@ -127,15 +92,7 @@ const signUpPathObject: ZodOpenApiPathsObject = {
           description: 'Successfully created user',
           content: {
             'application/json': {
-              schema: signUpResponseDto,
-              example: {
-                token: 'eyJhbGciOiJIUzI1NiIs...',
-                user: {
-                  id: '123',
-                  email: 'user@example.com',
-                  name: 'John Doe',
-                },
-              },
+              schema: apiResponseSchema(true, signUpResponseDto),
             },
           },
         },
@@ -143,15 +100,7 @@ const signUpPathObject: ZodOpenApiPathsObject = {
           description: 'Invalid request body',
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string' },
-                },
-              },
-              example: {
-                message: 'Invalid email or password format',
-              },
+              schema: apiResponseSchema(false),
             },
           },
         },
@@ -159,15 +108,7 @@ const signUpPathObject: ZodOpenApiPathsObject = {
           description: 'User already exists',
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string' },
-                },
-              },
-              example: {
-                message: 'User with this email already exists',
-              },
+              schema: apiResponseSchema(false),
             },
           },
         },
@@ -175,15 +116,7 @@ const signUpPathObject: ZodOpenApiPathsObject = {
           description: 'Too many requests',
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  message: { type: 'string' },
-                },
-              },
-              example: {
-                message: 'Too many signup attempts. Please try again later.',
-              },
+              schema: apiResponseSchema(false),
             },
           },
         },

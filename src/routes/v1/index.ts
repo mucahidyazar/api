@@ -37,3 +37,13 @@ const openApiPaths = {
   // ...wishlistOpenApiPaths,
 }
 export default openApiPaths
+
+const openApiTags = {
+  auth: 'Authentication',
+  calculation: 'Calculation',
+  notification: 'Notification',
+  pushToken: 'Push Token',
+  setting: 'Setting',
+}
+
+export { openApiTags }

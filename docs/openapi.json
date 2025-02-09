@@ -11,13 +11,100 @@
       "description": "Local development server"
     }
   ],
+  "x-tagGroups": [
+    {
+      "name": "User Management",
+      "tags": [
+        "Auth",
+        "User"
+      ]
+    },
+    {
+      "name": "Financial Management",
+      "tags": [
+        "Transaction",
+        "Wallet",
+        "Calculation"
+      ]
+    },
+    {
+      "name": "Features",
+      "tags": [
+        "Wishlist"
+      ]
+    },
+    {
+      "name": "Notifications",
+      "tags": [
+        "Notification",
+        "Push.Token"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints for user sign-in and sign-up",
+      "x-tagGroup": "User Management"
+    },
+    {
+      "name": "User",
+      "description": "User profile management and settings",
+      "x-tagGroup": "User Management"
+    },
+    {
+      "name": "Setting",
+      "description": "Application and user settings management",
+      "x-tagGroup": "User Management"
+    },
+    {
+      "name": "Transaction",
+      "description": "Financial transaction operations including creation, updates, and analytics",
+      "x-tagGroup": "Financial Management"
+    },
+    {
+      "name": "Transaction.Brand",
+      "description": "Management of transaction brands/vendors",
+      "x-tagGroup": "Financial Management"
+    },
+    {
+      "name": "Transaction.Category",
+      "description": "Categories for organizing and classifying transactions",
+      "x-tagGroup": "Financial Management"
+    },
+    {
+      "name": "Wallet",
+      "description": "Digital wallet management including balance and transactions",
+      "x-tagGroup": "Financial Management"
+    },
+    {
+      "name": "Calculation",
+      "description": "Financial calculations and analytics",
+      "x-tagGroup": "Financial Management"
+    },
+    {
+      "name": "Wishlist",
+      "description": "User wishlist management and sharing",
+      "x-tagGroup": "Features"
+    },
+    {
+      "name": "Notification",
+      "description": "System notifications and user alerts",
+      "x-tagGroup": "Notifications"
+    },
+    {
+      "name": "Push.Token",
+      "description": "Device push notification token management",
+      "x-tagGroup": "Notifications"
+    }
+  ],
   "paths": {
     "/api/v1/auth/sign-in": {
       "post": {
         "operationId": "signIn",
         "description": "Authenticate existing user and return JWT token",
         "tags": [
-          "auth"
+          "Auth"
         ],
         "summary": "Sign in",
         "requestBody": {
@@ -46,10 +133,6 @@
                 "additionalProperties": false,
                 "description": "User sign in data",
                 "title": "Sign In"
-              },
-              "example": {
-                "email": "user@example.com",
-                "password": "password123"
               }
             }
           }
@@ -62,25 +145,34 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "token": {
-                      "type": "string",
-                      "description": "Access token",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6....",
-                      "format": "jwt"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "description": "Access token",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6....",
+                          "format": "jwt"
+                        }
+                      },
+                      "required": [
+                        "token"
+                      ],
+                      "description": "Successful sign in response",
+                      "title": "Sign In Response"
                     }
                   },
                   "required": [
-                    "token"
+                    "success",
+                    "data"
                   ],
-                  "description": "Successful sign in response",
-                  "title": "Sign In Response"
-                },
-                "example": {
-                  "token": "eyJhbGciOiJIUzI1NiIs...",
-                  "user": {
-                    "id": "123",
-                    "email": "user@example.com"
-                  }
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -92,13 +184,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
                     }
-                  }
-                },
-                "example": {
-                  "message": "Invalid email or password format"
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -110,13 +236,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
                     }
-                  }
-                },
-                "example": {
-                  "message": "Invalid credentials"
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -128,10 +288,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
                     }
-                  }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -144,7 +341,7 @@
         "operationId": "signUp",
         "description": "Create a new user",
         "tags": [
-          "auth"
+          "Auth"
         ],
         "summary": "Sign up",
         "requestBody": {
@@ -174,10 +371,6 @@
                 "additionalProperties": false,
                 "description": "User sign up data",
                 "title": "Sign Up"
-              },
-              "example": {
-                "email": "user@example.com",
-                "password": "password123"
               }
             }
           }
@@ -190,26 +383,34 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "token": {
-                      "type": "string",
-                      "description": "Access token",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6....",
-                      "format": "jwt"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "description": "Access token",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6....",
+                          "format": "jwt"
+                        }
+                      },
+                      "required": [
+                        "token"
+                      ],
+                      "description": "Successful sign up response",
+                      "title": "Sign Up Response"
                     }
                   },
                   "required": [
-                    "token"
+                    "success",
+                    "data"
                   ],
-                  "description": "Successful sign up response",
-                  "title": "Sign Up Response"
-                },
-                "example": {
-                  "token": "eyJhbGciOiJIUzI1NiIs...",
-                  "user": {
-                    "id": "123",
-                    "email": "user@example.com",
-                    "name": "John Doe"
-                  }
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -221,13 +422,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
                     }
-                  }
-                },
-                "example": {
-                  "message": "Invalid email or password format"
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -239,13 +474,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
                     }
-                  }
-                },
-                "example": {
-                  "message": "User with this email already exists"
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
@@ -257,13 +526,47 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string"
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
                     }
-                  }
-                },
-                "example": {
-                  "message": "Too many signup attempts. Please try again later."
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
                 }
               }
             }
