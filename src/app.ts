@@ -64,6 +64,27 @@ app.get('/health', (_req, res) => {
 //   }
 // })
 
+app.use('/docs', express.static('docs'))
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>API Documentation</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          body { margin: 0; padding: 0; }
+        </style>
+      </head>
+      <body>
+        <redoc spec-url='/docs/openapi.json'></redoc>
+        <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+      </body>
+    </html>
+  `)
+})
+
 //! routes
 app.use(middlewareResponse)
 app.use(authRouter)

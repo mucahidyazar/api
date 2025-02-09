@@ -31,7 +31,8 @@
     "prettier": "prettier --check \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "prepare": "husky install",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "generate:openapi": "ts-node -r module-alias/register ./src/utils/openapi.ts"
   },
   "_moduleAliases": {
     "@": "dist",
@@ -64,7 +65,8 @@
     "socket.io": "4.8.1",
     "ts-node": "^10.9.2",
     "winston": "3.17.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
     "@types/cors": "2.8.17",
