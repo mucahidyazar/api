@@ -23,6 +23,6 @@ const openApiDocument = createDocument({
 })
 
 // Write the generated OpenAPI document to a JSON file
-writeFileSync('./openapi.json', JSON.stringify(openApiDocument, null, 2))
+writeFileSync('./docs/openapi.json', JSON.stringify(openApiDocument, null, 2))
 
 console.log('OpenAPI spec generated successfully.')

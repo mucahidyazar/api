@@ -139,6 +139,54 @@ const signUpPathObject: ZodOpenApiPathsObject = {
             },
           },
         },
+        400: {
+          description: 'Invalid request body',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'Invalid email or password format',
+              },
+            },
+          },
+        },
+        409: {
+          description: 'User already exists',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'User with this email already exists',
+              },
+            },
+          },
+        },
+        429: {
+          description: 'Too many requests',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'Too many signup attempts. Please try again later.',
+              },
+            },
+          },
+        },
       },
     },
   },
