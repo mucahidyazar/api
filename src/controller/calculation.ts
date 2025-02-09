@@ -5,13 +5,6 @@ import { ApiError } from '@/errors/api-error'
 import { Calculation } from '@/model/calculation'
 import { ApiResponse } from '@/utils'
 
-/**
- * @route POST api/v1/calculations
- * @description Create a new calculation
- * @access Private
- * @param {TCalculationDto} req.body
- * @returns {ApiResponse<TCalculationDto>} 201 - Success response with created calculation
- */
 async function calculationCreate(req: Request, res: Response) {
   const newCalculation = new Calculation({
     ...req.body,

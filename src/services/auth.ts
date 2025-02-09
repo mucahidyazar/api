@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
+import { z } from 'zod'
 
 import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
-import { TSignInDto, TSignUpDto } from '@/model/request/auth.dto'
+import { signInDto, signUpDto } from '@/model/request/auth.dto'
 import { User } from '@/model/user'
 
 /**
@@ -25,27 +26,23 @@ const generateAccessToken = user => {
 
 /**
  * Creates a new user account and generates an access token
- * @param {TSignUpDto} model - The sign-up data transfer object containing user information
- * @param {string} model.email - The email address of the user
- * @param {string} model.password - The password for the user account (min 8 characters)
+ * @param {z.infer<typeof signUpDto>} model - The user sign-up data
  * @returns {Promise<string>} JWT access token for the newly created user
  * @throws {TApiError} If there's an error during user creation or if email already exists
  */
-const signUpUser = async (model: TSignUpDto) => {
+const signUpUser = async (model: z.infer<typeof signUpDto>) => {
   const user = new User(model)
   await user.save()
   return generateAccessToken(user)
 }
 
 /**
- * Authenticates a user with their email and password
- * @param {TSignInDto} model - The sign-in data transfer object containing user credentials
- * @param {string} model.email - The email address of the user
- * @param {string} model.password - The password for the user account
+ * Authenticates a user and generates an access token
+ * @param {z.infer<typeof signInDto>} model - The user sign-in data
  * @returns {Promise<string>} JWT access token for the authenticated user
- * @throws {TApiError} If credentials are invalid or user is not found
+ * @throws {TApiError} If there's an error during user authentication
  */
-const signInUser = async (model: TSignInDto) => {
+const signInUser = async (model: z.infer<typeof signInDto>) => {
   const user = await User.findOne({ email: model.email })
     .select('+password')
     .lean()

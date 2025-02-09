@@ -157,15 +157,15 @@ async function subscriptionList(req: Request, res: Response) {
         { user: user },
         ...(walletObjectId || walletIds.length > 0
           ? [
-            {
-              wallet: {
-                $in: [
-                  ...walletIds,
-                  ...(walletObjectId ? [walletObjectId] : []),
-                ],
+              {
+                wallet: {
+                  $in: [
+                    ...walletIds,
+                    ...(walletObjectId ? [walletObjectId] : []),
+                  ],
+                },
               },
-            },
-          ]
+            ]
           : []),
       ],
       // Sadece parent subscription'ları al (kendisi bir subscription ama başka bir subscription'a bağlı değil)

@@ -1,4 +1,5 @@
 import express from 'express'
+import { ZodOpenApiPathsObject } from 'zod-openapi'
 
 import { ROUTES } from '@/constants'
 import { signIn, signUp } from '@/controller/auth'
@@ -8,47 +9,188 @@ import {
   signUpRateLimiter,
 } from '@/middleware'
 import { signInDto, signUpDto } from '@/model/request/auth.dto'
+import { signInResponseDto, signUpResponseDto } from '@/model/response/auth.dto'
 
-/**
- * Express router for authentication routes
- * @module routes/auth
- */
 const router = express.Router()
 
-/**
- * Route for user sign-in
- * @name POST /api/v1/auth/sign-in
- * @function
- * @memberof module:routes/auth
- * @inner
- * @param {string} path - Express path
- * @param {Function} middlewareValidateBody - Validates request body against signInDto schema
- * @param {Function} asyncWrapper - Wraps async route handler
- * @param {Function} signIn - Sign-in controller function
- * @see {@link signInDto}
- * @see {@link signIn}
- */
+const signInPathObject: ZodOpenApiPathsObject = {
+  [ROUTES.v1.auth.signIn]: {
+    post: {
+      operationId: 'signIn',
+      description: 'Authenticate existing user and return JWT token',
+      tags: ['auth'],
+      summary: 'Sign in',
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: signInDto,
+            example: {
+              email: 'user@example.com',
+              password: 'password123',
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'Successfully authenticated',
+          content: {
+            'application/json': {
+              schema: signInResponseDto,
+              example: {
+                token: 'eyJhbGciOiJIUzI1NiIs...',
+                user: {
+                  id: '123',
+                  email: 'user@example.com',
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: 'Invalid request body',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'Invalid email or password format',
+              },
+            },
+          },
+        },
+        401: {
+          description: 'Authentication failed',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'Invalid credentials',
+              },
+            },
+          },
+        },
+        429: {
+          description: 'Too many requests',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
 router.post(
   ROUTES.v1.auth.signIn,
   middlewareValidateBody(signInDto),
   asyncWrapper(signIn),
 )
 
-/**
- * Route for user registration
- * @name POST /api/v1/auth/sign-up
- * @function
- * @memberof module:routes/auth
- * @inner
- * @param {string} path - Express path
- * @param {Function} signUpRateLimiter - Rate limits sign-up requests
- * @param {Function} middlewareValidateBody - Validates request body against signUpDto schema
- * @param {Function} asyncWrapper - Wraps async route handler
- * @param {Function} signUp - Sign-up controller function
- * @see {@link signUpDto}
- * @see {@link signUp}
- * @see {@link signUpRateLimiter}
- */
+const signUpPathObject: ZodOpenApiPathsObject = {
+  [ROUTES.v1.auth.signUp]: {
+    post: {
+      operationId: 'signUp',
+      description: 'Create a new user',
+      tags: ['auth'],
+      summary: 'Sign up',
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: signUpDto,
+            example: {
+              email: 'user@example.com',
+              password: 'password123',
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'Successfully created user',
+          content: {
+            'application/json': {
+              schema: signUpResponseDto,
+              example: {
+                token: 'eyJhbGciOiJIUzI1NiIs...',
+                user: {
+                  id: '123',
+                  email: 'user@example.com',
+                  name: 'John Doe',
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: 'Invalid request body',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'Invalid email or password format',
+              },
+            },
+          },
+        },
+        409: {
+          description: 'User already exists',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'User with this email already exists',
+              },
+            },
+          },
+        },
+        429: {
+          description: 'Too many requests',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  message: { type: 'string' },
+                },
+              },
+              example: {
+                message: 'Too many signup attempts. Please try again later.',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
 router.post(
   ROUTES.v1.auth.signUp,
   signUpRateLimiter,
@@ -56,4 +198,9 @@ router.post(
   asyncWrapper(signUp),
 )
 
-export { router as authRouter }
+const authOpenApiPaths: ZodOpenApiPathsObject = {
+  ...signInPathObject,
+  ...signUpPathObject,
+}
+
+export { authOpenApiPaths, router as authRouter }

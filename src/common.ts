@@ -107,4 +107,4 @@ interface TErrorResponse extends TBaseResponse {
 type TResponseOptions = TSuccessResponse | TErrorResponse
 
 export { TResponseOptions }
-export type TResponseStatus = 'success' | 'error';
+export type TResponseStatus = 'success' | 'error'
