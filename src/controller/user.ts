@@ -65,7 +65,6 @@ async function userMeDelete(req: Request, res: Response) {
 }
 
 async function userMeUpdate(req: Request, res: Response) {
-
   const allowedUpdateKeys = [
     'firstName',
     'lastName',

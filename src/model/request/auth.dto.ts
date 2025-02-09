@@ -1,9 +1,5 @@
 import { z } from 'zod'
 
-/**
- * Schema for user authentication operations
- */
-
 const signInDto = z.object({
   email: z
     .string({ required_error: 'Email is required' })
@@ -22,9 +18,6 @@ const signUpDto = z.object({
     .min(8, { message: 'Password must be at least 8 characters' }),
 })
 
-/**
- * Type definitions inferred from validation schemas
- */
 type TSignInDto = z.infer<typeof signInDto>
 type TSignUpDto = z.infer<typeof signUpDto>
 

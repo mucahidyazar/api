@@ -7,12 +7,6 @@ import { queryHelper } from '@/helpers'
 import { Notification } from '@/model/notification'
 import { ApiResponse } from '@/utils'
 
-
-
-
-
-
-
 async function notificationList(req: Request, res: Response) {
   const unreadCount = await Notification.countDocuments({
     user: req.user.id,
