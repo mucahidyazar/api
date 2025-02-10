@@ -1,13 +1,13 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "My API",
+    "title": "Financial Management API",
     "version": "1.0.0",
-    "description": "API documentation generated using Zod and zod-openapi"
+    "description": "A comprehensive API for financial management including features such as digital wallet management, transaction tracking, expense analytics, wishlists, and user notifications. Supports multi-currency transactions, subscription tracking, and shared wallet access."
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:8001",
       "description": "Local development server"
     }
   ],
@@ -15,7 +15,7 @@
     {
       "name": "User Management",
       "tags": [
-        "Auth",
+        "Authentication",
         "User"
       ]
     },
@@ -43,7 +43,7 @@
   ],
   "tags": [
     {
-      "name": "Auth",
+      "name": "Authentication",
       "description": "Authentication endpoints for user sign-in and sign-up",
       "x-tagGroup": "User Management"
     },
@@ -99,14 +99,14 @@
     }
   ],
   "paths": {
-    "/api/v1/auth/sign-in": {
+    "/api/v1/auth/sign-up": {
       "post": {
-        "operationId": "signIn",
-        "description": "Authenticate existing user and return JWT token",
+        "operationId": "signUp",
+        "description": "Create a new user account with email and password authentication. Returns a JWT access token that can be used to authenticate future requests.",
         "tags": [
-          "Auth"
+          "Authentication"
         ],
-        "summary": "Sign in",
+        "summary": "Sign up",
         "requestBody": {
           "required": true,
           "content": {
@@ -123,7 +123,8 @@
                   "password": {
                     "type": "string",
                     "minLength": 8,
-                    "description": "User password - must be at least 8 characters"
+                    "description": "User password",
+                    "format": "password"
                   }
                 },
                 "required": [
@@ -131,15 +132,15 @@
                   "password"
                 ],
                 "additionalProperties": false,
-                "description": "User sign in data",
-                "title": "Sign In"
+                "description": "User sign up data",
+                "title": "Sign Up"
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Successfully authenticated",
+          "201": {
+            "description": "Successfully signed up",
             "content": {
               "application/json": {
                 "schema": {
@@ -163,8 +164,8 @@
                       "required": [
                         "token"
                       ],
-                      "description": "Successful sign in response",
-                      "title": "Sign In Response"
+                      "description": "Successful sign up response",
+                      "title": "Sign Up Response"
                     }
                   },
                   "required": [
@@ -229,8 +230,8 @@
               }
             }
           },
-          "401": {
-            "description": "Authentication failed",
+          "409": {
+            "description": "User already exists",
             "content": {
               "application/json": {
                 "schema": {
@@ -336,14 +337,14 @@
         }
       }
     },
-    "/api/v1/auth/sign-up": {
+    "/api/v1/auth/sign-in": {
       "post": {
-        "operationId": "signUp",
-        "description": "Create a new user",
+        "operationId": "signIn",
+        "description": "Authenticate existing user and return JWT token",
         "tags": [
-          "Auth"
+          "Authentication"
         ],
-        "summary": "Sign up",
+        "summary": "Sign in",
         "requestBody": {
           "required": true,
           "content": {
@@ -360,8 +361,7 @@
                   "password": {
                     "type": "string",
                     "minLength": 8,
-                    "description": "User password",
-                    "format": "password"
+                    "description": "User password - must be at least 8 characters"
                   }
                 },
                 "required": [
@@ -369,15 +369,15 @@
                   "password"
                 ],
                 "additionalProperties": false,
-                "description": "User sign up data",
-                "title": "Sign Up"
+                "description": "User sign in data",
+                "title": "Sign In"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Successfully created user",
+            "description": "Successfully signed in",
             "content": {
               "application/json": {
                 "schema": {
@@ -401,8 +401,8 @@
                       "required": [
                         "token"
                       ],
-                      "description": "Successful sign up response",
-                      "title": "Sign Up Response"
+                      "description": "Successful sign in response",
+                      "title": "Sign In Response"
                     }
                   },
                   "required": [
@@ -467,8 +467,8 @@
               }
             }
           },
-          "409": {
-            "description": "User already exists",
+          "401": {
+            "description": "Invalid credentials",
             "content": {
               "application/json": {
                 "schema": {

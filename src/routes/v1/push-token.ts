@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { ROUTES } from '@/constants'
-import { pushTokenCreate } from '@/controller/push-token'
+import { pushTokenCreate } from '@/controller'
 import { asyncWrapper } from '@/middleware'
 
 const router = express.Router()

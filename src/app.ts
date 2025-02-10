@@ -1,7 +1,10 @@
 import '@/client/env'
 import '@/config/db'
 
+import 'reflect-metadata'
+
 import { createServer } from 'http'
+import path from 'path'
 
 import cors from 'cors'
 import express from 'express'
@@ -65,24 +68,11 @@ app.get('/health', (_req, res) => {
 // })
 
 app.use('/docs', express.static('docs'))
-app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>API Documentation</title>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-          body { margin: 0; padding: 0; }
-        </style>
-      </head>
-      <body>
-        <redoc spec-url='/docs/openapi.json'></redoc>
-        <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
-      </body>
-    </html>
-  `)
+app.get('/v1/docs', (req, res) => {
+  res.sendFile(path.join(__dirname, '../docs', 'redoc.html'))
+})
+app.get('/v2/docs', (req, res) => {
+  res.sendFile(path.join(__dirname, '../docs', 'scalar.html'))
 })
 
 //! routes

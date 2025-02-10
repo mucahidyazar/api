@@ -7,7 +7,7 @@ import {
   transactionCategoryGet,
   transactionCategoryList,
   transactionCategoryUpdate,
-} from '@/controller/transaction-category'
+} from '@/controller'
 import { asyncWrapper, middlewareValidateBody } from '@/middleware'
 import {
   transactionCategorySchema,

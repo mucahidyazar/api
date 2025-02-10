@@ -6,7 +6,7 @@ import {
   notificationDelete,
   notificationMarkAsRead,
   notificationMarkAllAsRead,
-} from '@/controller/notification'
+} from '@/controller'
 import { asyncWrapper } from '@/middleware'
 
 const router = express.Router()

@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { writeFileSync } from 'fs'
 
 import { createDocument } from 'zod-openapi'
@@ -8,20 +10,21 @@ import openApiPaths from '../routes/v1'
 const openApiDocument = createDocument({
   openapi: '3.1.0',
   info: {
-    title: 'My API',
+    title: 'Financial Management API',
     version: '1.0.0',
-    description: 'API documentation generated using Zod and zod-openapi',
+    description:
+      'A comprehensive API for financial management including features such as digital wallet management, transaction tracking, expense analytics, wishlists, and user notifications. Supports multi-currency transactions, subscription tracking, and shared wallet access.',
   },
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: 'http://localhost:8001',
       description: 'Local development server',
     },
   ],
   'x-tagGroups': [
     {
       name: 'User Management',
-      tags: ['Auth', 'User'],
+      tags: ['Authentication', 'User'],
     },
     {
       name: 'Financial Management',
@@ -38,7 +41,7 @@ const openApiDocument = createDocument({
   ],
   tags: [
     {
-      name: 'Auth',
+      name: 'Authentication',
       description: 'Authentication endpoints for user sign-in and sign-up',
       'x-tagGroup': 'User Management',
     },
