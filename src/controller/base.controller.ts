@@ -1,8 +1,8 @@
 import { ZodOpenApiPathsObject } from 'zod-openapi'
 
-export const OPENAPI_METADATA_KEY = Symbol('openApiMetadata')
+import { OPENAPI_METADATA_KEY } from '@/constants'
 
-export type OpenApiMethodMetadata = {
+type OpenApiMethodMetadata = {
   method: string
   path: string
   operation?: OpenApiOperation
@@ -38,10 +38,10 @@ class BaseController {
       }
     }
 
-    console.log(paths)
-
     return paths
   }
 }
 
 export { BaseController }
+
+export type { OpenApiMethodMetadata }

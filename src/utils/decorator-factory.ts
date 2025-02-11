@@ -1,11 +1,10 @@
 import { z } from 'zod'
 
+import { OPENAPI_METADATA_KEY } from '@/constants'
 import {
   BaseController,
-  OPENAPI_METADATA_KEY,
   OpenApiMethodMetadata,
 } from '@/controller/base.controller'
-
 function Post(path: string) {
   return function (
     target: any,

@@ -70,4 +70,12 @@ const ERROR_MESSAGE = {
   invalid: (fieldName = 'Field') => `Invalid ${fieldName}`,
 }
 
-export { DEFAULTS, ERROR_MESSAGE, MODEL_OPTIONS, VALIDATION_RULES }
+const OPENAPI_METADATA_KEY = Symbol('openApiMetadata')
+
+export {
+  DEFAULTS,
+  ERROR_MESSAGE,
+  MODEL_OPTIONS,
+  OPENAPI_METADATA_KEY,
+  VALIDATION_RULES,
+}
