@@ -11,7 +11,7 @@ import {
   wishlistAccessorDelete,
   wishlistAccessorCreate,
   wishlistAccessorUpdate,
-} from '@/controller/wishlist'
+} from '@/controller'
 import { asyncWrapper, middlewareValidateBody } from '@/middleware'
 import {
   wishlistAccessorCreateSchema,

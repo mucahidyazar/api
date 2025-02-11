@@ -39,11 +39,17 @@ const openApiPaths = {
 export default openApiPaths
 
 const openApiTags = {
-  auth: 'Authentication',
+  authentication: 'Authentication',
   calculation: 'Calculation',
   notification: 'Notification',
   pushToken: 'Push Token',
   setting: 'Setting',
+  transaction: 'Transaction',
+  transactionBrand: 'Transaction Brand',
+  transactionCategory: 'Transaction Category',
+  user: 'User',
+  wallet: 'Wallet',
+  wishlist: 'Wishlist',
 }
 
 export { openApiTags }

@@ -9,7 +9,7 @@ import {
   transactionList,
   transactionStatsGet,
   transactionUpdate,
-} from '@/controller/transaction'
+} from '@/controller'
 import { asyncWrapper, middlewareValidateBody } from '@/middleware'
 import {
   transactionSchema,

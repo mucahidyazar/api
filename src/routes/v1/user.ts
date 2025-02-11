@@ -6,7 +6,7 @@ import {
   userMeDelete,
   userMeUpdate,
   userMePasswordUpdate,
-} from '@/controller/user'
+} from '@/controller'
 import { asyncWrapper } from '@/middleware'
 import { middlewareValidateBody } from '@/middleware'
 import { passwordUpdateSchema } from '@/validation'

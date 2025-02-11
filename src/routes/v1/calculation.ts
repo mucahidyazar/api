@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { ROUTES } from '@/constants'
-import { calculationCreate, calculationList } from '@/controller/calculation'
+import { calculationCreate, calculationList } from '@/controller'
 import { asyncWrapper } from '@/middleware'
 import { middlewareValidateBody } from '@/middleware'
 import { calculationCreateSchema } from '@/validation'

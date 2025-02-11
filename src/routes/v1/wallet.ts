@@ -12,7 +12,7 @@ import {
   walletAccessorDelete,
   walletAccessorUpdate,
   walletTypeList,
-} from '@/controller/wallet'
+} from '@/controller'
 import { asyncWrapper, middlewareValidateBody } from '@/middleware'
 import {
   walletAccessorCreateSchema,

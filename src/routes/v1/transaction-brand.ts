@@ -7,7 +7,7 @@ import {
   transactionBrandCreate,
   transactionBrandUpdate,
   transactionBrandDelete,
-} from '@/controller/transaction-brand'
+} from '@/controller'
 import { asyncWrapper, middlewareValidateBody } from '@/middleware'
 import {
   transactionBrandSchema,

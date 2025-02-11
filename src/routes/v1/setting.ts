@@ -7,7 +7,7 @@ import {
   settingBackup,
   settingRestore,
   settingReset,
-} from '@/controller/setting'
+} from '@/controller'
 import { asyncWrapper, middlewareValidateBody } from '@/middleware'
 import { settingUpdateSchema } from '@/validation/setting'
 
