@@ -16,13 +16,13 @@ router.post(
   ROUTES.v1.auth.signUp,
   signUpRateLimiter,
   middlewareValidateBody(signUpDto),
-  asyncWrapper(authController.signUp.bind(authController)),
+  asyncWrapper(authController.signUp),
 )
 
 router.post(
   ROUTES.v1.auth.signIn,
   middlewareValidateBody(signInDto),
-  asyncWrapper(authController.signIn.bind(authController)),
+  asyncWrapper(authController.signIn),
 )
 
 export const authOpenApiPaths = AuthController.getOpenApiPaths()

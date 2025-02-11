@@ -1,8 +1,5 @@
 import { z } from 'zod'
-import {
-  ZodOpenApiContentObject,
-  ZodOpenApiRequestBodyObject,
-} from 'zod-openapi'
+
 import {
   BaseController,
   OPENAPI_METADATA_KEY,
