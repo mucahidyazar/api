@@ -1,5 +1,8 @@
 import rateLimit from 'express-rate-limit'
 
+import { ERROR_CODE } from '@/constants'
+import { ApiResponse } from '@/utils'
+
 /**
  * Rate limiter middleware for sign-up requests
  * @description Limits the number of sign-up attempts from a single IP address
@@ -14,9 +17,10 @@ import rateLimit from 'express-rate-limit'
 export const signUpRateLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 5, // limit each IP to 5 requests per windowMs
-  message: {
-    status: 'error',
-    code: 429,
-    message: 'Too many accounts created. Please try again later.',
-  },
+  message: ApiResponse.failure({
+    type: 'RateLimitExceeded',
+    code: ERROR_CODE.RateLimitExceeded,
+    message: 'Too many requests. Please try again later.',
+    detail: undefined,
+  }),
 })
