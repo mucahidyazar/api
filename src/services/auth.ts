@@ -45,7 +45,6 @@ const signUpUser = async (model: z.infer<typeof signUpDto>) => {
 const signInUser = async (model: z.infer<typeof signInDto>) => {
   const user = await User.findOne({ email: model.email })
     .select('+password')
-    .lean()
     .exec()
 
   if (!user) {
