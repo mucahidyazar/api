@@ -9,7 +9,7 @@ export function middlewareResponse(
 ): void {
   res.response = function (response: ExtendedApiResponse): void {
     res.contentType('application/json')
-    const { statusCode, ...apiResponse } =
+    const { statusCode, apiResponse } =
       response as unknown as ExtendedApiResponse
 
     res.status(statusCode).json(apiResponse)
