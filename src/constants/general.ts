@@ -27,7 +27,7 @@ const VALIDATION_RULES = {
     uppercase: /[A-Z]/,
     lowercase: /[a-z]/,
     number: /[0-9]/,
-    special: /[!@#$%^&*]/,
+    special: /[!@#$%^&*()_+-=[]{}|;:,.<>?~]/,
   },
   input: {
     min: 2,
