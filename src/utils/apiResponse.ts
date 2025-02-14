@@ -12,9 +12,9 @@ type TApiError = {
 
 class ApiResponse<T = unknown> {
   public success: boolean = false
-  public data?: T | unknown = null
-  public metadata?: TMetadata | null = null
-  public error?: TApiError | null = null
+  public data?: T | undefined
+  public metadata?: TMetadata | undefined
+  public error?: TApiError | undefined
 
   constructor(init?: Partial<ApiResponse<T>>) {
     Object.assign(this, init)
