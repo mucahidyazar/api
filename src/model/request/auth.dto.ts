@@ -1,6 +1,8 @@
 import 'zod-openapi/extend'
 import { z } from 'zod'
 
+import { ERROR_MESSAGE, VALIDATION_RULES } from '@/constants'
+
 const signInDto = z
   .object({
     email: z
@@ -38,6 +40,18 @@ const signUpDto = z
     password: z
       .string({ required_error: 'Password is required' })
       .min(8, { message: 'Password must be at least 8 characters' })
+      .regex(VALIDATION_RULES.regex.uppercase, {
+        message: ERROR_MESSAGE.upperCase('Password'),
+      })
+      .regex(VALIDATION_RULES.regex.lowercase, {
+        message: ERROR_MESSAGE.lowerCase('Password'),
+      })
+      .regex(VALIDATION_RULES.regex.number, {
+        message: ERROR_MESSAGE.numberCase('Password'),
+      })
+      .regex(VALIDATION_RULES.regex.special, {
+        message: ERROR_MESSAGE.specialCase('Password'),
+      })
       .openapi({
         description: 'User password',
         format: 'password',

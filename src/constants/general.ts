@@ -24,15 +24,17 @@ const VALIDATION_RULES = {
   password: {
     min: 8,
     max: 100,
-    uppercase: /[A-Z]/,
-    lowercase: /[a-z]/,
-    number: /[0-9]/,
-    special: /[!@#$%^&*()_+-=[]{}|;:,.<>?~]/,
   },
   input: {
     min: 2,
     mid: 100,
     max: 500,
+  },
+  regex: {
+    uppercase: /[A-Z]/,
+    lowercase: /[a-z]/,
+    number: /[0-9]/,
+    special: /[!@#$%^&*()_+-=\[\]{}|;:,.<>?~]/,
   },
 }
 
@@ -64,7 +66,10 @@ const ERROR_MESSAGE = {
     `${fieldName} must contain at least one lowercase letter`,
   numberCase: (fieldName = 'Field') =>
     `${fieldName} must contain at least one number`,
-  specialCase: (fieldName = 'Field', specialChars = '!@#$%^&*') =>
+  specialCase: (
+    fieldName = 'Field',
+    specialChars = VALIDATION_RULES.regex.special,
+  ) =>
     `${fieldName} must contain at least one special character (${specialChars})`,
 
   invalid: (fieldName = 'Field') => `Invalid ${fieldName}`,

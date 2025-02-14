@@ -11,19 +11,10 @@ const passwordSchema = z
     VALIDATION_RULES.password.min,
     ERROR_MESSAGE.stringMin('Password', VALIDATION_RULES.password.min),
   )
-  .regex(
-    VALIDATION_RULES.password.uppercase,
-    ERROR_MESSAGE.upperCase('Password'),
-  )
-  .regex(
-    VALIDATION_RULES.password.lowercase,
-    ERROR_MESSAGE.lowerCase('Password'),
-  )
-  .regex(VALIDATION_RULES.password.number, ERROR_MESSAGE.numberCase('Password'))
-  .regex(
-    VALIDATION_RULES.password.special,
-    ERROR_MESSAGE.specialCase('Password'),
-  )
+  .regex(VALIDATION_RULES.regex.uppercase, ERROR_MESSAGE.upperCase('Password'))
+  .regex(VALIDATION_RULES.regex.lowercase, ERROR_MESSAGE.lowerCase('Password'))
+  .regex(VALIDATION_RULES.regex.number, ERROR_MESSAGE.numberCase('Password'))
+  .regex(VALIDATION_RULES.regex.special, ERROR_MESSAGE.specialCase('Password'))
 
 const passwordUpdateSchema = z.object({
   oldPassword: z
