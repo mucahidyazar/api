@@ -26,7 +26,7 @@ const VALIDATION_RULES = {
     max: 100,
   },
   input: {
-    min: 2,
+    min: 1,
     mid: 100,
     max: 500,
   },
@@ -34,7 +34,8 @@ const VALIDATION_RULES = {
     uppercase: /[A-Z]/,
     lowercase: /[a-z]/,
     number: /[0-9]/,
-    special: /[!@#$%^&*()_+-=\[\]{}|;:,.<>?~]/,
+    // eslint-disable-next-line no-useless-escape
+    special: /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?~]/
   },
 }
 
