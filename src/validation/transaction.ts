@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { DEFAULTS, ERROR_MESSAGE, VALIDATION_RULES } from '@/constants'
+import { ERROR_MESSAGE, VALIDATION_RULES } from '@/constants'
 import { createObjectIdSchema } from '@/validation/general'
 
 const transactionBrandSchema = z.object({
@@ -26,12 +26,6 @@ const transactionCategorySchema = z.object({
 })
 
 const transactionCategoryUpdateSchema = transactionCategorySchema.partial()
-
-const transactionBalanceSchema = z.object({
-  amount: z.number().default(0),
-  currency: z.string().default(DEFAULTS.currency),
-  rate: z.number().min(0).default(1),
-})
 
 const transactionSchema = z.object({
   type: z.enum(['income', 'expense']),
@@ -61,9 +55,6 @@ const transactionSchema = z.object({
   transactionCurrency: z
     .string({ message: 'Please select a currency.' })
     .min(1, { message: 'Please select a currency' }),
-
-  primaryBalance: transactionBalanceSchema.optional(),
-  secondaryBalance: transactionBalanceSchema.optional(),
 
   wallet: createObjectIdSchema('Wallet'),
   walletBalance: createObjectIdSchema('WalletBalance'),

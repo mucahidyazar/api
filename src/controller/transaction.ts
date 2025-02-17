@@ -194,19 +194,19 @@ async function subscriptionList(req: Request, res: Response) {
 
         const [firstTransaction, lastTransaction] = await Promise.all([
           Transaction.findOne({ subscriptionId: subscription._id })
-            .sort({ date: 1 })
-            .select('date'),
+            .sort({ dueDate: 1 })
+            .select('dueDate'),
           Transaction.findOne({ subscriptionId: subscription._id })
-            .sort({ date: -1 })
-            .select('date'),
+            .sort({ dueDate: -1 })
+            .select('dueDate'),
         ])
 
         return {
           ...subscription,
           subscriptionStats: {
             totalTransactions,
-            firstTransactionDate: firstTransaction?.date,
-            lastTransactionDate: lastTransaction?.date,
+            firstTransactionDate: firstTransaction?.dueDate,
+            lastTransactionDate: lastTransaction?.dueDate,
           },
         }
       }),
@@ -256,15 +256,14 @@ async function transactionChartGet(req: Request, res: Response) {
   const queryResponse = await query.exec()
 
   const chartObjectData = queryResponse?.reduce((acc, transaction) => {
-    const category = (transaction.transactionCategory as any)?.name
+    const category = (transaction.category as any)?.name
     if (!acc[category]) {
       acc[category] = {}
     }
     acc[category] = {
       ...acc[category],
-      color: (transaction.transactionCategory as any)?.color,
-      amount:
-        (acc[category]?.amount || 0) + (transaction.transactionAmount || 0),
+      color: (transaction.category as any)?.color,
+      amount: (acc[category]?.amount || 0) + (transaction.amount || 0),
     }
     return acc
   }, {}) as Record<string, { amount: number; color: number }>
@@ -313,9 +312,9 @@ async function transactionStatsGet(req: Request, res: Response) {
 
   const totalsMap = response.reduce(
     (acc, transaction) => {
-      const balance = transaction.transactionAmount as any
+      const balance = transaction.amount as any
 
-      if (transaction.type === 'income') {
+      if (transaction.direction === 'income') {
         const incomes = acc.incomes
         if (!incomes[balance.currency]) {
           incomes[balance.currency] = 0
@@ -380,10 +379,8 @@ async function transactionUpdate(req: Request, res: Response) {
     'type',
     'description',
     'link',
-    'date',
+    'dueDate',
     'balance',
-    'primaryBalance',
-    'secondaryBalance',
     'groupId',
     'transactionCategoryId',
     'transactionBrandId',
@@ -443,35 +440,35 @@ async function transactionUpdate(req: Request, res: Response) {
     throw new ApiError('Transaction not found', ERROR_CODE.EntityNotFound)
   }
 
-  const isTransactionIncome = transactionData?.type === 'income'
+  const isTransactionIncome = transactionData?.direction === 'income'
   if (transactionAmount) {
     if (isTransactionIncome) {
       if (isUpdateIncome) {
         walletBalance.amount =
           walletBalance.amount -
           (transactionAmount ?? 0) +
-          transactionData.transactionAmount
+          transactionData.amount
       } else {
         walletBalance.amount =
           walletBalance.amount -
           (transactionAmount ?? 0) -
-          transactionData.transactionAmount
+          transactionData.amount
       }
     } else {
       if (isUpdateIncome) {
         walletBalance.amount =
           walletBalance.amount +
           (transactionAmount ?? 0) +
-          transactionData.transactionAmount
+          transactionData.amount
       } else {
         walletBalance.amount =
           walletBalance.amount +
           (transactionAmount ?? 0) -
-          transactionData.transactionAmount
+          transactionData.amount
       }
     }
 
-    transactionData.transactionAmount = transactionAmount
+    transactionData.amount = transactionAmount
     await transactionData?.save()
   }
   await walletBalance.save()
