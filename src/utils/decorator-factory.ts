@@ -53,9 +53,7 @@ function ApiOperation(config: {
   description: string
   tags: string[]
   summary: string
-  security: {
-    bearerAuth: string[]
-  }
+  security: any
 }) {
   return function (
     target: any,
@@ -72,7 +70,6 @@ function ApiOperation(config: {
       responses: {},
       requestBody: undefined,
       operation: undefined,
-      security: [],
     }
 
     existingMetadata.operation = config
