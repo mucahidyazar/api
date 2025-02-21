@@ -17,7 +17,7 @@ import { User } from '@/model/user'
 const generateAccessToken = user => {
   return jwt.sign(
     { id: user._id, email: user.email, role: user.role },
-    'your_access_token_secret',
+    process.env.JWT_SECRET,
     {
       expiresIn: '1d',
     },

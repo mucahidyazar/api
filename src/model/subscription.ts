@@ -1,15 +1,18 @@
 import mongoose from 'mongoose'
 
+import { ITransaction } from './transaction'
 import { IBaseTransaction, baseTransactionSchema } from './transaction-base'
 
-interface ISubscription extends mongoose.Document, IBaseTransaction {
-  status: 'continuing' | 'completed' | 'canceled' | 'deleted'
+interface ISubscription extends IBaseTransaction {
+  subscriptionStatus: 'continuing' | 'completed' | 'canceled' | 'deleted'
   frequency: 'daily' | 'weekly' | 'monthly' | 'yearly'
   repeat: number
   autoRenew: boolean
   totalAmount: number
   startDate: Date
   endDate: Date
+
+  transactions: mongoose.Types.ObjectId[] | ITransaction['_id'][]
 
   nextPaymentDate: Date
   getNextPaymentDate(): Promise<Date>
@@ -67,9 +70,7 @@ interface ISubscription extends mongoose.Document, IBaseTransaction {
 }
 
 const subscriptionSchema = new mongoose.Schema({
-  ...baseTransactionSchema.obj,
-
-  status: {
+  subscriptionStatus: {
     type: String,
     describe: 'Status of the subscription',
     enum: ['continuing', 'completed', 'canceled', 'deleted'],
@@ -115,6 +116,13 @@ const subscriptionSchema = new mongoose.Schema({
     type: Date,
     describe: 'End date of the subscription',
   },
+}).add(baseTransactionSchema)
+
+subscriptionSchema.virtual('transactions', {
+  ref: 'Transaction',
+  localField: '_id',
+  foreignField: 'parent',
+  justOne: false,
 })
 
 /**

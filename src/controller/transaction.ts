@@ -101,7 +101,7 @@ async function transactionList(req: Request, res: Response) {
     $or: [{ user: user }, { accessors: { $in: accessorWalletIds } }],
   }).select('_id')
 
-  walletIds = accessibleWallets.map(wallet => wallet._id)
+  walletIds = accessibleWallets.map(wallet => wallet.id)
 
   const totalItems = await Transaction.countDocuments({
     $or: [{ user: user }, { wallet: { $in: [...walletIds, walletObjectId] } }],
@@ -148,7 +148,7 @@ async function subscriptionList(req: Request, res: Response) {
         $or: [{ user: user }, { accessors: { $in: accessorWalletIds } }],
       }).select('_id')
 
-      walletIds = accessibleWallets.map(wallet => wallet._id)
+      walletIds = accessibleWallets.map(wallet => wallet.id)
     }
 
     // Ana sorgu koşulları

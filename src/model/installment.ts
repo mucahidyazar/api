@@ -1,15 +1,18 @@
 import mongoose from 'mongoose'
 
+import { ITransaction } from './transaction'
 import { IBaseTransaction, baseTransactionSchema } from './transaction-base'
 
-interface IInstallment extends mongoose.Document, IBaseTransaction {
-  status: 'continuing' | 'completed' | 'canceled' | 'deleted'
+interface IInstallment extends IBaseTransaction {
+  installmentStatus: 'continuing' | 'completed' | 'canceled' | 'deleted'
   frequency: 'daily' | 'weekly' | 'monthly' | 'yearly'
   repeat: number
   autoRenew: boolean
   totalAmount: number
   startDate: Date
   endDate: Date
+
+  transactions: mongoose.Types.ObjectId[] | ITransaction['_id'][]
 
   remainingAmount: number
   getRemainingAmount(): Promise<number>
@@ -75,9 +78,7 @@ interface IInstallment extends mongoose.Document, IBaseTransaction {
 }
 
 const installmentSchema = new mongoose.Schema({
-  ...baseTransactionSchema.obj,
-
-  status: {
+  installmentStatus: {
     type: String,
     describe: 'Status of the installment',
     enum: ['continuing', 'completed', 'canceled', 'deleted'],
@@ -117,6 +118,13 @@ const installmentSchema = new mongoose.Schema({
     describe: 'End date of the installment',
     required: true,
   },
+}).add(baseTransactionSchema)
+
+installmentSchema.virtual('transactions', {
+  ref: 'Transaction',
+  localField: '_id',
+  foreignField: 'parent',
+  justOne: false,
 })
 
 /**

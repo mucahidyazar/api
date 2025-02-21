@@ -2,18 +2,24 @@ import mongoose from 'mongoose'
 
 import { VALIDATION_RULES } from '@/constants'
 
-import { IBaseTransaction, baseTransactionSchema } from './transaction-base'
+import { IInstallment } from './installment'
+import { ISubscription } from './subscription'
+import { baseTransactionSchema, IBaseTransaction } from './transaction-base'
 
-interface ITransacsaion extends mongoose.Document, IBaseTransaction {
+interface ITransaction extends IBaseTransaction {
   type: 'single' | 'installment' | 'subscription'
-  parentId: mongoose.Schema.Types.ObjectId | null
-  status: 'pending' | 'paid' | 'overdue' | 'canceled'
+  parent:
+    | mongoose.Schema.Types.ObjectId
+    | IInstallment['_id']
+    | ISubscription['_id']
+    | null
+  transactionStatus: 'pending' | 'paid' | 'overdue' | 'canceled'
   link: string
   dueDate: Date
 
-  markAsPaid(): Promise<ITransacsaion>
-  getOverdueTransactions(): Promise<ITransacsaion[]>
-  getByType(type: string, page: number, limit: number): Promise<ITransacsaion[]>
+  markAsPaid(): Promise<ITransaction>
+  getOverdueTransactions(): Promise<ITransaction[]>
+  getByType(type: string, page: number, limit: number): Promise<ITransaction[]>
   getSubscriptionsSummary(userId: string): Promise<
     {
       _id: mongoose.Types.ObjectId
@@ -42,8 +48,6 @@ interface ITransacsaion extends mongoose.Document, IBaseTransaction {
 }
 
 const transactionSchema = new mongoose.Schema({
-  ...baseTransactionSchema.obj,
-
   type: {
     type: String,
     describe: 'Type of the transaction',
@@ -52,14 +56,14 @@ const transactionSchema = new mongoose.Schema({
     default: 'single',
   },
 
-  parentId: {
+  parent: {
     type: mongoose.Schema.Types.ObjectId,
     describe: 'Parent transaction of the financial movement',
     refPath: 'type',
     default: null,
     validate: {
       validator: function (
-        this: ITransacsaion,
+        this: ITransaction,
         v: mongoose.Types.ObjectId | null,
       ): boolean {
         return this.type === 'single' || v != null
@@ -69,7 +73,7 @@ const transactionSchema = new mongoose.Schema({
     },
   },
 
-  status: {
+  transactionStatus: {
     type: String,
     describe: 'Status of the transaction',
     enum: ['pending', 'paid', 'overdue', 'canceled'],
@@ -86,7 +90,7 @@ const transactionSchema = new mongoose.Schema({
     describe: 'Due date of the transaction',
     required: true,
   },
-})
+}).add(baseTransactionSchema)
 
 transactionSchema.methods.markAsPaid = async function () {
   this.status = 'paid'
@@ -177,9 +181,9 @@ transactionSchema.statics.getMonthlyStats = async function (
   ])
 }
 
-const Transaction = mongoose.model<ITransacsaion>(
+const Transaction = mongoose.model<ITransaction>(
   'Transaction',
   transactionSchema,
 )
 
-export { Transaction }
+export { ITransaction, Transaction }

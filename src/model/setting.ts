@@ -1,36 +1,23 @@
 import mongoose from 'mongoose'
 
-import { DEFAULTS, MODEL_OPTIONS } from '@/constants'
+import { IBaseModel, baseSchema } from './base.model'
 
-const settingSchema = new mongoose.Schema(
-  {
-    themeMode: {
-      type: String,
-      default: 'light',
-    },
-    primaryCurrency: {
-      type: String,
-      default: DEFAULTS.currency,
-    },
-    secondaryCurrency: {
-      type: String,
-      default: '',
-    },
-    language: {
-      type: String,
-      default: 'en',
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      unique: true,
-      immutable: true,
-    },
+interface ISetting extends IBaseModel {
+  themeMode: string
+  language: string
+}
+
+const settingSchema = new mongoose.Schema({
+  themeMode: {
+    type: String,
+    default: 'light',
   },
-  MODEL_OPTIONS,
-)
+  language: {
+    type: String,
+    default: 'en',
+  },
+}).add(baseSchema)
 
-const Setting = mongoose.model('Setting', settingSchema)
+const Setting = mongoose.model<ISetting>('Setting', settingSchema)
 
-export { Setting }
+export { ISetting, Setting }

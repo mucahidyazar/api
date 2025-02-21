@@ -8,6 +8,6 @@ export const middlewareValidateBody =
       req.body = await schema.parseAsync(req.body)
       next()
     } catch (error) {
-      next(error) // Hatayı error handler'a gönder
+      next(error)
     }
   }

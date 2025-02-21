@@ -1,30 +1,40 @@
 import mongoose from 'mongoose'
 
-import { MODEL_OPTIONS } from '@/constants'
+import { IBaseModel, baseSchema } from './base.model'
+import { IUser } from './user'
+import { IWallet } from './wallet'
 
-const walletAccessorSchema = new mongoose.Schema(
-  {
-    status: {
-      type: String,
-      enum: ['active', 'pending'],
-      default: 'pending',
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      immutable: true,
-    },
-    wallet: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Wallet',
-      required: true,
-      immutable: true,
-    },
+interface IWalletAccessor extends IBaseModel {
+  walletAccessorStatus: 'active' | 'pending'
+
+  accessor: mongoose.Types.ObjectId | IUser['_id']
+
+  wallet: mongoose.Types.ObjectId | IWallet['_id']
+}
+
+const walletAccessorSchema = new mongoose.Schema({
+  walletAccessorStatus: {
+    type: String,
+    enum: ['active', 'pending'],
+    default: 'pending',
   },
-  MODEL_OPTIONS,
+  accessor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    immutable: true,
+  },
+  wallet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Wallet',
+    required: true,
+    immutable: true,
+  },
+}).add(baseSchema)
+
+const WalletAccessor = mongoose.model<IWalletAccessor>(
+  'WalletAccessor',
+  walletAccessorSchema,
 )
 
-const WalletAccessor = mongoose.model('WalletAccessor', walletAccessorSchema)
-
-export { WalletAccessor, walletAccessorSchema }
+export { IWalletAccessor, WalletAccessor }

@@ -1,38 +1,38 @@
 import mongoose from 'mongoose'
 
-import { MODEL_OPTIONS, VALIDATION_RULES } from '@/constants'
+import { VALIDATION_RULES } from '@/constants'
 
-const transactionCategorySchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      minlength: VALIDATION_RULES.input.min,
-      maxlength: VALIDATION_RULES.input.mid,
-    },
-    usageCount: {
-      type: Number,
-      default: 0,
-    },
-    icon: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      immutable: true,
-    },
+import { IBaseModel, baseSchema } from './base.model'
+
+interface ITransactionCategory extends IBaseModel {
+  name: string
+  usageCount: number
+  icon: string
+  color: string
+}
+
+const transactionCategorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: VALIDATION_RULES.input.min,
+    maxlength: VALIDATION_RULES.input.mid,
   },
-  MODEL_OPTIONS,
-)
+  usageCount: {
+    type: Number,
+    default: 0,
+  },
+  icon: {
+    type: String,
+  },
+  color: {
+    type: String,
+  },
+}).add(baseSchema)
 
-const TransactionCategory = mongoose.model(
+const TransactionCategory = mongoose.model<ITransactionCategory>(
   'TransactionCategory',
   transactionCategorySchema,
 )
 
-export { TransactionCategory, transactionCategorySchema }
+export { ITransactionCategory, TransactionCategory }
