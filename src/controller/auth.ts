@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 import { ROUTES } from '@/constants'
-import { signInDto, signUpDto } from '@/model/request/auth.dto'
-import { signInResponseDto, signUpResponseDto } from '@/model/response/auth.dto'
+import { signInDto, signUpDto } from '@/requestModel'
+import { signInResponseDto, signUpResponseDto } from '@/responseModel'
 import { signUpUser, signInUser } from '@/services/auth'
 import { ApiResponse, apiResponseSchema } from '@/utils'
 import {

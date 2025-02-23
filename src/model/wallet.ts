@@ -18,20 +18,19 @@ interface IWallet extends IBaseModel {
   walletBalances: mongoose.Types.ObjectId[] | IWalletBalance['_id'][]
   accessors: mongoose.Types.ObjectId[] | IWalletAccessor['_id'][]
 
-  totalBalance: number
+  getTotalBalance(): Promise<number>
 
   addAccessor(userId: string): Promise<IWallet>
   getMonthlySpendings(year: number, month: number): Promise<IWallet[]>
 
   hasSufficientBalance(amount: number, currency: string): Promise<boolean>
 
-  activeAccessors: any[]
-  getActiveAccessors(): Promise<IWallet[]>
+  populateActiveAccessors(): Promise<void>
 
   isOwner(userId: string): Promise<boolean>
 }
 
-const walletSchema = new mongoose.Schema({
+const walletSchema = new mongoose.Schema<IWallet>({
   title: {
     type: String,
     minlength: VALIDATION_RULES.input.min,
@@ -72,14 +71,16 @@ walletSchema.virtual('accessors', {
   ref: 'WalletAccessor',
   localField: '_id',
   foreignField: 'wallet',
+  match: { status: 'active', walletAccessorStatus: 'active' },
 })
 
-walletSchema.virtual('totalBalance').get(async function (this: IWallet) {
-  const balances = await mongoose
-    .model('WalletBalance')
-    .find({ wallet: this._id })
+walletSchema.methods.getTotalBalance = async function (this: IWallet) {
+  const balances = await mongoose.model('WalletBalance').find({
+    wallet: this._id,
+    status: 'active',
+  })
   return balances.reduce((acc, bal) => acc + bal.amount, 0)
-})
+}
 
 walletSchema.methods.addAccessor = async function (userId: string) {
   const WalletAccessor = mongoose.model('WalletAccessor')
@@ -126,19 +127,15 @@ walletSchema.methods.hasSufficientBalance = async function (
   return balance && balance.amount >= amount
 }
 
-walletSchema.methods.getActiveAccessors = async function () {
-  return mongoose
-    .model('WalletAccessor')
-    .find({
-      wallet: this._id,
-      status: 'active',
-    })
-    .populate('accessor', 'firstName lastName email')
+walletSchema.methods.populateActiveAccessors = async function () {
+  this.populate({
+    path: 'accessors',
+    match: { status: 'active', walletAccessorStatus: 'active' },
+    populate: {
+      path: 'accessor',
+    },
+  })
 }
-
-walletSchema.virtual('activeAccessors').get(async function (this: IWallet) {
-  return await this.getActiveAccessors()
-})
 
 walletSchema.methods.isOwner = async function (userId: string) {
   return this.createdBy.id === userId

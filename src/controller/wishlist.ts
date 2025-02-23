@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
+import { PaginationRequestParameters } from '@/model/request/common.dto'
 import { User } from '@/model/user'
 import { Wishlist } from '@/model/wishlist'
 import { WishlistAccessor } from '@/model/wishlist-accessor'
@@ -62,13 +63,11 @@ async function wishlistList(req: Request, res: Response) {
 
   const accessorWishlistIds = accessors.map(accessor => accessor.wishlist)
 
-  const totalItems = await Wishlist.countDocuments({
+  const filter = {
     $or: [{ user: req.user?.id }, { _id: { $in: accessorWishlistIds } }],
-  })
+  }
 
-  const query = Wishlist.find({
-    $or: [{ user: req.user?.id }, { _id: { $in: accessorWishlistIds } }],
-  })
+  const query = Wishlist.find(filter)
     .populate({
       path: 'user',
       select: 'name email',
@@ -81,8 +80,8 @@ async function wishlistList(req: Request, res: Response) {
       },
     })
 
-  const { metadata } = queryHelper({
-    queries: { ...req.query, totalItems },
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
     query,
   })
 

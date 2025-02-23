@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
+import { PaginationRequestParameters } from '@/model/request/common.dto'
 import { Transaction } from '@/model/transaction'
 import { TransactionBrand } from '@/model/transaction-brand'
 import { TransactionCategory } from '@/model/transaction-category'
@@ -103,18 +104,15 @@ async function transactionList(req: Request, res: Response) {
 
   walletIds = accessibleWallets.map(wallet => wallet.id)
 
-  const totalItems = await Transaction.countDocuments({
+  const filter = {
     $or: [{ user: user }, { wallet: { $in: [...walletIds, walletObjectId] } }],
     ...(req.query.subscription && { subscription: true }),
-  })
+  }
 
-  const query = Transaction.find({
-    $or: [{ user: user }, { wallet: { $in: [...walletIds, walletObjectId] } }],
-    ...(req.query.subscription && { subscription: true }),
-  })
+  const query = Transaction.find(filter)
 
-  const { metadata } = queryHelper({
-    queries: { ...req.query, totalItems },
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
     query,
   })
 
@@ -355,12 +353,17 @@ async function transactionStatsGet(req: Request, res: Response) {
 async function transactionGet(req: Request, res: Response) {
   const allUniqueWalletIds = await getUniqueWalletIds({ user: req.user?.id })
 
-  const query = Transaction.findOne({
+  const filter = {
     _id: req.params.id,
     $or: [{ user: req.user?.id }, { wallet: { $in: allUniqueWalletIds } }],
-  })
+  }
 
-  queryHelper({ queries: req.query, query })
+  const query = Transaction.findOne(filter)
+
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
+    query,
+  })
 
   const data = await query.exec()
 
@@ -370,7 +373,7 @@ async function transactionGet(req: Request, res: Response) {
 
   return res.response({
     statusCode: 200,
-    apiResponse: ApiResponse.success(data),
+    apiResponse: ApiResponse.success(data, metadata),
   })
 }
 

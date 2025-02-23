@@ -4,13 +4,13 @@ import { z } from 'zod'
 import { ERROR_CODE, ROUTES } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
-import { walletCreateDto } from '@/model/request/wallet.dto'
 import { Transaction } from '@/model/transaction'
 import { User } from '@/model/user'
 import { Wallet } from '@/model/wallet'
 import { IWalletAccessor, WalletAccessor } from '@/model/wallet-accessor'
 import { WalletBalance } from '@/model/wallet-balance'
 import { WalletType } from '@/model/wallet-type'
+import { PaginationRequestParameters, walletCreateDto } from '@/requestModel'
 import { PushNotificationService } from '@/services/push-notification'
 import { ApiResponse, apiResponseSchema } from '@/utils'
 import {
@@ -110,7 +110,6 @@ export class WalletController extends BaseController {
       bearerAuth: [],
     },
   })
-  @ApiBody(true, z.object({}))
   @DApiResponse(
     200,
     'Wallets listed successfully',
@@ -128,53 +127,30 @@ export class WalletController extends BaseController {
 
     const accessorWalletIds = accessors.map(accessor => accessor.wallet)
 
-    const totalItems = await Wallet.countDocuments({
+    const filter = {
       $or: [{ createdBy: req.user?.id }, { _id: { $in: accessorWalletIds } }],
-    })
+    }
 
-    const query = Wallet.find({
-      $or: [{ createdBy: req.user?.id }, { _id: { $in: accessorWalletIds } }],
-    })
-      .populate('walletType')
-      .populate({
-        path: 'walletBalances', // Virtual alan adı
-        options: { sort: { createdAt: -1 } }, // Gerekirse ek seçenekler
-      })
-      .populate({
-        path: 'createdBy',
-        select: 'firstName email',
-      })
+    const query = Wallet.find(filter)
 
-    const { metadata } = queryHelper({
-      queries: { ...req.query, totalItems },
+    const { metadata } = await queryHelper({
+      queryStrings: PaginationRequestParameters.parse(req.query),
       query,
     })
 
-    const wallets = await query.exec()
-
-    const walletsWithAccessorInfo = await Promise.all(
-      wallets.map(async wallet => {
-        const walletObj = wallet.toObject()
-
-        const accessors = await WalletAccessor.find({
-          wallet: wallet.id,
-          walletAccessorStatus: 'active',
-        }).populate({
+    const wallets = await query
+      .populate({
+        path: 'accessors',
+        match: { status: 'active', walletAccessorStatus: 'active' },
+        populate: {
           path: 'accessor',
-          select: 'firstName email',
-        })
-
-        return {
-          ...walletObj,
-          isOwner: await wallet.isOwner(req.user?.id),
-          accessors,
-        }
-      }),
-    )
+        },
+      })
+      .exec()
 
     return res.response({
       statusCode: 200,
-      apiResponse: ApiResponse.success(walletsWithAccessorInfo, metadata),
+      apiResponse: ApiResponse.success(wallets, metadata),
     })
   }
 
@@ -430,21 +406,16 @@ export class WalletController extends BaseController {
     const walletBalances = await WalletBalance.find({ wallet: wallet.id })
     const walletBalanceIds = walletBalances.map(balance => balance._id)
 
-    const totalItems = await Transaction.countDocuments({
+    const filter = {
       $or: [
         { createdBy: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
         { _id: { $in: walletBalanceIds } }, // Kullanıcı accessors'da mı?
       ],
-    })
-    const query = Transaction.find({
-      $or: [
-        { createdBy: req.user?.id }, // Kullanıcı wallet'ın sahibi mi?
-        { _id: { $in: walletBalanceIds } }, // Kullanıcı accessors'da mı?
-      ],
-    })
+    }
+    const query = Transaction.find(filter)
 
-    const { metadata } = queryHelper({
-      queries: { ...req.query, totalItems },
+    const { metadata } = await queryHelper({
+      queryStrings: PaginationRequestParameters.parse(req.query),
       query,
     })
 
