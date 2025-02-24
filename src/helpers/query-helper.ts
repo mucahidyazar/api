@@ -37,12 +37,14 @@ async function handlePagination(
   const limit = options.limit
   const skip = (page - 1) * limit
 
+  const totalItems = await query.clone().countDocuments()
+
   query.skip(skip).limit(limit)
 
   return getPaginationMetadata({
     limit,
     page,
-    totalItems: await query.countDocuments(),
+    totalItems,
   })
 }
 

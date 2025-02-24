@@ -140,6 +140,15 @@ export class WalletController extends BaseController {
 
     const wallets = await query
       .populate({
+        path: 'createdBy',
+      })
+      .populate({
+        path: 'walletType',
+      })
+      .populate({
+        path: 'walletBalances',
+      })
+      .populate({
         path: 'accessors',
         match: { status: 'active', walletAccessorStatus: 'active' },
         populate: {
