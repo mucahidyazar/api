@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
+import { PaginationRequestParameters } from '@/model/request/common.dto'
 import { User } from '@/model/user'
 import { Wishlist } from '@/model/wishlist'
 import { WishlistAccessor } from '@/model/wishlist-accessor'
@@ -57,18 +58,16 @@ async function wishlistCreate(req: Request, res: Response) {
 async function wishlistList(req: Request, res: Response) {
   const accessors = await WishlistAccessor.find({
     user: req.user?.id,
-    status: 'active',
+    wishlistAccessorStatus: 'active',
   })
 
   const accessorWishlistIds = accessors.map(accessor => accessor.wishlist)
 
-  const totalItems = await Wishlist.countDocuments({
+  const filter = {
     $or: [{ user: req.user?.id }, { _id: { $in: accessorWishlistIds } }],
-  })
+  }
 
-  const query = Wishlist.find({
-    $or: [{ user: req.user?.id }, { _id: { $in: accessorWishlistIds } }],
-  })
+  const query = Wishlist.find(filter)
     .populate({
       path: 'user',
       select: 'name email',
@@ -81,8 +80,8 @@ async function wishlistList(req: Request, res: Response) {
       },
     })
 
-  const { metadata } = queryHelper({
-    queries: { ...req.query, totalItems },
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
     query,
   })
 
@@ -94,7 +93,7 @@ async function wishlistList(req: Request, res: Response) {
 
       const accessors = await WishlistAccessor.find({
         wishlist: wishlist._id,
-        status: 'active',
+        wishlistAccessorStatus: 'active',
       }).populate({
         path: 'user',
         select: 'name email',
@@ -102,7 +101,7 @@ async function wishlistList(req: Request, res: Response) {
 
       return {
         ...wishlistObj,
-        isOwner: wishlist.user._id.toString() === req.user?.id,
+        isOwner: wishlist.createdBy === req.user?.id,
         accessors,
       }
     }),
@@ -123,7 +122,7 @@ async function wishlistGet(req: Request, res: Response) {
   // Kullanıcının erişebileceği wishlist erişimcilerini alın
   const accessibleWishlistIds = await WishlistAccessor.find({
     user: userId,
-    status: 'active',
+    wishlistAccessorStatus: 'active',
   }).distinct('wishlist')
 
   // Wishlist'ı bulun ve ilişkili alanları populate edin
@@ -237,7 +236,7 @@ async function wishlistUpdate(req: Request, res: Response) {
 
         // Yeni item ekle
         await WishlistAccessor.create({
-          status: 'pending',
+          wishlistAccessorStatus: 'pending',
           wishlist: wishlist._id,
           user: user?.id,
         })
@@ -250,8 +249,8 @@ async function wishlistUpdate(req: Request, res: Response) {
           wishlist: wishlist.id,
         })
 
-        const isUserSelf = wishlistAccessor?.user === req.user.id
-        const isUserWishlistOwner = wishlist.user === req.user.id
+        const isUserSelf = wishlistAccessor?.accessor === req.user.id
+        const isUserWishlistOwner = wishlist.createdBy === req.user.id
 
         if (isUserSelf || isUserWishlistOwner) {
           await wishlistAccessor?.deleteOne()
@@ -345,7 +344,7 @@ async function wishlistItemUpdate(req: Request, res: Response) {
                 $and: [
                   { $eq: ['$wishlist', '$$wishlistId'] },
                   { $eq: ['$user', new mongoose.Types.ObjectId(userId)] },
-                  { $eq: ['$status', 'active'] },
+                  { $eq: ['$wishlistAccessorStatus', 'active'] },
                 ],
               },
             },
@@ -486,7 +485,7 @@ async function wishlistAccessorCreate(req: Request, res: Response) {
   }
 
   const isAdmin = req.user.role === 'admin'
-  const isWishlistOwner = wishlist.user.toString() === req.user.id
+  const isWishlistOwner = wishlist.createdBy === req.user.id
   if (!isAdmin && !isWishlistOwner) {
     throw new ApiError('Unauthorized', ERROR_CODE.Unauthorized)
   }

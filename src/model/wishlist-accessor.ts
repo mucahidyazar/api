@@ -1,33 +1,38 @@
 import mongoose from 'mongoose'
 
-import { MODEL_OPTIONS } from '@/constants'
+import { IBaseModel, baseSchema } from './base.model'
+import { IUser } from './user'
+import { IWishlist } from './wishlist'
 
-const wishlistAccessorSchema = new mongoose.Schema(
-  {
-    status: {
-      type: String,
-      enum: ['active', 'pending'],
-      default: 'pending',
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      immutable: true,
-    },
-    wishlist: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Wishlist',
-      required: true,
-      immutable: true,
-    },
+interface IWishlistAccessor extends IBaseModel {
+  wishlistAccessorStatus: 'active' | 'pending'
+  accessor: mongoose.Types.ObjectId | IUser['_id']
+  wishlist: mongoose.Types.ObjectId | IWishlist['_id']
+}
+
+const wishlistAccessorSchema = new mongoose.Schema({
+  wishlistAccessorStatus: {
+    type: String,
+    enum: ['active', 'pending'],
+    default: 'pending',
   },
-  MODEL_OPTIONS,
-)
+  accessor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    immutable: true,
+  },
+  wishlist: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Wishlist',
+    required: true,
+    immutable: true,
+  },
+}).add(baseSchema)
 
-const WishlistAccessor = mongoose.model(
+const WishlistAccessor = mongoose.model<IWishlistAccessor>(
   'WishlistAccessor',
   wishlistAccessorSchema,
 )
 
-export { WishlistAccessor, wishlistAccessorSchema }
+export { WishlistAccessor }

@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 import { ROUTES } from '@/constants'
-import { signInDto, signUpDto } from '@/model/request/auth.dto'
-import { signInResponseDto, signUpResponseDto } from '@/model/response/auth.dto'
+import { signInDto, signUpDto } from '@/requestModel'
+import { signInResponseDto, signUpResponseDto } from '@/responseModel'
 import { signUpUser, signInUser } from '@/services/auth'
 import { ApiResponse, apiResponseSchema } from '@/utils'
 import {
@@ -23,6 +23,7 @@ export class AuthController extends BaseController {
       'Create a new user account with email and password authentication. Returns a JWT access token that can be used to authenticate future requests.',
     tags: ['Authentication'],
     summary: 'Sign up',
+    security: undefined,
   })
   @ApiBody(true, signUpDto)
   @DApiResponse(
@@ -49,6 +50,7 @@ export class AuthController extends BaseController {
     description: 'Authenticate existing user and return JWT token',
     tags: ['Authentication'],
     summary: 'Sign in',
+    security: undefined,
   })
   @ApiBody(true, signInDto)
   @DApiResponse(

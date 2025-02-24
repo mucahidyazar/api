@@ -1,36 +1,36 @@
 import mongoose from 'mongoose'
 
-import { MODEL_OPTIONS } from '@/constants'
 import { calculationLoanDataSchema } from '@/validation'
 
-const calculationSchema = new mongoose.Schema(
-  {
-    type: {
-      type: String,
-      enum: ['loan'],
-      immutable: true,
-      required: true,
-    },
-    data: {
-      type: mongoose.Schema.Types.Mixed,
-      required: true,
-      validate: (value: any) => {
-        if (value.type === 'loan') {
-          return calculationLoanDataSchema.safeParse(value)
-        }
-        return false
-      },
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      immutable: true,
+import { IBaseModel, baseSchema } from './base.model'
+
+interface ICalculation extends IBaseModel {
+  type: 'loan'
+  data: any
+}
+
+const calculationSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['loan'],
+    immutable: true,
+    required: true,
+  },
+  data: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+    validate: (value: any) => {
+      if (value.type === 'loan') {
+        return calculationLoanDataSchema.safeParse(value)
+      }
+      return false
     },
   },
-  MODEL_OPTIONS,
+}).add(baseSchema)
+
+const Calculation = mongoose.model<ICalculation>(
+  'Calculation',
+  calculationSchema,
 )
 
-const Calculation = mongoose.model('Calculation', calculationSchema)
-
-export { Calculation, calculationSchema }
+export { Calculation, ICalculation }

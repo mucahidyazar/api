@@ -1,112 +1,189 @@
 import mongoose from 'mongoose'
 
-import { DEFAULTS, MODEL_OPTIONS, VALIDATION_RULES } from '@/constants'
+import { VALIDATION_RULES } from '@/constants'
 
-const transactionBalanceSchema = new mongoose.Schema(
-  {
-    amount: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    currency: {
-      type: String,
-      default: DEFAULTS.currency,
-      required: true,
-    },
-    rate: {
-      type: Number,
-      default: 1,
-      required: true,
+import { IInstallment } from './installment'
+import { ISubscription } from './subscription'
+import { baseTransactionSchema, IBaseTransaction } from './transaction-base'
+
+interface ITransaction extends IBaseTransaction {
+  type: 'single' | 'installment' | 'subscription'
+  parent:
+    | mongoose.Schema.Types.ObjectId
+    | IInstallment['_id']
+    | ISubscription['_id']
+    | null
+  transactionStatus: 'pending' | 'paid' | 'overdue' | 'canceled'
+  link: string
+  dueDate: Date
+
+  markAsPaid(): Promise<ITransaction>
+  getOverdueTransactions(): Promise<ITransaction[]>
+  getByType(type: string, page: number, limit: number): Promise<ITransaction[]>
+  getSubscriptionsSummary(userId: string): Promise<
+    {
+      _id: mongoose.Types.ObjectId
+      totalAmount: number
+      count: number
+    }[]
+  >
+  getInstallmentsSummary(userId: string): Promise<
+    {
+      _id: mongoose.Types.ObjectId
+      totalAmount: number
+      count: number
+    }[]
+  >
+  getMonthlyStats(
+    userId: string,
+    year: number,
+    month: number,
+  ): Promise<
+    {
+      _id: string
+      total: number
+      count: number
+    }[]
+  >
+}
+
+const transactionSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    describe: 'Type of the transaction',
+    enum: ['single', 'installment', 'subscription'],
+    required: true,
+    default: 'single',
+  },
+
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    describe: 'Parent transaction of the financial movement',
+    refPath: 'type',
+    default: null,
+    validate: {
+      validator: function (
+        this: ITransaction,
+        v: mongoose.Types.ObjectId | null,
+      ): boolean {
+        return this.type === 'single' || v != null
+      },
+      message:
+        'ParentId is required for installment and subscription transactions',
     },
   },
-  MODEL_OPTIONS,
-)
 
-const transactionSchema = new mongoose.Schema(
-  {
-    type: {
-      type: String,
-      enum: ['income', 'expense'],
-      required: true,
-    },
-    description: {
-      type: String,
-      maxlength: VALIDATION_RULES.input.max,
-    },
-    link: {
-      type: String,
-      maxlength: VALIDATION_RULES.input.max,
-    },
-    date: {
-      type: Date,
-      required: true,
-    },
-
-    primaryBalance: {
-      type: transactionBalanceSchema,
-    },
-    secondaryBalance: {
-      type: transactionBalanceSchema,
-    },
-
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      immutable: true,
-    },
-
-    wallet: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Wallet',
-      required: true,
-    },
-    walletBalance: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'WalletBalance',
-      required: true,
-    },
-
-    // subscriptionRecurrence: {
-    //   type: Number,
-    //   default: 1,
-    //   min: 1,
-    // },
-    // subscriptionType: {
-    //   type: String,
-    //   enum: ['daily', 'weekly', 'monthly', 'yearly'],
-    //   required: function () {
-    //     return (this as { subscription: boolean }).subscription;
-    //   },
-    //   validate: {
-    //     validator: function (value: string) {
-    //       return !(this as { subscription: boolean }).subscription || value.length > 0;
-    //     },
-    //     message: 'Subscription type is required when the transaction is subscription.'
-    //   }
-    // },
-
-    transactionAmount: {
-      type: Number,
-      required: true,
-    },
-    transactionCurrency: {
-      type: String,
-      default: DEFAULTS.currency,
-    },
-    transactionCategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'TransactionCategory',
-    },
-    transactionBrand: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'TransactionBrand',
-    },
+  transactionStatus: {
+    type: String,
+    describe: 'Status of the transaction',
+    enum: ['pending', 'paid', 'overdue', 'canceled'],
+    default: 'paid',
   },
-  MODEL_OPTIONS,
+
+  link: {
+    type: String,
+    describe: 'Link of the transaction',
+    maxlength: VALIDATION_RULES.input.max,
+  },
+  dueDate: {
+    type: Date,
+    describe: 'Due date of the transaction',
+    required: true,
+  },
+}).add(baseTransactionSchema)
+
+transactionSchema.methods.markAsPaid = async function () {
+  this.status = 'paid'
+  this.updatedAt = new Date()
+  return this.save()
+}
+
+transactionSchema.statics.getOverdueTransactions = async function () {
+  return this.find({
+    dueDate: { $lt: new Date() },
+    status: { $ne: 'paid' },
+  })
+}
+
+transactionSchema.statics.getByType = async function (
+  type: string,
+  page: number,
+  limit: number,
+) {
+  return this.find({ type })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort({ createdAt: -1 })
+}
+
+transactionSchema.statics.getSubscriptionsSummary = async function (
+  userId: string,
+) {
+  return this.aggregate([
+    {
+      $match: {
+        type: 'subscription',
+        user: new mongoose.Types.ObjectId(userId),
+      },
+    },
+    {
+      $group: {
+        _id: '$parentId',
+        totalAmount: { $sum: '$amount' },
+        count: { $sum: 1 },
+      },
+    },
+  ])
+}
+
+transactionSchema.statics.getInstallmentsSummary = async function (
+  userId: string,
+) {
+  return this.aggregate([
+    {
+      $match: {
+        type: 'installment',
+        user: new mongoose.Types.ObjectId(userId),
+      },
+    },
+    {
+      $group: {
+        _id: '$parentId',
+        totalAmount: { $sum: '$amount' },
+        count: { $sum: 1 },
+      },
+    },
+  ])
+}
+
+transactionSchema.statics.getMonthlyStats = async function (
+  userId: string,
+  year: number,
+  month: number,
+) {
+  const startDate = new Date(year, month - 1, 1)
+  const endDate = new Date(year, month, 0)
+
+  return this.aggregate([
+    {
+      $match: {
+        user: new mongoose.Types.ObjectId(userId),
+        date: { $gte: startDate, $lte: endDate },
+      },
+    },
+    {
+      $group: {
+        _id: '$type',
+        total: { $sum: '$amount' },
+        count: { $sum: 1 },
+      },
+    },
+  ])
+}
+
+const Transaction = mongoose.model<ITransaction>(
+  'Transaction',
+  transactionSchema,
 )
 
-const Transaction = mongoose.model('Transaction', transactionSchema)
-
-export { Transaction, transactionBalanceSchema }
+export { ITransaction, Transaction }

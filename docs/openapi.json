@@ -11,6 +11,11 @@
       "description": "Local development server"
     }
   ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "x-tagGroups": [
     {
       "name": "User Management",
@@ -121,10 +126,28 @@
                     "example": "user@example.com"
                   },
                   "password": {
-                    "type": "string",
-                    "minLength": 8,
+                    "allOf": [
+                      {
+                        "type": "string",
+                        "pattern": "[A-Z]",
+                        "minLength": 8
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "[a-z]"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "[0-9]"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "[!@#$%^&*()_+\\-=\\[\\]{}|;:,.<>?~]"
+                      }
+                    ],
                     "description": "User password",
-                    "format": "password"
+                    "format": "password",
+                    "minLength": 8
                   }
                 },
                 "required": [
@@ -572,6 +595,2496 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/wallet": {
+      "post": {
+        "operationId": "walletCreate",
+        "description": "Create a new wallet",
+        "tags": [
+          "Wallet"
+        ],
+        "summary": "Create wallet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "description": "The title of the wallet",
+                    "example": "My wallet"
+                  },
+                  "description": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "default": "",
+                    "description": "The description of the wallet",
+                    "example": "My wallet"
+                  },
+                  "design": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "default": "design-0",
+                    "description": "The design of the wallet",
+                    "example": "design-0"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "default": "",
+                    "description": "The platform of the wallet(Required based on wallet type)",
+                    "example": "My wallet"
+                  },
+                  "walletTypeId": {
+                    "type": "string",
+                    "description": "The type of the wallet",
+                    "example": "66c0616b531123616b531123"
+                  },
+                  "accessorEmails": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "default": [],
+                    "description": "The emails of the accessors",
+                    "example": [
+                      "accessor1@example.com",
+                      "accessor2@example.com"
+                    ]
+                  },
+                  "walletBalances": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "currency": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "amount": {
+                          "type": "number",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "currency",
+                        "amount"
+                      ]
+                    },
+                    "description": "The balances of the wallet",
+                    "example": [
+                      {
+                        "currency": "USD",
+                        "amount": 0
+                      },
+                      {
+                        "currency": "EUR",
+                        "amount": 20000
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "title",
+                  "walletTypeId",
+                  "walletBalances"
+                ],
+                "additionalProperties": false,
+                "description": "Create a new wallet",
+                "title": "Create Wallet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Wallet created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "walletList",
+        "summary": "List wallets",
+        "description": "List all wallets for the current user",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallets listed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wallet/:id([0-9a-fA-F]{24})": {
+      "get": {
+        "operationId": "walletGet",
+        "summary": "Get a wallet by ID",
+        "description": "Get a wallet by its ID",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "walletUpdate",
+        "summary": "Update a wallet by ID",
+        "description": "Update a wallet by its ID",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "walletDelete",
+        "summary": "Delete a wallet by ID",
+        "description": "Delete a wallet by its ID",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wallet/:id([0-9a-fA-F]{24})/transaction": {
+      "get": {
+        "operationId": "walletTransactionList",
+        "summary": "List transactions for a wallet",
+        "description": "List all transactions for a wallet by its ID",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transactions listed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wallet/:id([0-9a-fA-F]{24})/accessor": {
+      "post": {
+        "operationId": "walletAccessorCreate",
+        "summary": "Create a new wallet accessor",
+        "description": "Create a new wallet accessor for a wallet",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Wallet accessor created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wallet/:id([0-9a-fA-F]{24})/accessor/:accessorId([0-9a-fA-F]{24})": {
+      "delete": {
+        "operationId": "walletAccessorDelete",
+        "summary": "Delete a wallet accessor",
+        "description": "Delete a wallet accessor by its ID",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet accessor deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "walletAccessorUpdate",
+        "summary": "Update a wallet accessor",
+        "description": "Update a wallet accessor by its ID",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet accessor updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wallet-type": {
+      "get": {
+        "operationId": "walletTypeList",
+        "summary": "List wallet types",
+        "description": "List all wallet types",
+        "tags": [
+          "Wallet"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Wallet types listed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "The success of the response",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of the error",
+                          "example": "validation_error"
+                        },
+                        "code": {
+                          "type": "string",
+                          "description": "The code of the error",
+                          "example": "validation_error"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "The message of the error",
+                          "example": "Validation error"
+                        },
+                        "detail": {
+                          "description": "The detail of the error",
+                          "example": {}
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The response of the API"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your JWT token in the format: Bearer <token>"
       }
     }
   }

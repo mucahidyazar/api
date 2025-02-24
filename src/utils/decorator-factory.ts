@@ -5,45 +5,55 @@ import {
   BaseController,
   OpenApiMethodMetadata,
 } from '@/controller/base.controller'
-function Post(path: string) {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
-    const existingMetadata: OpenApiMethodMetadata = Reflect.getMetadata(
-      OPENAPI_METADATA_KEY,
-      target,
-      propertyKey,
-    ) || {
-      method: '',
-      path: '',
-      responses: {},
-      requestBody: undefined,
-      operation: undefined,
-    }
 
-    const mergedMetadata: OpenApiMethodMetadata = {
-      ...existingMetadata,
-      method: 'post',
-      path,
-    }
+function createMethodDecorator(method: string) {
+  return function (path: string) {
+    return function (
+      target: any,
+      propertyKey: string,
+      descriptor: PropertyDescriptor,
+    ) {
+      const existingMetadata: OpenApiMethodMetadata = Reflect.getMetadata(
+        OPENAPI_METADATA_KEY,
+        target,
+        propertyKey,
+      ) || {
+        method: '',
+        path: '',
+        responses: {},
+        requestBody: undefined,
+        operation: undefined,
+      }
 
-    Reflect.defineMetadata(
-      OPENAPI_METADATA_KEY,
-      mergedMetadata,
-      target,
-      propertyKey,
-    )
-    return descriptor
+      const mergedMetadata: OpenApiMethodMetadata = {
+        ...existingMetadata,
+        method,
+        path,
+      }
+
+      Reflect.defineMetadata(
+        OPENAPI_METADATA_KEY,
+        mergedMetadata,
+        target,
+        propertyKey,
+      )
+      return descriptor
+    }
   }
 }
+
+const Get = createMethodDecorator('get')
+const Post = createMethodDecorator('post')
+const Put = createMethodDecorator('put')
+const Patch = createMethodDecorator('patch')
+const Delete = createMethodDecorator('delete')
 
 function ApiOperation(config: {
   operationId: string
   description: string
   tags: string[]
   summary: string
+  security: any
 }) {
   return function (
     target: any,
@@ -140,4 +150,4 @@ function DApiResponse(
   }
 }
 
-export { ApiBody, ApiOperation, DApiResponse, Post }
+export { ApiBody, ApiOperation, DApiResponse, Delete, Get, Patch, Post, Put }

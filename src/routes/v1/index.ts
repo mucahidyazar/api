@@ -20,7 +20,7 @@ import { authOpenApiPaths } from './auth'
 // import { transactionBrandOpenApiPaths } from './transaction-brand'
 // import { transactionCategoryOpenApiPaths } from './transaction-category'
 // import { userOpenApiPaths } from './user'
-// import { walletOpenApiPaths } from './wallet'
+import { walletOpenApiPaths } from './wallet'
 // import { wishlistOpenApiPaths } from './wishlist'
 
 const openApiPaths = {
@@ -33,7 +33,7 @@ const openApiPaths = {
   // ...transactionBrandOpenApiPaths,
   // ...transactionCategoryOpenApiPaths,
   // ...userOpenApiPaths,
-  // ...walletOpenApiPaths,
+  ...walletOpenApiPaths,
   // ...wishlistOpenApiPaths,
 }
 export default openApiPaths

@@ -5,6 +5,7 @@ import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
 import { Notification } from '@/model/notification'
+import { PaginationRequestParameters } from '@/model/request/common.dto'
 import { ApiResponse } from '@/utils'
 
 async function notificationList(req: Request, res: Response) {
@@ -14,20 +15,17 @@ async function notificationList(req: Request, res: Response) {
     isArchived: false,
   })
 
-  const totalItems = await Notification.countDocuments({
+  const filter = {
     user: req.user.id,
     ...(!req.query.showAll && { isArchived: false }),
-  })
+  }
 
-  const query = Notification.find({
-    user: req.user.id,
-    ...(!req.query.showAll && { isArchived: false }),
-  })
+  const query = Notification.find(filter)
     .sort({ createdAt: -1 })
     .populate('invite.resource')
 
-  const { metadata } = queryHelper({
-    queries: { ...req.query, totalItems },
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
     query,
   })
 

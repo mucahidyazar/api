@@ -10,6 +10,19 @@ type TApiError = {
   detail: unknown
 }
 
+type TMetadata = {
+  page?: number
+  limit?: number
+  totalItems?: number
+  totalPages?: number
+  currentPage?: number
+  hasNextPage?: boolean
+  hasPrevPage?: boolean
+  nextPage?: number | null
+  prevPage?: number | null
+  [key: string]: any // This allows for additional properties
+}
+
 class ApiResponse<T = unknown> {
   public success: boolean = false
   public data?: T | undefined
@@ -24,7 +37,7 @@ class ApiResponse<T = unknown> {
     return new ApiResponse<T>({
       success: true,
       data,
-      ...(metadata ? metadata : {}),
+      metadata,
     })
   }
 
@@ -37,15 +50,6 @@ type ExtendedApiResponse = {
   statusCode: number
 
   apiResponse: ApiResponse
-}
-
-type TMetadata = {
-  page: number
-  pageSize: number
-  totalCount: number
-  totalPages: number
-  hasPreviousPage: boolean
-  hasNextPage: boolean
 }
 
 export { ApiResponse, ExtendedApiResponse, TApiError }

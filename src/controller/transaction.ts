@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
 import { queryHelper } from '@/helpers'
+import { PaginationRequestParameters } from '@/model/request/common.dto'
 import { Transaction } from '@/model/transaction'
 import { TransactionBrand } from '@/model/transaction-brand'
 import { TransactionCategory } from '@/model/transaction-category'
@@ -101,20 +102,17 @@ async function transactionList(req: Request, res: Response) {
     $or: [{ user: user }, { accessors: { $in: accessorWalletIds } }],
   }).select('_id')
 
-  walletIds = accessibleWallets.map(wallet => wallet._id)
+  walletIds = accessibleWallets.map(wallet => wallet.id)
 
-  const totalItems = await Transaction.countDocuments({
+  const filter = {
     $or: [{ user: user }, { wallet: { $in: [...walletIds, walletObjectId] } }],
     ...(req.query.subscription && { subscription: true }),
-  })
+  }
 
-  const query = Transaction.find({
-    $or: [{ user: user }, { wallet: { $in: [...walletIds, walletObjectId] } }],
-    ...(req.query.subscription && { subscription: true }),
-  })
+  const query = Transaction.find(filter)
 
-  const { metadata } = queryHelper({
-    queries: { ...req.query, totalItems },
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
     query,
   })
 
@@ -148,7 +146,7 @@ async function subscriptionList(req: Request, res: Response) {
         $or: [{ user: user }, { accessors: { $in: accessorWalletIds } }],
       }).select('_id')
 
-      walletIds = accessibleWallets.map(wallet => wallet._id)
+      walletIds = accessibleWallets.map(wallet => wallet.id)
     }
 
     // Ana sorgu koşulları
@@ -194,19 +192,19 @@ async function subscriptionList(req: Request, res: Response) {
 
         const [firstTransaction, lastTransaction] = await Promise.all([
           Transaction.findOne({ subscriptionId: subscription._id })
-            .sort({ date: 1 })
-            .select('date'),
+            .sort({ dueDate: 1 })
+            .select('dueDate'),
           Transaction.findOne({ subscriptionId: subscription._id })
-            .sort({ date: -1 })
-            .select('date'),
+            .sort({ dueDate: -1 })
+            .select('dueDate'),
         ])
 
         return {
           ...subscription,
           subscriptionStats: {
             totalTransactions,
-            firstTransactionDate: firstTransaction?.date,
-            lastTransactionDate: lastTransaction?.date,
+            firstTransactionDate: firstTransaction?.dueDate,
+            lastTransactionDate: lastTransaction?.dueDate,
           },
         }
       }),
@@ -256,15 +254,14 @@ async function transactionChartGet(req: Request, res: Response) {
   const queryResponse = await query.exec()
 
   const chartObjectData = queryResponse?.reduce((acc, transaction) => {
-    const category = (transaction.transactionCategory as any)?.name
+    const category = (transaction.category as any)?.name
     if (!acc[category]) {
       acc[category] = {}
     }
     acc[category] = {
       ...acc[category],
-      color: (transaction.transactionCategory as any)?.color,
-      amount:
-        (acc[category]?.amount || 0) + (transaction.transactionAmount || 0),
+      color: (transaction.category as any)?.color,
+      amount: (acc[category]?.amount || 0) + (transaction.amount || 0),
     }
     return acc
   }, {}) as Record<string, { amount: number; color: number }>
@@ -313,9 +310,9 @@ async function transactionStatsGet(req: Request, res: Response) {
 
   const totalsMap = response.reduce(
     (acc, transaction) => {
-      const balance = transaction.transactionAmount as any
+      const balance = transaction.amount as any
 
-      if (transaction.type === 'income') {
+      if (transaction.direction === 'income') {
         const incomes = acc.incomes
         if (!incomes[balance.currency]) {
           incomes[balance.currency] = 0
@@ -356,12 +353,17 @@ async function transactionStatsGet(req: Request, res: Response) {
 async function transactionGet(req: Request, res: Response) {
   const allUniqueWalletIds = await getUniqueWalletIds({ user: req.user?.id })
 
-  const query = Transaction.findOne({
+  const filter = {
     _id: req.params.id,
     $or: [{ user: req.user?.id }, { wallet: { $in: allUniqueWalletIds } }],
-  })
+  }
 
-  queryHelper({ queries: req.query, query })
+  const query = Transaction.findOne(filter)
+
+  const { metadata } = await queryHelper({
+    queryStrings: PaginationRequestParameters.parse(req.query),
+    query,
+  })
 
   const data = await query.exec()
 
@@ -371,7 +373,7 @@ async function transactionGet(req: Request, res: Response) {
 
   return res.response({
     statusCode: 200,
-    apiResponse: ApiResponse.success(data),
+    apiResponse: ApiResponse.success(data, metadata),
   })
 }
 
@@ -380,10 +382,8 @@ async function transactionUpdate(req: Request, res: Response) {
     'type',
     'description',
     'link',
-    'date',
+    'dueDate',
     'balance',
-    'primaryBalance',
-    'secondaryBalance',
     'groupId',
     'transactionCategoryId',
     'transactionBrandId',
@@ -443,35 +443,35 @@ async function transactionUpdate(req: Request, res: Response) {
     throw new ApiError('Transaction not found', ERROR_CODE.EntityNotFound)
   }
 
-  const isTransactionIncome = transactionData?.type === 'income'
+  const isTransactionIncome = transactionData?.direction === 'income'
   if (transactionAmount) {
     if (isTransactionIncome) {
       if (isUpdateIncome) {
         walletBalance.amount =
           walletBalance.amount -
           (transactionAmount ?? 0) +
-          transactionData.transactionAmount
+          transactionData.amount
       } else {
         walletBalance.amount =
           walletBalance.amount -
           (transactionAmount ?? 0) -
-          transactionData.transactionAmount
+          transactionData.amount
       }
     } else {
       if (isUpdateIncome) {
         walletBalance.amount =
           walletBalance.amount +
           (transactionAmount ?? 0) +
-          transactionData.transactionAmount
+          transactionData.amount
       } else {
         walletBalance.amount =
           walletBalance.amount +
           (transactionAmount ?? 0) -
-          transactionData.transactionAmount
+          transactionData.amount
       }
     }
 
-    transactionData.transactionAmount = transactionAmount
+    transactionData.amount = transactionAmount
     await transactionData?.save()
   }
   await walletBalance.save()

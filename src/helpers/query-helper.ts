@@ -1,15 +1,58 @@
 import { Query } from 'mongoose'
 
+import { TPaginationRequestParameters } from '@/model/request/common.dto'
+
+type PaginationMetadata = {
+  page: number
+  limit: number
+  totalItems: number
+  totalPages: number
+  currentPage: number
+  hasNextPage: boolean
+  hasPrevPage: boolean
+  nextPage: number | null
+  prevPage: number | null
+}
+
+type QueryHelperResult = {
+  metadata: PaginationMetadata | undefined
+}
+
+type QueryHelperArgs = {
+  queryStrings: TPaginationRequestParameters
+  query: Query<any, any>
+}
+
 type TGetPaginationMetadataArgs = {
   limit: number
   page: number
   totalItems: number
 }
+
+async function handlePagination(
+  query: Query<any, any>,
+  options: TPaginationRequestParameters,
+): Promise<PaginationMetadata | undefined> {
+  const page = options.page
+  const limit = options.limit
+  const skip = (page - 1) * limit
+
+  const totalItems = await query.clone().countDocuments()
+
+  query.skip(skip).limit(limit)
+
+  return getPaginationMetadata({
+    limit,
+    page,
+    totalItems,
+  })
+}
+
 export function getPaginationMetadata({
   limit,
   page,
   totalItems,
-}: TGetPaginationMetadataArgs) {
+}: TGetPaginationMetadataArgs): PaginationMetadata {
   const totalPages = Math.ceil(totalItems / limit)
 
   return {
@@ -25,40 +68,13 @@ export function getPaginationMetadata({
   }
 }
 
-type ListRequestQuery = {
-  page?: string
-  limit?: string
-  populateFields?: string
+async function queryHelper({
+  queryStrings,
+  query,
+}: QueryHelperArgs): Promise<QueryHelperResult> {
+  const metadata = await handlePagination(query, queryStrings)
+
+  return { metadata }
 }
 
-type TQueryHelperArgs = {
-  queries: ListRequestQuery & { totalItems?: number }
-  query: Query<any, any>
-}
-export function queryHelper({ queries, query }: TQueryHelperArgs) {
-  const populateFields = queries.populateFields
-    ? queries.populateFields.split(',')
-    : []
-  populateFields.forEach(field => {
-    query.populate(field)
-  })
-
-  let metadata
-  if (queries.totalItems) {
-    const page = parseInt(queries.page || '1')
-    const limit = parseInt(queries.limit || '50')
-    const skip = (page - 1) * limit
-
-    query.skip(skip).limit(limit)
-
-    metadata = getPaginationMetadata({
-      limit,
-      page,
-      totalItems: queries.totalItems,
-    })
-  }
-
-  return {
-    metadata,
-  }
-}
+export { queryHelper }
