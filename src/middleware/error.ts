@@ -36,8 +36,8 @@ export const middlewareError: ErrorRequestHandler = (
     return res.response({
       statusCode: 400,
       apiResponse: ApiResponse.failure({
-        type: 'InvalidParameters',
-        code: ERROR_CODE.InvalidParameters,
+        type: 'ZodValidationError',
+        code: ERROR_CODE.ZodValidationError,
         message: 'Validation failed',
         detail: err.errors.map(
           (error): ErrorDetail => ({
@@ -55,8 +55,8 @@ export const middlewareError: ErrorRequestHandler = (
     return res.response({
       statusCode: 400,
       apiResponse: ApiResponse.failure({
-        type: 'InvalidParameters',
-        code: ERROR_CODE.InvalidParameters,
+        type: 'MongooseValidationError',
+        code: ERROR_CODE.MongooseValidationError,
         message: 'Validation failed',
         detail: Object.entries(err.errors).map(
           ([field, error]): ErrorDetail => ({

@@ -104,12 +104,10 @@ async function transactionList(req: Request, res: Response) {
 
   walletIds = accessibleWallets.map(wallet => wallet.id)
 
-  const filter = {
+  const query = Transaction.find({
     $or: [{ user: user }, { wallet: { $in: [...walletIds, walletObjectId] } }],
     ...(req.query.subscription && { subscription: true }),
-  }
-
-  const query = Transaction.find(filter)
+  })
 
   const { metadata } = await queryHelper({
     queryStrings: PaginationRequestParameters.parse(req.query),

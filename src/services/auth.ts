@@ -32,8 +32,8 @@ const generateAccessToken = user => {
  */
 const signUpUser = async (model: z.infer<typeof signUpDto>) => {
   const user = new User(model)
-  await user.save()
-  return generateAccessToken(user)
+  const savedUser = await user.save()
+  return generateAccessToken(savedUser)
 }
 
 /**

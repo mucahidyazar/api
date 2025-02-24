@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
+import { FilterQuery } from 'mongoose'
 
 import { ERROR_CODE } from '@/constants'
 import { ApiError } from '@/errors/api-error'
-import { TransactionBrand } from '@/model/transaction-brand'
+import { ITransactionBrand, TransactionBrand } from '@/model/transaction-brand'
 import { ApiResponse } from '@/utils'
 
 async function transactionBrandCreate(req: Request, res: Response) {
   const newTransactionBrand = new TransactionBrand({
     ...req.body,
-    user: req.user?.id,
+    createdBy: req.user?.id,
   })
 
   const data = await newTransactionBrand.save()
@@ -21,7 +22,10 @@ async function transactionBrandCreate(req: Request, res: Response) {
 
 async function transactionBrandList(req: Request, res: Response) {
   const data = await TransactionBrand.find({
-    $or: [{ user: req.user?.id }, { user: '6714c1614412e8a0efa8f5ff' }],
+    $or: [
+      { createdBy: req.user?.id },
+      { createdBy: '6714c1614412e8a0efa8f5ff' },
+    ],
   })
 
   return res.response({
@@ -31,10 +35,12 @@ async function transactionBrandList(req: Request, res: Response) {
 }
 
 async function transactionBrandGet(req: Request, res: Response) {
-  const data = await TransactionBrand.findOne({
+  const filter: FilterQuery<ITransactionBrand> = {
     _id: req.params.id,
-    $or: [{ user: req.user?.id }],
-  })
+    createdBy: req.user?.id,
+  }
+
+  const data = await TransactionBrand.findOne(filter)
 
   if (!data) {
     throw new ApiError('Transaction brand not found', ERROR_CODE.EntityNotFound)

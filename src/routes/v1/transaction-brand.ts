@@ -18,8 +18,8 @@ const router = express.Router()
 
 router.post(
   ROUTES.v1.transactionBrand.create,
-  asyncWrapper(transactionBrandCreate),
   middlewareValidateBody(transactionBrandSchema),
+  asyncWrapper(transactionBrandCreate),
 )
 
 router.delete(

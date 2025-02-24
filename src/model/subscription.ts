@@ -89,8 +89,6 @@ const subscriptionSchema = new mongoose.Schema({
   repeat: {
     type: Number,
     describe: 'Number of times to repeat the subscription',
-    required: true,
-    default: 1,
   },
 
   autoRenew: {
